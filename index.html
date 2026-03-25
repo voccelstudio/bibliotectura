@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Studio A — Arquitectura de Autor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #B8965A;
+      --gold-light: #D4B483;
+      --gold-dim: rgba(184,150,90,0.15);
+      --black: #0A0A0A;
+      --dark: #111111;
+      --dark2: #181818;
+      --mid: #2A2A2A;
+      --muted: #6A6A6A;
+      --light: #F5F0E8;
+      --white: #FAFAF8;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'Montserrat', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--light);
+      font-family: var(--sans);
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* CURSOR */
+    .cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(184,150,90,0.6);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.15s ease-out, width 0.3s, height 0.3s, opacity 0.3s;
+    }
+    body:hover .cursor { opacity: 1; }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 60px;
+      mix-blend-mode: normal;
+      transition: background 0.4s, padding 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(12px);
+      padding: 18px 60px;
+      border-bottom: 1px solid rgba(184,150,90,0.12);
+    }
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.7);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-cta {
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 10px 24px;
+      text-decoration: none;
+      transition: background 0.3s, color 0.3s;
+    }
+    .nav-cta:hover { background: var(--gold); color: var(--black); }
+
+    /* HAMBURGER */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px; height: 1px;
+      background: var(--gold);
+      transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10,10,10,0.97);
+      z-index: 99;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: var(--serif);
+      font-size: 2.5rem;
+      font-weight: 300;
+      color: var(--light);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.3s;
+    }
+    .mobile-menu a:hover { color: var(--gold); }
+
+    /* HERO */
+    #hero {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1800&q=85');
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.05);
+      animation: heroZoom 12s ease-out forwards;
+    }
+    @keyframes heroZoom {
+      from { transform: scale(1.05); }
+      to   { transform: scale(1.0); }
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(10,10,10,0.92) 0%,
+        rgba(10,10,10,0.3) 50%,
+        rgba(10,10,10,0.1) 100%
+      );
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 80px 60px;
+      max-width: 860px;
+      animation: fadeUp 1.2s 0.4s both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-tag {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .hero-tag::before {
+      content: '';
+      display: block;
+      width: 40px; height: 1px;
+      background: var(--gold);
+    }
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(3.5rem, 7vw, 6.5rem);
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+      margin-bottom: 32px;
+      color: var(--white);
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+    .hero-sub {
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      color: rgba(245,240,232,0.6);
+      max-width: 420px;
+      line-height: 2;
+      margin-bottom: 48px;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--black);
+      padding: 16px 40px;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.2s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .btn-ghost {
+      border: 1px solid rgba(245,240,232,0.35);
+      color: var(--light);
+      padding: 16px 40px;
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: border-color 0.3s, color 0.3s;
+      display: inline-block;
+    }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      right: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      z-index: 2;
+      animation: fadeUp 1.2s 1s both;
+    }
+    .hero-scroll span {
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.4);
+      writing-mode: vertical-rl;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(0.6); }
+    }
+
+    /* STATS BAR */
+    .stats-bar {
+      background: var(--dark2);
+      border-top: 1px solid rgba(184,150,90,0.2);
+      border-bottom: 1px solid rgba(184,150,90,0.2);
+      display: flex;
+      justify-content: center;
+    }
+    .stats-inner {
+      display: flex;
+      width: 100%;
+      max-width: 1100px;
+    }
+    .stat-item {
+      flex: 1;
+      padding: 40px 30px;
+      text-align: center;
+      border-right: 1px solid rgba(184,150,90,0.12);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s, transform 0.6s;
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-item.visible { opacity: 1; transform: translateY(0); }
+    .stat-num {
+      font-family: var(--serif);
+      font-size: 3rem;
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* SECTION COMMON */
+    section { padding: 120px 60px; }
+    .section-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 80px;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+    .section-tag {
+      font-size: 0.6rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .section-tag::before {
+      content: '';
+      display: block;
+      width: 28px; height: 1px;
+      background: var(--gold);
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 4vw, 3.8rem);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--white);
+    }
+    .section-title em { font-style: italic; color: var(--gold-light); }
+
+    /* PROJECTS */
+    #proyectos { background: var(--dark); }
+
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 60px;
+    }
+    .filter-btn {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 8px 20px;
+      border: 1px solid rgba(184,150,90,0.25);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: var(--sans);
+    }
+    .filter-btn.active, .filter-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: var(--gold-dim);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+    }
+    .proj-card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--mid);
+    }
+    .proj-card:nth-child(1) { grid-column: span 7; grid-row: span 2; }
+    .proj-card:nth-child(2) { grid-column: span 5; }
+    .proj-card:nth-child(3) { grid-column: span 5; }
+    .proj-card:nth-child(4) { grid-column: span 4; }
+    .proj-card:nth-child(5) { grid-column: span 4; }
+    .proj-card:nth-child(6) { grid-column: span 4; }
+
+    .proj-img {
+      width: 100%;
+      height: 100%;
+      min-height: 300px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.5s;
+      filter: brightness(0.8) saturate(0.9);
+    }
+    .proj-card:nth-child(1) .proj-img { min-height: 500px; }
+
+    .proj-card:hover .proj-img {
+      transform: scale(1.06);
+      filter: brightness(0.5) saturate(0.8);
+    }
+    .proj-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 32px 28px;
+      background: linear-gradient(to top, rgba(10,10,10,0.9) 0%, transparent 100%);
+      transform: translateY(8px);
+      transition: transform 0.4s;
+    }
+    .proj-card:hover .proj-info { transform: translateY(0); }
+    .proj-cat {
+      font-size: 0.58rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .proj-name {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 300;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .proj-loc {
+      font-size: 0.65rem;
+      color: rgba(245,240,232,0.5);
+      letter-spacing: 0.1em;
+    }
+    .proj-arrow {
+      position: absolute;
+      top: 24px; right: 24px;
+      width: 40px; height: 40px;
+      border: 1px solid rgba(184,150,90,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity 0.3s, transform 0.3s;
+      color: var(--gold);
+      font-size: 1rem;
+    }
+    .proj-card:hover .proj-arrow { opacity: 1; transform: translateY(0); }
+
+    /* ABOUT */
+    #nosotros {
+      background: var(--black);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 100px;
+      align-items: center;
+    }
+    .about-img-wrap {
+      position: relative;
+    }
+    .about-img {
+      width: 100%;
+      height: 650px;
+      object-fit: cover;
+      display: block;
+    }
+    .about-img-deco {
+      position: absolute;
+      bottom: -24px;
+      right: -24px;
+      width: 180px;
+      height: 180px;
+      border: 1px solid var(--gold);
+      z-index: -1;
+    }
+    .about-badge {
+      position: absolute;
+      top: 32px;
+      right: -32px;
+      background: var(--gold);
+      color: var(--black);
+      padding: 20px 24px;
+      text-align: center;
+    }
+    .about-badge-num {
+      font-family: var(--serif);
+      font-size: 2.4rem;
+      font-weight: 300;
+      line-height: 1;
+      display: block;
+    }
+    .about-badge-txt {
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      display: block;
+      margin-top: 4px;
+    }
+    .about-text { padding-right: 20px; }
+    .about-text p {
+      font-size: 0.85rem;
+      line-height: 2;
+      color: rgba(245,240,232,0.65);
+      margin-bottom: 24px;
+    }
+    .about-text .lead {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+    .about-services {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 40px;
+    }
+    .service-item {
+      padding: 20px;
+      border: 1px solid rgba(184,150,90,0.15);
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .service-item:hover {
+      border-color: var(--gold);
+      background: var(--gold-dim);
+    }
+    .service-icon { font-size: 1.4rem; margin-bottom: 10px; }
+    .service-name {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--light);
+      margin-bottom: 6px;
+    }
+    .service-desc {
+      font-size: 0.72rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* PROCESS */
+    #proceso {
+      background: var(--dark2);
+      text-align: center;
+    }
+    #proceso .section-header {
+      justify-content: center;
+      text-align: left;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      margin-top: 60px;
+      position: relative;
+    }
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 30px;
+      left: 12.5%;
+      right: 12.5%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+    }
+    .process-step {
+      padding: 20px 30px 40px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.5s, transform 0.5s;
+    }
+    .process-step.visible { opacity: 1; transform: translateY(0); }
+    .step-num {
+      width: 60px; height: 60px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      color: var(--gold);
+      background: var(--dark2);
+      position: relative;
+      z-index: 1;
+    }
+    .step-title {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 300;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+    .step-desc {
+      font-size: 0.72rem;
+      color: var(--muted);
+      line-height: 1.9;
+    }
+
+    /* TESTIMONIALS */
+    #testimonios {
+      background: var(--dark);
+      overflow: hidden;
+    }
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .testi-card {
+      padding: 40px 36px;
+      border: 1px solid rgba(184,150,90,0.12);
+      background: var(--dark2);
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .testi-card:hover {
+      border-color: rgba(184,150,90,0.4);
+      transform: translateY(-4px);
+    }
+    .testi-quote {
+      font-family: var(--serif);
+      font-size: 3rem;
+      color: var(--gold);
+      line-height: 0.5;
+      margin-bottom: 20px;
+      opacity: 0.6;
+    }
+    .testi-text {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      font-weight: 300;
+      font-style: italic;
+      color: rgba(245,240,232,0.8);
+      line-height: 1.8;
+      margin-bottom: 28px;
+    }
+    .testi-author {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .testi-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(184,150,90,0.3);
+    }
+    .testi-name {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      color: var(--light);
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+    .testi-role { font-size: 0.65rem; color: var(--muted); }
+
+    /* BOOKING */
+    #contacto {
+      background: var(--black);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 100px;
+      align-items: start;
+    }
+    .booking-info { padding-top: 10px; }
+    .booking-info p {
+      font-size: 0.82rem;
+      line-height: 2;
+      color: rgba(245,240,232,0.6);
+      margin-bottom: 48px;
+    }
+    .contact-items { display: flex; flex-direction: column; gap: 24px; }
+    .contact-item {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .contact-icon {
+      width: 44px; height: 44px;
+      border: 1px solid rgba(184,150,90,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+      color: var(--gold);
+    }
+    .contact-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .contact-val {
+      font-size: 0.82rem;
+      color: var(--light);
+    }
+
+    .booking-form { }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+    .form-group label {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      background: var(--dark2);
+      border: 1px solid rgba(184,150,90,0.2);
+      color: var(--light);
+      padding: 14px 18px;
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      font-weight: 300;
+      outline: none;
+      transition: border-color 0.3s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: var(--muted); }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--gold); }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+    .form-group select option { background: var(--dark2); }
+
+    .form-submit {
+      width: 100%;
+      background: var(--gold);
+      color: var(--black);
+      border: none;
+      padding: 18px;
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      margin-top: 8px;
+    }
+    .form-submit:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 60px 40px;
+      border: 1px solid rgba(184,150,90,0.3);
+    }
+    .form-success .success-icon { font-size: 2.5rem; margin-bottom: 20px; }
+    .form-success h3 {
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+    .form-success p { font-size: 0.8rem; color: var(--muted); line-height: 1.8; }
+
+    /* FOOTER */
+    footer {
+      background: var(--dark2);
+      border-top: 1px solid rgba(184,150,90,0.15);
+      padding: 60px 60px 40px;
+    }
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 60px;
+    }
+    .footer-brand .nav-logo { display: block; margin-bottom: 16px; font-size: 1.8rem; }
+    .footer-brand p { font-size: 0.75rem; color: var(--muted); line-height: 1.9; max-width: 280px; }
+    .footer-col h4 {
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-col ul li a {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .footer-col ul li a:hover { color: var(--light); }
+    .footer-bottom {
+      border-top: 1px solid rgba(184,150,90,0.1);
+      padding-top: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-bottom p { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.08em; }
+    .social-links { display: flex; gap: 16px; }
+    .social-links a {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(184,150,90,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .social-links a:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* LIGHTBOX */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5,5,5,0.96);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox-inner {
+      max-width: 1000px;
+      width: 100%;
+      position: relative;
+    }
+    .lightbox img {
+      width: 100%;
+      max-height: 80vh;
+      object-fit: contain;
+      display: block;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: -48px; right: 0;
+      background: none;
+      border: none;
+      color: var(--gold);
+      font-size: 1.5rem;
+      cursor: pointer;
+      letter-spacing: 0.1em;
+      font-family: var(--sans);
+      font-weight: 300;
+    }
+    .lightbox-caption {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .lightbox-title {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      font-weight: 300;
+      color: var(--white);
+    }
+    .lightbox-loc { font-size: 0.72rem; color: var(--muted); }
+
+    /* REVEAL ANIMATION */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      nav { padding: 24px 30px; }
+      nav.scrolled { padding: 16px 30px; }
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+
+      section { padding: 80px 30px; }
+      #nosotros, #contacto { grid-template-columns: 1fr; gap: 60px; }
+      .about-img { height: 450px; }
+      .about-badge { right: 16px; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
+
+      .projects-grid { grid-template-columns: 1fr 1fr; }
+      .proj-card:nth-child(n) { grid-column: span 1; grid-row: span 1; }
+      .proj-img { min-height: 260px !important; }
+
+      .process-steps { grid-template-columns: 1fr 1fr; }
+      .process-steps::before { display: none; }
+
+      .testi-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+
+      .stats-inner { flex-wrap: wrap; }
+      .stat-item { flex: 1 1 50%; border-right: none; border-bottom: 1px solid rgba(184,150,90,0.12); }
+      .stat-item:nth-child(odd) { border-right: 1px solid rgba(184,150,90,0.12); }
+
+      .hero-content { padding: 60px 30px; }
+      .hero-scroll { right: 30px; }
+    }
+
+    @media (max-width: 640px) {
+      .projects-grid { grid-template-columns: 1fr; }
+      .process-steps { grid-template-columns: 1fr; }
+      .about-services { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .stat-item { flex: 1 1 100%; border-right: none; }
+      .stat-item:nth-child(odd) { border-right: none; }
+      footer { padding: 40px 20px 30px; }
+      section { padding: 60px 20px; }
+      nav { padding: 20px; }
+      nav.scrolled { padding: 14px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CUSTOM CURSOR -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#hero" class="nav-logo">Studio<span>A</span></a>
+    <ul class="nav-links">
+      <li><a href="#proyectos">Proyectos</a></li>
+      <li><a href="#nosotros">El Estudio</a></li>
+      <li><a href="#proceso">Proceso</a></li>
+      <li><a href="#testimonios">Clientes</a></li>
+    </ul>
+    <a href="#contacto" class="nav-cta">Reservar Consulta</a>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#proyectos" onclick="closeMobile()">Proyectos</a>
+    <a href="#nosotros" onclick="closeMobile()">El Estudio</a>
+    <a href="#proceso" onclick="closeMobile()">Proceso</a>
+    <a href="#testimonios" onclick="closeMobile()">Clientes</a>
+    <a href="#contacto" onclick="closeMobile()" style="color:var(--gold)">Reservar Consulta</a>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-tag">Arquitectura · Diseño · Legado</div>
+      <h1 class="hero-title">
+        Espacios que<br>
+        <em>perduran</em> en<br>
+        el tiempo
+      </h1>
+      <p class="hero-sub">Diseñamos arquitectura de autor que equilibra la excelencia estética con la funcionalidad más refinada. Cada proyecto, una obra singular.</p>
+      <div class="hero-actions">
+        <a href="#proyectos" class="btn-primary">Ver Proyectos</a>
+        <a href="#contacto" class="btn-ghost">Reservar Consulta</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat-item">
+        <div class="stat-num" data-target="18">0</div>
+        <div class="stat-label">Años de Trayectoria</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" data-target="147">0</div>
+        <div class="stat-label">Proyectos Realizados</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" data-target="12">0</div>
+        <div class="stat-label">Premios de Diseño</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" data-target="8">0</div>
+        <div class="stat-label">Países</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECTS -->
+  <section id="proyectos">
+    <div class="section-header reveal">
+      <div>
+        <div class="section-tag">Portfolio</div>
+        <h2 class="section-title">Obras <em>Selectas</em></h2>
+      </div>
+      <div style="padding-top:10px">
+        <p style="font-size:0.78rem;color:var(--muted);max-width:320px;line-height:1.9">Una selección de nuestros proyectos más destacados en arquitectura residencial, corporativa y hospitalaria.</p>
+      </div>
+    </div>
+    <div class="filter-bar reveal">
+      <button class="filter-btn active" onclick="filterProjects('all', this)">Todos</button>
+      <button class="filter-btn" onclick="filterProjects('residencial', this)">Residencial</button>
+      <button class="filter-btn" onclick="filterProjects('corporativo', this)">Corporativo</button>
+      <button class="filter-btn" onclick="filterProjects('interior', this)">Interiorismo</button>
+      <button class="filter-btn" onclick="filterProjects('urbano', this)">Urbano</button>
+    </div>
+    <div class="projects-grid" id="projectsGrid">
+      <div class="proj-card" data-cat="residencial" onclick="openLightbox(0)">
+        <img class="proj-img" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=80" alt="Casa Cielo" loading="lazy"/>
+        <div class="proj-info">
+          <div class="proj-cat">Residencial · 2023</div>
+          <div class="proj-name">Casa Cielo</div>
+          <div class="proj-loc">Buenos Aires, Argentina</div>
+        </div>
+        <div class="proj-arrow">↗</div>
+      </div>
+      <div class="proj-card" data-cat="corporativo" onclick="openLightbox(1)">
+        <img class="proj-img" src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=700&q=80" alt="Torre Ébano" loading="lazy"/>
+        <div class="proj-info">
+          <div class="proj-cat">Corporativo · 2023</div>
+          <div class="proj-name">Torre Ébano</div>
+          <div class="proj-loc">Santiago, Chile</div>
+        </div>
+        <div class="proj-arrow">↗</div>
+      </div>
+      <div class="proj-card" data-cat="interior" onclick="openLightbox(2)">
+        <img class="proj-img" src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=700&q=80" alt="Suite Serena" loading="lazy"/>
+        <div class="proj-info">
+          <div class="proj-cat">Interiorismo · 2022</div>
+          <div class="proj-name">Suite Serena</div>
+          <div class="proj-loc">Montevideo, Uruguay</div>
+        </div>
+        <div class="proj-arrow">↗</div>
+      </div>
+      <div class="proj-card" data-cat="urbano" onclick="openLightbox(3)">
+        <img class="proj-img" src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600&q=80" alt="Plaza Núcleo" loading="lazy"/>
+        <div class="proj-info">
+          <div class="proj-cat">Urbano · 2022</div>
+          <div class="proj-name">Plaza Núcleo</div>
+          <div class="proj-loc">São Paulo, Brasil</div>
+        </div>
+        <div class="proj-arrow">↗</div>
+      </div>
+      <div class="proj-card" data-cat="residencial" onclick="openLightbox(4)">
+        <img class="proj-img" src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600&q=80" alt="Villa Meridian" loading="lazy"/>
+        <div class="proj-info">
+          <div class="proj-cat">Residencial · 2021</div>
+          <div class="proj-name">Villa Meridian</div>
+          <div class="proj-loc">Punta del Este, Uruguay</div>
+        </div>
+        <div class="proj-arrow">↗</div>
+      </div>
+      <div class="proj-card" data-cat="corporativo" onclick="openLightbox(5)">
+        <img class="proj-img" src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=600&q=80" alt="Campus Aurora" loading="lazy"/>
+        <div class="proj-info">
+          <div class="proj-cat">Corporativo · 2021</div>
+          <div class="proj-name">Campus Aurora</div>
+          <div class="proj-loc">Lima, Perú</div>
+        </div>
+        <div class="proj-arrow">↗</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="nosotros">
+    <div class="about-img-wrap reveal">
+      <img class="about-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=700&q=80" alt="Arquitecto" />
+      <div class="about-img-deco"></div>
+      <div class="about-badge">
+        <span class="about-badge-num">18</span>
+        <span class="about-badge-txt">Años de<br>Excelencia</span>
+      </div>
+    </div>
+    <div class="about-text reveal" style="transition-delay:0.2s">
+      <div class="section-tag">El Estudio</div>
+      <h2 class="section-title" style="margin-bottom:32px">Arquitectura como<br><em>forma de arte</em></h2>
+      <p class="lead">Creo en que cada espacio tiene el poder de transformar la vida de quienes lo habitan. Mi trabajo nace de la escucha profunda y la búsqueda de la belleza esencial.</p>
+      <p>Fundé Studio A en 2006 con la convicción de que la arquitectura de excelencia debe ser accesible a quienes valoran el diseño como inversión en calidad de vida. He colaborado con clientes en Argentina, Chile, Uruguay, Brasil y Europa.</p>
+      <p>Cada proyecto atraviesa un proceso riguroso de conceptualización, diseño y ejecución, garantizando resultados que superan las expectativas y perduran en el tiempo.</p>
+      <div class="about-services">
+        <div class="service-item">
+          <div class="service-icon">◻</div>
+          <div class="service-name">Arquitectura Residencial</div>
+          <div class="service-desc">Casas y apartamentos de autor adaptados a su estilo de vida único.</div>
+        </div>
+        <div class="service-item">
+          <div class="service-icon">◈</div>
+          <div class="service-name">Arquitectura Corporativa</div>
+          <div class="service-desc">Oficinas y espacios de trabajo que potencian la identidad de su empresa.</div>
+        </div>
+        <div class="service-item">
+          <div class="service-icon">◇</div>
+          <div class="service-name">Interiorismo</div>
+          <div class="service-desc">Diseño interior integral con selección de materiales y mobiliario.</div>
+        </div>
+        <div class="service-item">
+          <div class="service-icon">⬡</div>
+          <div class="service-name">Consultoría</div>
+          <div class="service-desc">Asesoramiento experto en proyectos de inversión inmobiliaria.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="proceso">
+    <div class="section-header reveal">
+      <div>
+        <div class="section-tag">Metodología</div>
+        <h2 class="section-title">El <em>Proceso</em></h2>
+      </div>
+    </div>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="step-num">01</div>
+        <div class="step-title">Descubrimiento</div>
+        <div class="step-desc">Una conversación profunda para entender su visión, necesidades y el potencial del espacio. Escuchamos antes de diseñar.</div>
+      </div>
+      <div class="process-step" style="transition-delay:0.15s">
+        <div class="step-num">02</div>
+        <div class="step-title">Concepto</div>
+        <div class="step-desc">Desarrollamos la idea rectora del proyecto: la narrativa arquitectónica que guiará cada decisión de diseño.</div>
+      </div>
+      <div class="process-step" style="transition-delay:0.3s">
+        <div class="step-num">03</div>
+        <div class="step-title">Diseño</div>
+        <div class="step-desc">Plantas, alzados, visualizaciones 3D y selección de materiales. El proyecto toma forma con precisión y detalle.</div>
+      </div>
+      <div class="process-step" style="transition-delay:0.45s">
+        <div class="step-num">04</div>
+        <div class="step-title">Ejecución</div>
+        <div class="step-desc">Dirección de obra rigurosa, garantizando que cada detalle se ejecute conforme a la visión original del proyecto.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonios">
+    <div class="section-header reveal">
+      <div>
+        <div class="section-tag">Clientes</div>
+        <h2 class="section-title">Lo que dicen<br>nuestros <em>clientes</em></h2>
+      </div>
+    </div>
+    <div class="testi-grid reveal">
+      <div class="testi-card">
+        <div class="testi-quote">"</div>
+        <p class="testi-text">Transformó completamente nuestra visión en algo que superó cualquier expectativa. La atención al detalle y la sensibilidad estética son incomparables.</p>
+        <div class="testi-author">
+          <img class="testi-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="Cliente"/>
+          <div>
+            <div class="testi-name">Carolina Reyes</div>
+            <div class="testi-role">Propietaria · Casa Cielo</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-quote">"</div>
+        <p class="testi-text">Nuestra nueva sede corporativa es hoy nuestra mejor carta de presentación. El diseño refleja perfectamente los valores de nuestra empresa.</p>
+        <div class="testi-author">
+          <img class="testi-avatar" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80" alt="Cliente"/>
+          <div>
+            <div class="testi-name">Marcos Villalba</div>
+            <div class="testi-role">CEO · Torre Ébano</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-quote">"</div>
+        <p class="testi-text">Un profesional que entiende que la arquitectura es un diálogo continuo. Cada reunión fue una instancia de aprendizaje mutuo y creación compartida.</p>
+        <div class="testi-author">
+          <img class="testi-avatar" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80" alt="Cliente"/>
+          <div>
+            <div class="testi-name">Isabel Fontaine</div>
+            <div class="testi-role">Propietaria · Villa Meridian</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING / CONTACT -->
+  <section id="contacto">
+    <div class="booking-info reveal">
+      <div class="section-tag">Contacto</div>
+      <h2 class="section-title" style="margin-bottom:24px">Reservá tu<br><em>Consulta</em></h2>
+      <p>El primer paso hacia el proyecto de sus sueños comienza con una conversación. Reserve una consulta inicial —sin cargo— para explorar las posibilidades.</p>
+      <div class="contact-items">
+        <div class="contact-item">
+          <div class="contact-icon">✉</div>
+          <div>
+            <div class="contact-label">Email</div>
+            <div class="contact-val">hola@studioa.com</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">☏</div>
+          <div>
+            <div class="contact-label">Teléfono</div>
+            <div class="contact-val">+595 981 103251</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">◎</div>
+          <div>
+            <div class="contact-label">Estudio</div>
+            <div class="contact-val">Av. Calle 1234, Asuncion<br>Lunes a Viernes · 9:00 – 18:00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="booking-form reveal" style="transition-delay:0.2s">
+      <div id="bookingFormWrap">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" placeholder="Juan García" id="f-name"/>
+          </div>
+          <div class="form-group">
+            <label>Apellido</label>
+            <input type="text" placeholder="García" id="f-last"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="juan@email.com" id="f-email"/>
+        </div>
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="tel" placeholder="+54 11 ..." id="f-phone"/>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Tipo de Proyecto</label>
+            <select id="f-type">
+              <option value="">Seleccionar...</option>
+              <option>Residencial — Casa</option>
+              <option>Residencial — Apartamento</option>
+              <option>Corporativo — Oficinas</option>
+              <option>Corporativo — Comercial</option>
+              <option>Interiorismo</option>
+              <option>Consultoría</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Presupuesto Estimado</label>
+            <select id="f-budget">
+              <option value="">Seleccionar...</option>
+              <option>USD 50.000 – 150.000</option>
+              <option>USD 150.000 – 500.000</option>
+              <option>USD 500.000 – 1.000.000</option>
+              <option>Más de USD 1.000.000</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Fecha Preferida para la Consulta</label>
+          <input type="date" id="f-date"/>
+        </div>
+        <div class="form-group">
+          <label>Cuéntenos su Proyecto</label>
+          <textarea placeholder="Describa brevemente su visión, el terreno o espacio disponible, y cualquier referencia de estilo que le inspire..." id="f-msg"></textarea>
+        </div>
+        <button class="form-submit" onclick="submitForm()">Solicitar Consulta Gratuita</button>
+      </div>
+      <div class="form-success" id="formSuccess">
+        <div class="success-icon">✦</div>
+        <h3>Consulta Reservada</h3>
+        <p>Gracias por contactarnos. Nos pondremos en comunicación dentro de las próximas 24 horas para confirmar su consulta y comenzar a explorar su proyecto juntos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="#hero" class="nav-logo">Studio<span>A</span></a>
+        <p>Arquitectura de autor que equilibra la excelencia estética con la funcionalidad más refinada. Cada proyecto, una obra singular.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="#proyectos">Proyectos</a></li>
+          <li><a href="#nosotros">El Estudio</a></li>
+          <li><a href="#proceso">Proceso</a></li>
+          <li><a href="#testimonios">Clientes</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Servicios</h4>
+        <ul>
+          <li><a href="#">Arquitectura Residencial</a></li>
+          <li><a href="#">Arquitectura Corporativa</a></li>
+          <li><a href="#">Interiorismo</a></li>
+          <li><a href="#">Consultoría</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Política de Privacidad</a></li>
+          <li><a href="#">Términos de Uso</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Studio A — Arquitectura de Autor. Todos los derechos reservados.</p>
+      <div class="social-links">
+        <a href="#" title="Instagram">IG</a>
+        <a href="#" title="LinkedIn">IN</a>
+        <a href="#" title="Behance">BE</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <div class="lightbox-inner">
+      <button class="lightbox-close" onclick="closeLightboxBtn()">Cerrar ×</button>
+      <img id="lightboxImg" src="" alt=""/>
+      <div class="lightbox-caption">
+        <div>
+          <div class="lightbox-title" id="lightboxTitle"></div>
+          <div class="lightbox-loc" id="lightboxLoc"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // PROJECTS DATA
+    const projects = [
+      { img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=85', name: 'Casa Cielo', loc: 'Buenos Aires, Argentina · Residencial · 2023' },
+      { img: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1200&q=85', name: 'Torre Ébano', loc: 'Santiago, Chile · Corporativo · 2023' },
+      { img: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1200&q=85', name: 'Suite Serena', loc: 'Montevideo, Uruguay · Interiorismo · 2022' },
+      { img: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&q=85', name: 'Plaza Núcleo', loc: 'São Paulo, Brasil · Urbano · 2022' },
+      { img: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&q=85', name: 'Villa Meridian', loc: 'Punta del Este, Uruguay · Residencial · 2021' },
+      { img: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1200&q=85', name: 'Campus Aurora', loc: 'Lima, Perú · Corporativo · 2021' },
+    ];
+
+    // CURSOR
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+      setTimeout(() => {
+        ring.style.left = e.clientX + 'px';
+        ring.style.top = e.clientY + 'px';
+      }, 60);
+    });
+    document.querySelectorAll('a, button, .proj-card, .filter-btn').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.width = '6px'; cursor.style.height = '6px';
+        ring.style.width = '52px'; ring.style.height = '52px';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.width = '10px'; cursor.style.height = '10px';
+        ring.style.width = '36px'; ring.style.height = '36px';
+      });
+    });
+
+    // NAV SCROLL
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // HAMBURGER
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+    function closeMobile() {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    }
+
+    // INTERSECTION OBSERVER
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal, .stat-item, .process-step').forEach(el => observer.observe(el));
+
+    // COUNTER ANIMATION
+    function animateCount(el, target, suffix = '') {
+      let start = 0;
+      const duration = 1800;
+      const step = Math.ceil(target / (duration / 16));
+      const timer = setInterval(() => {
+        start += step;
+        if (start >= target) { start = target; clearInterval(timer); }
+        el.textContent = start + suffix;
+      }, 16);
+    }
+    const statsObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const nums = entry.target.querySelectorAll('[data-target]');
+          nums.forEach(el => animateCount(el, parseInt(el.dataset.target)));
+          statsObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    statsObs.observe(document.querySelector('.stats-bar'));
+
+    // FILTER
+    function filterProjects(cat, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.proj-card').forEach(card => {
+        const show = cat === 'all' || card.dataset.cat === cat;
+        card.style.display = show ? '' : 'none';
+      });
+    }
+
+    // LIGHTBOX
+    function openLightbox(idx) {
+      const p = projects[idx];
+      document.getElementById('lightboxImg').src = p.img;
+      document.getElementById('lightboxTitle').textContent = p.name;
+      document.getElementById('lightboxLoc').textContent = p.loc;
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox(e) {
+      if (e.target === document.getElementById('lightbox')) closeLightboxBtn();
+    }
+    function closeLightboxBtn() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightboxBtn(); });
+
+    // FORM SUBMIT
+    function submitForm() {
+      const name = document.getElementById('f-name').value;
+      const email = document.getElementById('f-email').value;
+      const type = document.getElementById('f-type').value;
+      if (!name || !email || !type) {
+        alert('Por favor complete los campos obligatorios: Nombre, Email y Tipo de Proyecto.');
+        return;
+      }
+      document.getElementById('bookingFormWrap').style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
+    }
+
+    // Stagger process steps delay
+    document.querySelectorAll('.process-step').forEach((el, i) => {
+      el.style.transitionDelay = (i * 0.15) + 's';
+    });
+
+    // Set min date for date input
+    const dateInput = document.getElementById('f-date');
+    if (dateInput) {
+      const today = new Date().toISOString().split('T')[0];
+      dateInput.setAttribute('min', today);
+    }
+  </script>
+</body>
+</html>
