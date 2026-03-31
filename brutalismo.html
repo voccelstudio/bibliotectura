@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Brutalismo — ARQREF</title>
+  <meta name="description" content="Guía técnica del Brutalismo: características, figuras clave, combinaciones de interior y paisajismo, paleta de materiales y plantas arquitectónicas recomendadas."/>
+  <meta property="og:title" content="Brutalismo — ARQREF"/>
+  <meta property="og:description" content="Hormigón visto, monumentalidad y honestidad material. Guía técnica completa con interiores, paisajismo y materiales compatibles."/>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org","@type":"Article",
+    "headline":"Brutalismo: Guía técnica completa de arquitectura, interiores y materiales",
+    "description":"Hormigón visto, estructuras monumentales y honestidad material. Todo sobre el estilo brutalista.",
+    "author":{"@type":"Organization","name":"ARQREF"},
+    "inLanguage":"es",
+    "keywords":"brutalismo, arquitectura brutalista, hormigón visto, béton brut, Le Corbusier, interiorismo industrial"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org","@type":"BreadcrumbList",
+    "itemListElement":[
+      {"@type":"ListItem","position":1,"name":"ARQREF","item":"https://TU-USUARIO.github.io/arqref/"},
+      {"@type":"ListItem","position":2,"name":"Estilos","item":"https://TU-USUARIO.github.io/arqref/estilos/"},
+      {"@type":"ListItem","position":3,"name":"Brutalismo"}
+    ]
+  }
+  </script>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    .ficha-layout {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 40px 20px;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 32px;
+      align-items: start;
+    }
+    @media (max-width: 960px) { .ficha-layout { grid-template-columns: 1fr; } }
+
+    .ficha-sidebar {
+      position: sticky;
+      top: calc(var(--nav-h) + 16px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .info-block {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+    }
+
+    .info-block-header {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info-block-header::before { content: ''; width: 6px; height: 1px; background: var(--accent); }
+
+    .info-block-body { padding: 14px; }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.82rem;
+    }
+
+    .info-row:last-child { border-bottom: none; }
+    .info-row-label { color: var(--text-2); font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.06em; }
+    .info-row-val   { color: var(--text-0); text-align: right; max-width: 60%; }
+  </style>
+</head>
+<body>
+  <div id="scroll-bar"></div>
+
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a class="nav-logo" href="../index.html">
+        <div class="nav-logo-mark">AR</div>
+        <span class="nav-logo-text">ARQ<span style="color:var(--accent)">REF</span></span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html"><span class="nav-icon">⊞</span> Inicio</a></li>
+        <li><a href="index.html" class="active"><span class="nav-icon">🏛</span> Estilos</a></li>
+        <li><a href="../interiores/index.html"><span class="nav-icon">🪑</span> Interiores</a></li>
+        <li><a href="../floorplans/index.html"><span class="nav-icon">📐</span> Floorplans</a></li>
+        <li><a href="../comparador.html"><span class="nav-icon">⇄</span> Comparador</a></li>
+        <li><a href="../glosario.html"><span class="nav-icon">▤</span> Glosario</a></li>
+        <li><a href="../workspace.html"><span class="nav-icon">◈</span> Workspace</a></li>
+      </ul>
+      <div class="nav-right">
+        <button class="nav-btn" onclick="ARQREF.printFicha()">⎙ PDF</button>
+        <button class="nav-btn primary"
+          data-action="add-to-project"
+          data-ref-id="brutalismo"
+          data-ref-tipo="estilo-arquitectonico"
+          data-ref-nombre="Brutalismo">+ Proyecto</button>
+        <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header" data-label="BRUT">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">ARQREF</a><span class="sep">/</span>
+        <a href="index.html">Estilos</a><span class="sep">/</span>
+        <span>Brutalismo</span>
+      </div>
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:20px;">
+        <div>
+          <div class="page-eyebrow">Estilo arquitectónico · 1950–1970</div>
+          <h1 class="page-title"><em>Brutalismo</em></h1>
+          <div class="flex gap-8" style="margin-top:12px;">
+            <span class="badge badge-ghost">Reino Unido / Internacional</span>
+            <span class="badge badge-ghost">Hormigón visto</span>
+            <span class="badge badge-ghost">Monumentalismo</span>
+          </div>
+        </div>
+        <div class="flex gap-8" style="flex-wrap:wrap;">
+          <button class="btn btn-ghost"
+            data-action="add-to-project"
+            data-ref-id="brutalismo"
+            data-ref-tipo="estilo-arquitectonico"
+            data-ref-nombre="Brutalismo">+ Agregar a proyecto</button>
+          <button class="btn btn-ghost" onclick="ARQREF.printFicha()">⎙ Exportar PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GALERÍA PRINCIPAL -->
+  <div class="container" style="padding-top:24px; padding-bottom:0;">
+    <div class="gallery-3">
+      <div class="img-wrap" style="height:100%;">
+        <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=900&q=80&fit=crop"
+             alt="Edificio brutalista — hormigón visto, fachada monumental" loading="lazy"/>
+      </div>
+      <div class="img-wrap">
+        <img src="https://images.unsplash.com/photo-1545670723-196ed0954986?w=500&q=80&fit=crop"
+             alt="Interior brutalista — textura de hormigón expuesto" loading="lazy"/>
+      </div>
+      <div class="img-wrap">
+        <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=500&q=80&fit=crop"
+             alt="Detalle estructural brutalista — geometría repetitiva" loading="lazy"/>
+      </div>
+    </div>
+    <p class="text-xs text-muted" style="margin-top:6px; font-family:var(--font-mono); padding-bottom:8px;">
+      Fachada brutalista · Interior texturado · Detalle constructivo — Fotos: Unsplash (CC0)
+    </p>
+  </div>
+
+  <!-- FICHA LAYOUT -->
+  <div class="ficha-layout">
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div>
+
+      <!-- Descripción -->
+      <div class="blockquote" style="margin-bottom:32px;">
+        <p>El brutalismo surge en la década de 1950 en el Reino Unido como una reacción a la frivolidad ornamental. El término deriva del francés <em>béton brut</em> (hormigón en bruto), acuñado por Le Corbusier. Su premisa es radical: el material no se disimula, se celebra.</p>
+      </div>
+
+      <p style="color:var(--text-1); line-height:1.8; margin-bottom:32px; font-size:0.92rem;">
+        Más que un estilo, el brutalismo es una postura ética: la arquitectura no debe mentir sobre sus materiales ni su estructura. Los edificios brutalistas muestran cómo están hechos. Los pilares, las vigas, las instalaciones — todo es visible. Esta honestidad radical lo convirtió en el lenguaje de la arquitectura social de posguerra: universidades, conjuntos habitacionales, edificios gubernamentales. Hoy experimenta un revival potente en el mundo del diseño de interiores y el interiorismo contemporáneo.
+      </p>
+
+      <!-- Características -->
+      <div class="section-head"><h2>Características principales</h2></div>
+      <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:40px;">
+        <span class="badge badge-ghost">Hormigón visto (béton brut)</span>
+        <span class="badge badge-ghost">Estructuras monumentales</span>
+        <span class="badge badge-ghost">Geometría repetitiva</span>
+        <span class="badge badge-ghost">Honestidad material</span>
+        <span class="badge badge-ghost">Funcionalismo extremo</span>
+        <span class="badge badge-ghost">Texturas expresivas</span>
+        <span class="badge badge-ghost">Volúmenes escultóricos</span>
+        <span class="badge badge-ghost">Planta funcional</span>
+      </div>
+
+      <!-- Figuras clave -->
+      <div class="section-head"><h2>Figuras clave</h2></div>
+      <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:40px;">
+        <span class="badge badge-green">Le Corbusier</span>
+        <span class="badge badge-green">Alison + Peter Smithson</span>
+        <span class="badge badge-green">Paul Rudolph</span>
+        <span class="badge badge-green">Marcel Breuer</span>
+        <span class="badge badge-green">Tadao Ando</span>
+        <span class="badge badge-green">Balkrishna Doshi</span>
+      </div>
+
+      <!-- Obras de referencia -->
+      <div class="section-head"><h2>Obras de referencia</h2></div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:8px; margin-bottom:40px;">
+        <div class="info-block">
+          <div class="info-block-body">
+            <div style="font-size:0.82rem; color:var(--text-0); font-weight:500; margin-bottom:4px;">Unité d'Habitation</div>
+            <div class="text-xs text-muted">Le Corbusier · Marsella, 1952</div>
+          </div>
+        </div>
+        <div class="info-block">
+          <div class="info-block-body">
+            <div style="font-size:0.82rem; color:var(--text-0); font-weight:500; margin-bottom:4px;">Barbican Centre</div>
+            <div class="text-xs text-muted">Chamberlin, Powell & Bon · Londres, 1982</div>
+          </div>
+        </div>
+        <div class="info-block">
+          <div class="info-block-body">
+            <div style="font-size:0.82rem; color:var(--text-0); font-weight:500; margin-bottom:4px;">Art & Architecture Bldg</div>
+            <div class="text-xs text-muted">Paul Rudolph · Yale, 1963</div>
+          </div>
+        </div>
+        <div class="info-block">
+          <div class="info-block-body">
+            <div style="font-size:0.82rem; color:var(--text-0); font-weight:500; margin-bottom:4px;">Church of the Light</div>
+            <div class="text-xs text-muted">Tadao Ando · Osaka, 1989</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs: Interior / Paisajismo / Materiales -->
+      <div class="tabs-root">
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="interior">🪑 Interiores compatibles</button>
+          <button class="tab-btn" data-tab="paisajismo">🌿 Paisajismo</button>
+          <button class="tab-btn" data-tab="materiales">🎨 Materiales</button>
+          <button class="tab-btn" data-tab="floorplans">📐 Floorplans</button>
+        </div>
+
+        <!-- TAB: INTERIOR -->
+        <div class="tab-panel active" data-panel="interior">
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:12px;">
+
+            <div class="card accent-hover" style="padding:16px;">
+              <div class="flex items-center justify-between" style="margin-bottom:8px;">
+                <span style="font-family:var(--font-disp); font-size:1.1rem; font-weight:700;">Industrial</span>
+                <span class="badge badge-green">95%</span>
+              </div>
+              <div class="score-bar"><div class="score-track"><div class="score-fill" data-score="95"></div></div></div>
+              <p class="text-sm text-muted" style="margin:10px 0 12px;">Estructuras metálicas expuestas, tuberías vistas, mobiliario de acero. La paleta de grises se potencia con detalles en metal negro.</p>
+              <a class="btn btn-ghost btn-sm" href="../interiores/industrial.html">Ver estilo →</a>
+            </div>
+
+            <div class="card accent-hover" style="padding:16px;">
+              <div class="flex items-center justify-between" style="margin-bottom:8px;">
+                <span style="font-family:var(--font-disp); font-size:1.1rem; font-weight:700;">Wabi-Sabi</span>
+                <span class="badge badge-green">88%</span>
+              </div>
+              <div class="score-bar"><div class="score-track"><div class="score-fill" data-score="88"></div></div></div>
+              <p class="text-sm text-muted" style="margin:10px 0 12px;">Imperfección y textura, celebración de lo natural y las marcas del tiempo. Materiales sin pulir, madera desgastada, lino crudo.</p>
+              <a class="btn btn-ghost btn-sm" href="../interiores/wabi-sabi.html">Ver estilo →</a>
+            </div>
+
+            <div class="card accent-hover" style="padding:16px;">
+              <div class="flex items-center justify-between" style="margin-bottom:8px;">
+                <span style="font-family:var(--font-disp); font-size:1.1rem; font-weight:700;">Minimalismo</span>
+                <span class="badge badge-green">82%</span>
+              </div>
+              <div class="score-bar"><div class="score-track"><div class="score-fill" data-score="82"></div></div></div>
+              <p class="text-sm text-muted" style="margin:10px 0 12px;">Menos es más: dejar que el material hable sin ornamentos superfluos. Muebles de líneas puras sobre el hormigón visto.</p>
+              <a class="btn btn-ghost btn-sm" href="../interiores/minimalismo.html">Ver estilo →</a>
+            </div>
+
+            <div class="card accent-hover" style="padding:16px;">
+              <div class="flex items-center justify-between" style="margin-bottom:8px;">
+                <span style="font-family:var(--font-disp); font-size:1.1rem; font-weight:700;">Dark Academia</span>
+                <span class="badge badge-amber">72%</span>
+              </div>
+              <div class="score-bar"><div class="score-track"><div class="score-fill" data-score="72" style="background:var(--amber);"></div></div></div>
+              <p class="text-sm text-muted" style="margin:10px 0 12px;">Madera oscura, libros, lámparas de escritorio, textiles de lana. El brutalismo como escenario intelectual y austero.</p>
+              <a class="btn btn-ghost btn-sm" href="../interiores/dark-academia.html">Ver estilo →</a>
+            </div>
+
+            <div class="card accent-hover" style="padding:16px;">
+              <div class="flex items-center justify-between" style="margin-bottom:8px;">
+                <span style="font-family:var(--font-disp); font-size:1.1rem; font-weight:700;">Biofílico <span class="eco-flag">🌱 Eco</span></span>
+                <span class="badge badge-eco">78%</span>
+              </div>
+              <div class="score-bar"><div class="score-track"><div class="score-fill" data-score="78" style="background:var(--eco);"></div></div></div>
+              <p class="text-sm text-muted" style="margin:10px 0 12px;">Plantas colgantes y muros verdes que contrastan y ablandan la dureza del hormigón. Verde vivo sobre gris.</p>
+              <a class="btn btn-ghost btn-sm" href="../interiores/biophilic.html">Ver estilo →</a>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- TAB: PAISAJISMO -->
+        <div class="tab-panel" data-panel="paisajismo">
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:12px;">
+
+            <div class="card accent-hover" style="padding:16px;">
+              <div class="flex items-center justify-between" style="margin-bottom:8px;">
+                <span style="font-family:var(--font-disp); font-size:1.1rem; font-weight:700;">Xeriscape</span>
+                <span class="badge badge-eco">92%</span>
+              </div>
+              <div class="score-bar"><div class="score-track"><div class="score-fill" data-score="92" style="background:var(--eco);"></div></div></div>
+              <p class="text-sm text-muted" style="margin:10px 0 12px;">Bajo consumo hídrico. Cactus, agaves, suculentas y gramíneas que dialogan con la materialidad brutalista. Grava y piedra volcánica.</p>
+              <span class="eco-flag">🌱 Eco — bajo mantenimiento</span>
+            </div>
+
+            <div class="card accent-hover" style="padding:16px;">
+              <div class="flex items-center justify-between" style="margin-bottom:8px;">
+                <span style="font-family:var(--font-disp); font-size:1.1rem; font-weight:700;">Rústico controlado</span>
+                <span class="badge badge-green">78%</span>
+              </div>
+              <div class="score-bar"><div class="score-track"><div class="score-fill" data-score="78"></div></div></div>
+              <p class="text-sm text-muted" style="margin:10px 0 12px;">Vegetación en macetas de hormigón, geometrías simples, piedras y grava. Diálogo entre lo salvaje y lo construido.</p>
+            </div>
+
+            <div class="card accent-hover" style="padding:16px;">
+              <div class="flex items-center justify-between" style="margin-bottom:8px;">
+                <span style="font-family:var(--font-disp); font-size:1.1rem; font-weight:700;">Pradera urbana</span>
+                <span class="badge badge-eco">82%</span>
+              </div>
+              <div class="score-bar"><div class="score-track"><div class="score-fill" data-score="82" style="background:var(--eco);"></div></div></div>
+              <p class="text-sm text-muted" style="margin:10px 0 12px;">Gramíneas altas, pennisetum, festuca. Movimiento natural que contrasta con la rigidez del hormigón. Bajo mantenimiento y alto impacto visual.</p>
+              <span class="eco-flag">🌱 Eco — nativas recomendadas</span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- TAB: MATERIALES -->
+        <div class="tab-panel" data-panel="materiales">
+          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; margin-bottom:24px;">
+            <div class="info-block">
+              <div class="info-block-header">Arquitectura</div>
+              <div class="info-block-body" style="display:flex; flex-direction:column; gap:6px;">
+                <div class="color-chip" data-hex="#4A4A4A" title="Click para copiar HEX">
+                  <div class="color-swatch" style="background:#4A4A4A;"></div>
+                  <div class="color-chip-info"><span class="color-chip-name">Hormigón visto</span><span class="color-chip-hex">#4A4A4A</span></div>
+                  <span class="color-chip-copy">copiar</span>
+                </div>
+                <div class="color-chip" data-hex="#8B4513" title="Click para copiar HEX">
+                  <div class="color-swatch" style="background:#8B4513;"></div>
+                  <div class="color-chip-info"><span class="color-chip-name">Acero corten</span><span class="color-chip-hex">#8B4513</span></div>
+                  <span class="color-chip-copy">copiar</span>
+                </div>
+                <div class="color-chip" data-hex="#6B7280" title="Click para copiar HEX">
+                  <div class="color-swatch" style="background:#6B7280;"></div>
+                  <div class="color-chip-info"><span class="color-chip-name">Vidrio industrial</span><span class="color-chip-hex">#6B7280</span></div>
+                  <span class="color-chip-copy">copiar</span>
+                </div>
+              </div>
+            </div>
+            <div class="info-block">
+              <div class="info-block-header">Interior</div>
+              <div class="info-block-body" style="display:flex; flex-direction:column; gap:6px;">
+                <div class="color-chip" data-hex="#1C1C1C" title="Click para copiar HEX">
+                  <div class="color-swatch" style="background:#1C1C1C;"></div>
+                  <div class="color-chip-info"><span class="color-chip-name">Metal negro mate</span><span class="color-chip-hex">#1C1C1C</span></div>
+                  <span class="color-chip-copy">copiar</span>
+                </div>
+                <div class="color-chip" data-hex="#5D4037" title="Click para copiar HEX">
+                  <div class="color-swatch" style="background:#5D4037;"></div>
+                  <div class="color-chip-info"><span class="color-chip-name">Madera recuperada</span><span class="color-chip-hex">#5D4037</span></div>
+                  <span class="color-chip-copy">copiar</span>
+                </div>
+                <div class="color-chip" data-hex="#6B4C3B" title="Click para copiar HEX">
+                  <div class="color-swatch" style="background:#6B4C3B;"></div>
+                  <div class="color-chip-info"><span class="color-chip-name">Cuero envejecido</span><span class="color-chip-hex">#6B4C3B</span></div>
+                  <span class="color-chip-copy">copiar</span>
+                </div>
+              </div>
+            </div>
+            <div class="info-block">
+              <div class="info-block-header">Exterior / Paisaje</div>
+              <div class="info-block-body" style="display:flex; flex-direction:column; gap:6px;">
+                <div class="color-chip" data-hex="#9E9E9E" title="Click para copiar HEX">
+                  <div class="color-swatch" style="background:#9E9E9E;"></div>
+                  <div class="color-chip-info"><span class="color-chip-name">Grava</span><span class="color-chip-hex">#9E9E9E</span></div>
+                  <span class="color-chip-copy">copiar</span>
+                </div>
+                <div class="color-chip" data-hex="#424242" title="Click para copiar HEX">
+                  <div class="color-swatch" style="background:#424242;"></div>
+                  <div class="color-chip-info"><span class="color-chip-name">Piedra volcánica</span><span class="color-chip-hex">#424242</span></div>
+                  <span class="color-chip-copy">copiar</span>
+                </div>
+                <div class="color-chip" data-hex="#6D8B74" title="Click para copiar HEX">
+                  <div class="color-swatch" style="background:#6D8B74;"></div>
+                  <div class="color-chip-info"><span class="color-chip-name">Agave / cactácea</span><span class="color-chip-hex">#6D8B74</span></div>
+                  <span class="color-chip-copy">copiar</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Plantas recomendadas -->
+          <div class="section-head" style="margin-top:16px;"><h2>Plantas recomendadas para interiores</h2></div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:8px; margin-bottom:24px;">
+            <div class="info-block"><div class="info-block-body">
+              <div style="font-size:0.85rem; color:var(--text-0); font-weight:500;">Ficus lyrata</div>
+              <div class="text-xs text-muted">Hojas grandes, silueta escultórica</div>
+            </div></div>
+            <div class="info-block"><div class="info-block-body">
+              <div style="font-size:0.85rem; color:var(--text-0); font-weight:500;">Sansevieria trifasciata</div>
+              <div class="text-xs text-muted">Vertical, bajo mantenimiento</div>
+            </div></div>
+            <div class="info-block"><div class="info-block-body">
+              <div style="font-size:0.85rem; color:var(--text-0); font-weight:500;">Monstera deliciosa</div>
+              <div class="text-xs text-muted">Hojas perforadas, tropical</div>
+            </div></div>
+            <div class="info-block"><div class="info-block-body">
+              <div style="font-size:0.85rem; color:var(--text-0); font-weight:500;">Dracaena marginata</div>
+              <div class="text-xs text-muted">Tronco visto, hojas lineales</div>
+            </div></div>
+          </div>
+        </div>
+
+        <!-- TAB: FLOORPLANS -->
+        <div class="tab-panel" data-panel="floorplans">
+          <p class="text-sm text-muted" style="margin-bottom:20px;">Tipologías de planta compatibles con el vocabulario brutalista. Énfasis en plantas libres, circulaciones visibles y módulos estructurales expresivos.</p>
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:12px;">
+            <a class="card accent-hover" href="../floorplans/planta-libre.html" style="padding:16px; text-decoration:none;">
+              <div style="font-family:var(--font-mono); font-size:0.62rem; color:var(--text-2); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.1em;">Residencial</div>
+              <div style="font-family:var(--font-disp); font-size:1.1rem; font-weight:700; color:var(--text-0); margin-bottom:6px;">Planta libre modular</div>
+              <p class="text-sm text-muted" style="margin-bottom:10px;">Estructura expuesta define los espacios. Sin tabiques convencionales.</p>
+              <span class="badge badge-ghost">80–150 m²</span>
+            </a>
+            <a class="card accent-hover" href="../floorplans/unifamiliar-grande.html" style="padding:16px; text-decoration:none;">
+              <div style="font-family:var(--font-mono); font-size:0.62rem; color:var(--text-2); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.1em;">Residencial</div>
+              <div style="font-family:var(--font-disp); font-size:1.1rem; font-weight:700; color:var(--text-0); margin-bottom:6px;">Casa brutalista en L</div>
+              <p class="text-sm text-muted" style="margin-bottom:10px;">Volúmenes que se articulan, patios en hormigón, integración interior-exterior controlada.</p>
+              <span class="badge badge-ghost">+150 m²</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- fin contenido principal -->
+
+    <!-- SIDEBAR -->
+    <aside class="ficha-sidebar">
+
+      <!-- Datos técnicos -->
+      <div class="info-block">
+        <div class="info-block-header">Datos técnicos</div>
+        <div class="info-block-body">
+          <div class="info-row"><span class="info-row-label">Origen</span><span class="info-row-val">Reino Unido</span></div>
+          <div class="info-row"><span class="info-row-label">Período</span><span class="info-row-val">1950–1970</span></div>
+          <div class="info-row"><span class="info-row-label">Material primario</span><span class="info-row-val">Hormigón armado</span></div>
+          <div class="info-row"><span class="info-row-label">Programa típico</span><span class="info-row-val">Vivienda social, institucional</span></div>
+          <div class="info-row"><span class="info-row-label">Costo constructivo</span><span class="info-row-val">Medio-bajo</span></div>
+          <div class="info-row"><span class="info-row-label">Mantenimiento</span><span class="info-row-val">Alto (hormigón)</span></div>
+        </div>
+      </div>
+
+      <!-- Nota personal -->
+      <div class="info-block" id="nota-widget" data-estilo="brutalismo">
+        <div class="info-block-header">
+          Mis notas
+          <span class="nota-status text-xs text-muted" style="margin-left:auto;"></span>
+        </div>
+        <div class="info-block-body">
+          <textarea class="nota-textarea input" style="min-height:100px; font-size:0.82rem;" placeholder="Anotá tus observaciones sobre este estilo..."></textarea>
+        </div>
+      </div>
+
+      <!-- Agregar a proyecto -->
+      <button class="btn btn-primary w-full"
+        data-action="add-to-project"
+        data-ref-id="brutalismo"
+        data-ref-tipo="estilo-arquitectonico"
+        data-ref-nombre="Brutalismo"
+        data-ref-url="estilos/brutalismo.html">
+        + Agregar a proyecto
+      </button>
+
+      <!-- Estilos relacionados -->
+      <div class="info-block">
+        <div class="info-block-header">Estilos relacionados</div>
+        <div class="info-block-body" style="display:flex; flex-direction:column; gap:6px;">
+          <a href="bauhaus.html" class="btn btn-ghost btn-sm w-full" style="justify-content:flex-start;">→ Bauhaus</a>
+          <a href="modernismo.html" class="btn btn-ghost btn-sm w-full" style="justify-content:flex-start;">→ Modernismo</a>
+          <a href="deconstructivismo.html" class="btn btn-ghost btn-sm w-full" style="justify-content:flex-start;">→ Deconstructivismo</a>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">
+          <div class="nav-logo-mark">AR</div>
+          <span class="nav-logo-text">ARQ<span style="color:var(--accent)">REF</span></span>
+        </div>
+        <p>Herramienta de referencia para arquitectos. Código abierto, sin publicidad.</p>
+      </div>
+      <div class="footer-col"><h4>Arquitectura</h4><ul>
+        <li><a href="bauhaus.html">Bauhaus</a></li>
+        <li><a href="modernismo.html">Modernismo</a></li>
+        <li><a href="gotico.html">Gótico</a></li>
+        <li><a href="index.html">Ver todos →</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Interiores</h4><ul>
+        <li><a href="../interiores/industrial.html">Industrial</a></li>
+        <li><a href="../interiores/wabi-sabi.html">Wabi-Sabi</a></li>
+        <li><a href="../interiores/biophilic.html">Biofílico 🌱</a></li>
+        <li><a href="../interiores/index.html">Ver todos →</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Herramientas</h4><ul>
+        <li><a href="../floorplans/index.html">Floorplans</a></li>
+        <li><a href="../workspace.html">Workspace</a></li>
+        <li><a href="../comparador.html">Comparador</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>ARQREF © 2025 — MIT License</span>
+      <span>Fotos: Unsplash (CC0) · Contenido: CC BY-SA 4.0</span>
+    </div>
+  </footer>
+
+  <div id="toast-container"></div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

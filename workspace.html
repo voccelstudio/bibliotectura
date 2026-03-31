@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Workspace — ARQREF</title>
+  <meta name="robots" content="noindex"/>
+  <link rel="stylesheet" href="css/main.css"/>
+  <style>
+    .ws-layout {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 32px 20px;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      align-items: start;
+      min-height: calc(100vh - var(--nav-h));
+    }
+    @media (max-width: 860px) {
+      .ws-layout { grid-template-columns: 1fr; }
+    }
+
+    /* Sidebar proyectos */
+    .ws-sidebar {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      position: sticky;
+      top: calc(var(--nav-h) + 16px);
+    }
+
+    .ws-sidebar-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .ws-sidebar-title {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ws-sidebar-title::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+    }
+
+    .proyecto-item {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .proyecto-item:hover { background: var(--bg-3); }
+    .proyecto-item.active { background: var(--accent-glow); border-left: 2px solid var(--accent); padding-left: 14px; }
+
+    .proyecto-item-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      flex-shrink: 0;
+      opacity: 0.5;
+    }
+
+    .proyecto-item.active .proyecto-item-dot { opacity: 1; }
+
+    .proyecto-item-info { flex: 1; min-width: 0; }
+
+    .proyecto-item-name {
+      font-size: 0.85rem;
+      color: var(--text-0);
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .proyecto-item-meta {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--text-2);
+      margin-top: 2px;
+    }
+
+    /* Panel principal */
+    .ws-main { min-width: 0; }
+
+    .ws-panel {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+
+    .ws-panel-header {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .ws-panel-title {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ws-panel-title::before {
+      content: '';
+      width: 8px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .ws-panel-body { padding: 20px; }
+
+    /* Refs grid */
+    .refs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    .ref-card {
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      padding: 12px;
+      position: relative;
+      transition: border-color 0.15s;
+    }
+
+    .ref-card:hover { border-color: var(--border-md); }
+
+    .ref-card-type {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-2);
+      margin-bottom: 6px;
+    }
+
+    .ref-card-name {
+      font-size: 0.85rem;
+      color: var(--text-0);
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .ref-card-del {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: none;
+      border: 1px solid transparent;
+      color: var(--text-2);
+      width: 22px;
+      height: 22px;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .ref-card:hover .ref-card-del { border-color: var(--danger-dim); color: var(--danger); }
+
+    /* Paleta de colores */
+    .paleta-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .paleta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      cursor: pointer;
+      transition: border-color 0.15s;
+      position: relative;
+    }
+
+    .paleta-item:hover { border-color: var(--accent); }
+
+    .paleta-swatch {
+      width: 20px;
+      height: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+      flex-shrink: 0;
+    }
+
+    .paleta-hex {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-1);
+    }
+
+    .paleta-del {
+      background: none;
+      border: none;
+      color: var(--text-2);
+      font-size: 0.7rem;
+      cursor: pointer;
+      padding: 0 2px;
+      transition: color 0.15s;
+      line-height: 1;
+    }
+
+    .paleta-del:hover { color: var(--danger); }
+
+    /* Notas textarea */
+    .nota-area {
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      color: var(--text-0);
+      padding: 14px 16px;
+      font-size: 0.88rem;
+      font-family: var(--font-sans);
+      width: 100%;
+      min-height: 120px;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.15s;
+      line-height: 1.65;
+    }
+
+    .nota-area:focus { border-color: var(--accent); }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--text-2);
+    }
+
+    .empty-state .empty-icon {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+      opacity: 0.3;
+    }
+
+    .empty-state p {
+      font-family: var(--font-disp);
+      font-style: italic;
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+
+    /* Nuevo proyecto form */
+    .new-proyecto-form {
+      padding: 16px;
+      background: var(--bg-0);
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <div id="scroll-bar"></div>
+
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a class="nav-logo" href="index.html">
+        <div class="nav-logo-mark">AR</div>
+        <span class="nav-logo-text">ARQ<span style="color:var(--accent)">REF</span></span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html"><span class="nav-icon">⊞</span> Inicio</a></li>
+        <li><a href="estilos/index.html"><span class="nav-icon">🏛</span> Estilos</a></li>
+        <li><a href="interiores/index.html"><span class="nav-icon">🪑</span> Interiores</a></li>
+        <li><a href="floorplans/index.html"><span class="nav-icon">📐</span> Floorplans</a></li>
+        <li><a href="comparador.html"><span class="nav-icon">⇄</span> Comparador</a></li>
+        <li><a href="glosario.html"><span class="nav-icon">▤</span> Glosario</a></li>
+        <li><a href="workspace.html" class="active"><span class="nav-icon">◈</span> Workspace</a></li>
+      </ul>
+      <div class="nav-right">
+        <button class="nav-btn" id="exportBtn">⬇ Exportar</button>
+        <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <div style="background:var(--bg-0); border-bottom:1px solid var(--border); padding:20px 0;">
+    <div class="container">
+      <div class="breadcrumb"><a href="index.html">Inicio</a><span class="sep">/</span><span>Workspace</span></div>
+      <div class="flex items-center justify-between">
+        <div>
+          <div class="page-eyebrow">Sistema de trabajo</div>
+          <h1 class="page-title">Mi <em>Workspace</em></h1>
+          <p class="page-sub">Proyectos, referencias, paletas y notas — todo guardado localmente en tu navegador.</p>
+        </div>
+        <button class="btn btn-primary btn-lg" id="btnNuevoProyecto">+ Nuevo proyecto</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ws-layout">
+    <!-- Sidebar: lista de proyectos -->
+    <div class="ws-sidebar">
+      <div class="ws-sidebar-header">
+        <span class="ws-sidebar-title">Proyectos</span>
+        <span class="badge badge-green" id="proyectoCount">0</span>
+      </div>
+      <div id="proyectosList">
+        <div class="empty-state" style="padding:32px 16px;">
+          <div class="empty-icon">◈</div>
+          <p>Sin proyectos aún</p>
+          <button class="btn btn-ghost w-full btn-sm" id="btnNuevoP2">+ Crear proyecto</button>
+        </div>
+      </div>
+      <div class="new-proyecto-form">
+        <div class="form-group">
+          <label class="label">Nombre del proyecto</label>
+          <input class="input input-mono" id="inputNombreProyecto" type="text" placeholder="Casa Rodríguez, Local Comercial..."/>
+        </div>
+        <div class="form-group">
+          <label class="label">Tipo</label>
+          <select class="input" id="inputTipoProyecto">
+            <option value="">Sin especificar</option>
+            <option value="vivienda-unifamiliar">Vivienda unifamiliar</option>
+            <option value="vivienda-colectiva">Vivienda colectiva</option>
+            <option value="comercial">Local comercial</option>
+            <option value="oficina">Oficina</option>
+            <option value="espacio-publico">Espacio público</option>
+            <option value="reforma">Reforma / Remodelación</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <button class="btn btn-primary w-full" id="btnCrearProyecto">Crear proyecto</button>
+      </div>
+    </div>
+
+    <!-- Main: panel del proyecto activo -->
+    <div class="ws-main" id="wsMain">
+      <div class="empty-state ws-panel" style="padding:64px;">
+        <div class="empty-icon">◈</div>
+        <p>Seleccioná o creá un proyecto para empezar</p>
+        <p class="text-sm text-muted">Las referencias que guardás en cada ficha de estilo o interior aparecen acá. Tus datos se guardan localmente.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add color to palette -->
+  <div class="modal-overlay" id="modalAddColor">
+    <div class="modal" style="max-width:380px;">
+      <div class="modal-header">
+        <span class="modal-title">Agregar color a paleta</span>
+        <button class="modal-close" data-modal-close>✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="label">Color (HEX)</label>
+          <div class="flex gap-8">
+            <input type="color" id="colorPicker" style="width:48px; height:40px; background:none; border:1px solid var(--border); cursor:pointer; padding:2px;" value="#4ADE80"/>
+            <input class="input input-mono" id="colorHexInput" type="text" placeholder="#4ADE80" style="flex:1;"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="label">Nombre / descripción</label>
+          <input class="input" id="colorNameInput" type="text" placeholder="Verde acento, Hormigón claro..."/>
+        </div>
+        <button class="btn btn-primary w-full" id="btnConfirmColor">Agregar a paleta</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+  <script src="js/main.js"></script>
+  <script>
+  (function() {
+    let proyectoActivo = null;
+
+    // ── Render sidebar ──────────────────────────────────────────
+    function renderSidebar() {
+      const proyectos = ARQREF.Proyectos.getAll();
+      const list = document.getElementById('proyectosList');
+      const count = document.getElementById('proyectoCount');
+      count.textContent = proyectos.length;
+
+      if (!proyectos.length) {
+        list.innerHTML = `<div class="empty-state" style="padding:32px 16px;"><div class="empty-icon">◈</div><p>Sin proyectos aún</p><button class="btn btn-ghost w-full btn-sm" id="btnNuevoP2">+ Crear proyecto</button></div>`;
+        document.getElementById('btnNuevoP2')?.addEventListener('click', focusNuevoProyecto);
+        return;
+      }
+
+      list.innerHTML = proyectos.map(p => `
+        <div class="proyecto-item ${proyectoActivo === p.id ? 'active' : ''}" data-pid="${p.id}">
+          <div class="proyecto-item-dot"></div>
+          <div class="proyecto-item-info">
+            <div class="proyecto-item-name">${ARQREF.escHtml(p.nombre)}</div>
+            <div class="proyecto-item-meta">${p.tipo || 'sin tipo'} · ${p.refs.length} refs</div>
+          </div>
+          <button class="ref-card-del" data-del-p="${p.id}" title="Eliminar proyecto">✕</button>
+        </div>
+      `).join('');
+
+      list.querySelectorAll('.proyecto-item').forEach(item => {
+        item.addEventListener('click', e => {
+          if (e.target.dataset.delP) return;
+          proyectoActivo = item.dataset.pid;
+          renderSidebar();
+          renderMain();
+        });
+      });
+
+      list.querySelectorAll('[data-del-p]').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          if (confirm('¿Eliminar este proyecto?')) {
+            ARQREF.Proyectos.delete(btn.dataset.delP);
+            if (proyectoActivo === btn.dataset.delP) { proyectoActivo = null; renderMain(); }
+            renderSidebar();
+          }
+        });
+      });
+    }
+
+    // ── Render main ─────────────────────────────────────────────
+    function renderMain() {
+      const main = document.getElementById('wsMain');
+      if (!proyectoActivo) {
+        main.innerHTML = `<div class="empty-state ws-panel" style="padding:64px;"><div class="empty-icon">◈</div><p>Seleccioná o creá un proyecto</p><p class="text-sm text-muted">Las referencias se guardan por proyecto. Tus datos nunca salen del navegador.</p></div>`;
+        return;
+      }
+
+      const p = ARQREF.Proyectos.get(proyectoActivo);
+      if (!p) return;
+
+      main.innerHTML = `
+        <!-- Header del proyecto -->
+        <div class="ws-panel">
+          <div class="ws-panel-header">
+            <span class="ws-panel-title">${ARQREF.escHtml(p.nombre)}</span>
+            <div class="flex gap-8">
+              ${p.tipo ? `<span class="badge badge-ghost">${ARQREF.escHtml(p.tipo)}</span>` : ''}
+              <button class="btn btn-ghost btn-sm" id="btnPrintProyecto">⎙ Exportar PDF</button>
+            </div>
+          </div>
+          <div class="ws-panel-body">
+            <div class="flex gap-24" style="flex-wrap:wrap;">
+              <div><span class="label">Creado</span><span class="text-sm text-muted">${new Date(p.createdAt).toLocaleDateString('es-AR')}</span></div>
+              <div><span class="label">Referencias</span><span class="text-sm text-accent">${p.refs.length}</span></div>
+              <div><span class="label">Colores</span><span class="text-sm text-accent">${p.paleta.length}</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notas del proyecto -->
+        <div class="ws-panel">
+          <div class="ws-panel-header">
+            <span class="ws-panel-title">Notas del proyecto</span>
+            <span class="text-xs text-muted" id="notaStatus"></span>
+          </div>
+          <div class="ws-panel-body">
+            <textarea class="nota-area" id="proyectoNota" placeholder="Escribí acá tus notas sobre el proyecto: requerimientos del cliente, restricciones, ideas...">${ARQREF.escHtml(p.notas || '')}</textarea>
+          </div>
+        </div>
+
+        <!-- Referencias -->
+        <div class="ws-panel">
+          <div class="ws-panel-header">
+            <span class="ws-panel-title">Referencias guardadas</span>
+            <span class="badge badge-green">${p.refs.length}</span>
+          </div>
+          <div class="ws-panel-body">
+            ${p.refs.length ? `
+              <div class="refs-grid" id="refsGrid">
+                ${p.refs.map((ref, i) => `
+                  <div class="ref-card">
+                    <div class="ref-card-type">${ARQREF.escHtml(ref.tipo || 'referencia')}</div>
+                    <div class="ref-card-name">${ARQREF.escHtml(ref.nombre || ref.id)}</div>
+                    ${ref.url ? `<a href="${ARQREF.escHtml(ref.url)}" class="btn btn-ghost btn-sm" style="margin-top:4px;">Ver ficha →</a>` : ''}
+                    <button class="ref-card-del" data-ref-idx="${i}" title="Quitar referencia">✕</button>
+                  </div>
+                `).join('')}
+              </div>
+            ` : `<p class="text-sm text-muted">Sin referencias aún. Explorá estilos e interiores y usá el botón "Agregar a proyecto".</p>`}
+          </div>
+        </div>
+
+        <!-- Paleta de colores -->
+        <div class="ws-panel">
+          <div class="ws-panel-header">
+            <span class="ws-panel-title">Paleta del proyecto</span>
+            <button class="btn btn-ghost btn-sm" data-modal-open="modalAddColor">+ Color</button>
+          </div>
+          <div class="ws-panel-body">
+            ${p.paleta.length ? `
+              <div class="paleta-grid" id="paletaGrid">
+                ${p.paleta.map((c, i) => `
+                  <div class="paleta-item color-chip" data-hex="${ARQREF.escHtml(c.hex)}" title="Click para copiar">
+                    <div class="paleta-swatch" style="background:${ARQREF.escHtml(c.hex)};"></div>
+                    <span class="paleta-hex">${ARQREF.escHtml(c.hex)}</span>
+                    ${c.nombre ? `<span class="text-xs text-muted">${ARQREF.escHtml(c.nombre)}</span>` : ''}
+                    <button class="paleta-del" data-pal-idx="${i}" title="Quitar">✕</button>
+                  </div>
+                `).join('')}
+              </div>
+            ` : `<p class="text-sm text-muted" style="margin-bottom:12px;">La paleta del proyecto está vacía. Agregá colores manualmente o copialos desde las fichas de estilos.</p>`}
+          </div>
+        </div>
+      `;
+
+      // Eventos
+      // Notas autosave
+      const notaArea = document.getElementById('proyectoNota');
+      const notaStatus = document.getElementById('notaStatus');
+      let notaTimer;
+      notaArea?.addEventListener('input', () => {
+        clearTimeout(notaTimer);
+        notaStatus.textContent = '···';
+        notaTimer = setTimeout(() => {
+          ARQREF.Proyectos.update(proyectoActivo, { notas: notaArea.value });
+          notaStatus.textContent = '✓ guardado';
+          setTimeout(() => notaStatus.textContent = '', 2000);
+        }, 800);
+      });
+
+      // Delete refs
+      document.querySelectorAll('[data-ref-idx]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.refIdx);
+          const pp = ARQREF.Proyectos.get(proyectoActivo);
+          pp.refs.splice(idx, 1);
+          ARQREF.Proyectos.update(proyectoActivo, { refs: pp.refs });
+          ARQREF.Toast.show('Referencia quitada', 'warn');
+          renderMain();
+        });
+      });
+
+      // Delete paleta
+      document.querySelectorAll('[data-pal-idx]').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          const idx = parseInt(btn.dataset.palIdx);
+          const pp = ARQREF.Proyectos.get(proyectoActivo);
+          pp.paleta.splice(idx, 1);
+          ARQREF.Proyectos.update(proyectoActivo, { paleta: pp.paleta });
+          renderMain();
+        });
+      });
+
+      // Color chips copy
+      ARQREF.initColorChips(main);
+
+      // Export PDF
+      document.getElementById('btnPrintProyecto')?.addEventListener('click', () => window.print());
+
+      // Re-init modal open buttons
+      document.querySelectorAll('[data-modal-open]').forEach(btn => {
+        btn.addEventListener('click', () => ARQREF.Modal.open(btn.dataset.modalOpen));
+      });
+
+      renderSidebar();
+    }
+
+    // ── Crear proyecto ───────────────────────────────────────────
+    function focusNuevoProyecto() {
+      document.getElementById('inputNombreProyecto')?.focus();
+    }
+
+    document.getElementById('btnCrearProyecto')?.addEventListener('click', () => {
+      const nombre = document.getElementById('inputNombreProyecto').value.trim();
+      const tipo   = document.getElementById('inputTipoProyecto').value;
+      if (!nombre) { ARQREF.Toast.show('Escribí un nombre para el proyecto', 'warn'); return; }
+      const p = ARQREF.Proyectos.create(nombre, tipo);
+      proyectoActivo = p.id;
+      document.getElementById('inputNombreProyecto').value = '';
+      renderSidebar();
+      renderMain();
+    });
+
+    document.getElementById('inputNombreProyecto')?.addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('btnCrearProyecto').click();
+    });
+
+    document.getElementById('btnNuevoProyecto')?.addEventListener('click', focusNuevoProyecto);
+
+    // ── Add color modal ──────────────────────────────────────────
+    const colorPicker   = document.getElementById('colorPicker');
+    const colorHexInput = document.getElementById('colorHexInput');
+
+    colorPicker?.addEventListener('input', () => {
+      colorHexInput.value = colorPicker.value.toUpperCase();
+    });
+
+    colorHexInput?.addEventListener('input', () => {
+      const v = colorHexInput.value.trim();
+      if (/^#[0-9A-Fa-f]{6}$/.test(v)) colorPicker.value = v;
+    });
+
+    document.getElementById('btnConfirmColor')?.addEventListener('click', () => {
+      if (!proyectoActivo) { ARQREF.Toast.show('Seleccioná un proyecto primero', 'warn'); return; }
+      const hex   = colorHexInput.value.trim() || colorPicker.value;
+      const nombre= document.getElementById('colorNameInput').value.trim();
+      const p = ARQREF.Proyectos.get(proyectoActivo);
+      p.paleta.push({ hex, nombre });
+      ARQREF.Proyectos.update(proyectoActivo, { paleta: p.paleta });
+      ARQREF.Modal.closeAll();
+      ARQREF.Toast.show('✓ Color agregado a la paleta');
+      renderMain();
+      document.getElementById('colorNameInput').value = '';
+    });
+
+    // ── Export JSON ──────────────────────────────────────────────
+    document.getElementById('exportBtn')?.addEventListener('click', () => {
+      const data = {
+        proyectos: ARQREF.Proyectos.getAll(),
+        notas: ARQREF.Notas.getAll(),
+        favoritos: ARQREF.Favoritos.getAll(),
+        exportedAt: new Date().toISOString()
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'arqref-workspace.json'; a.click();
+      URL.revokeObjectURL(url);
+      ARQREF.Toast.show('✓ Workspace exportado como JSON');
+    });
+
+    // Init
+    renderSidebar();
+    const primero = ARQREF.Proyectos.getAll()[0];
+    if (primero) { proyectoActivo = primero.id; renderSidebar(); renderMain(); }
+
+  })();
+  </script>
+</body>
+</html>

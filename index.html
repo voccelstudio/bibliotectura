@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ARQREF — Referencia Arquitectónica para Profesionales</title>
+  <meta name="description" content="Herramienta de referencia para arquitectos: estilos arquitectónicos, decoración de interiores, floorplans, paletas de materiales y workspace de proyecto."/>
+  <meta property="og:title" content="ARQREF — Referencia Arquitectónica"/>
+  <meta property="og:description" content="Enciclopedia técnica de estilos arquitectónicos, interiores, floorplans y materiales para profesionales del diseño."/>
+  <meta property="og:type" content="website"/>
+  <link rel="canonical" href="https://TU-USUARIO.github.io/arqref/"/>
+  <link rel="stylesheet" href="css/main.css"/>
+  <style>
+    /* ── Hero ── */
+    .hero {
+      background: var(--bg-0);
+      border-bottom: 1px solid var(--border);
+      padding: 72px 0 56px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(74,222,128,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(74,222,128,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    .hero-corner {
+      position: absolute;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--text-2);
+      letter-spacing: 0.08em;
+    }
+    .hero-corner.tl { top: 16px; left: 20px; }
+    .hero-corner.tr { top: 16px; right: 20px; }
+    .hero-corner.bl { bottom: 16px; left: 20px; }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 32px; }
+    }
+
+    .hero-version {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-version::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s ease infinite;
+    }
+
+    .hero h1 {
+      font-family: var(--font-mono);
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--text-0);
+      margin-bottom: 8px;
+    }
+
+    .hero h1 .accent { color: var(--accent); }
+
+    .hero-tagline {
+      font-family: var(--font-disp);
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--text-1);
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-bottom: 32px;
+    }
+
+    .hero-stat {
+      background: var(--bg-1);
+      padding: 14px 12px;
+      text-align: center;
+    }
+
+    .hero-stat-val {
+      font-family: var(--font-mono);
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: var(--accent);
+      display: block;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .hero-stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-2);
+    }
+
+    /* Search */
+    .search-box {
+      background: var(--bg-2);
+      border: 1px solid var(--border-md);
+      padding: 20px;
+    }
+
+    .search-box-title {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-2);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .search-input-wrap {
+      display: flex;
+      gap: 0;
+      margin-bottom: 12px;
+    }
+
+    .search-input-wrap .input {
+      border-right: none;
+    }
+
+    .search-input-wrap .btn {
+      flex-shrink: 0;
+    }
+
+    .search-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .filter-chip {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      color: var(--text-2);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .filter-chip:hover,
+    .filter-chip.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    /* ── Quick access modules ── */
+    .modules-grid {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 48px 20px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 2px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    @media (max-width: 900px) {
+      .modules-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .modules-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    .module-btn {
+      background: var(--bg-1);
+      padding: 28px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .module-btn:hover { background: var(--bg-3); }
+
+    .module-icon {
+      font-size: 1.6rem;
+      line-height: 1;
+    }
+
+    .module-name {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-0);
+    }
+
+    .module-desc {
+      font-size: 0.75rem;
+      color: var(--text-2);
+      line-height: 1.5;
+    }
+
+    .module-count {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--accent);
+      margin-top: auto;
+    }
+
+    /* ── Styles grid ── */
+    .styles-section {
+      padding: 0 0 64px;
+    }
+
+    .styles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2px;
+      background: var(--border);
+    }
+
+    .style-card {
+      background: var(--bg-2);
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+      position: relative;
+    }
+
+    .style-card:hover { background: var(--bg-3); }
+
+    .style-card-img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.75) saturate(0.6);
+      transition: filter 0.4s ease, transform 0.4s ease;
+    }
+
+    .style-card:hover .style-card-img {
+      filter: brightness(0.85) saturate(0.8);
+      transform: scale(1.03);
+    }
+
+    .style-card-img-wrap {
+      overflow: hidden;
+      position: relative;
+    }
+
+    .style-card-img-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(12,13,14,0.7) 0%, transparent 55%);
+    }
+
+    .style-card-era {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-0);
+      background: rgba(12,13,14,0.75);
+      padding: 3px 8px;
+      z-index: 2;
+      backdrop-filter: blur(4px);
+    }
+
+    .style-card-eco {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 2;
+    }
+
+    .style-card-body { padding: 16px 18px 18px; }
+
+    .style-card-body h3 {
+      font-family: var(--font-disp);
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--text-0);
+      margin-bottom: 6px;
+    }
+
+    .style-card-body p {
+      font-size: 0.8rem;
+      color: var(--text-1);
+      line-height: 1.55;
+      margin-bottom: 12px;
+    }
+
+    .style-card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 12px;
+    }
+
+    .style-card-tag {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      background: var(--bg-4);
+      color: var(--text-2);
+      border: 1px solid var(--border);
+    }
+
+    .style-card-cta {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Categoría tabs de filtro */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .filter-bar-label {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-2);
+      flex-shrink: 0;
+    }
+
+    /* ── Recent activity sidebar ── */
+    .home-layout {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 40px 20px;
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 32px;
+      align-items: start;
+    }
+
+    @media (max-width: 960px) {
+      .home-layout { grid-template-columns: 1fr; }
+    }
+
+    .sidebar-panel {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      position: sticky;
+      top: calc(var(--nav-h) + 16px);
+    }
+
+    .sidebar-panel-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar-panel-header::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .sidebar-panel-body { padding: 16px; }
+
+    .quick-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--text-1);
+    }
+
+    .quick-item:last-child { border-bottom: none; }
+    .quick-item-icon { font-size: 1rem; flex-shrink: 0; opacity: 0.7; }
+    .quick-item a { color: var(--text-0); transition: color 0.15s; }
+    .quick-item a:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div id="scroll-bar"></div>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a class="nav-logo" href="index.html">
+        <div class="nav-logo-mark">AR</div>
+        <span class="nav-logo-text">ARQ<span>REF</span></span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="active"><span class="nav-icon">⊞</span> Inicio</a></li>
+        <li><a href="estilos/index.html"><span class="nav-icon">🏛</span> Estilos</a></li>
+        <li><a href="interiores/index.html"><span class="nav-icon">🪑</span> Interiores</a></li>
+        <li><a href="floorplans/index.html"><span class="nav-icon">📐</span> Floorplans</a></li>
+        <li><a href="comparador.html"><span class="nav-icon">⇄</span> Comparador</a></li>
+        <li><a href="glosario.html"><span class="nav-icon">▤</span> Glosario</a></li>
+        <li><a href="workspace.html"><span class="nav-icon">◈</span> Workspace</a></li>
+      </ul>
+      <div class="nav-right">
+        <a class="nav-btn primary" href="workspace.html">
+          <span>◈</span> <span>Mis Proyectos</span>
+        </a>
+        <button class="nav-toggle" id="navToggle" aria-label="Menú">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid-bg"></div>
+    <span class="hero-corner tl">v2.0 — 2025</span>
+    <span class="hero-corner tr">GitHub Pages / Static</span>
+    <span class="hero-corner bl">CC BY-SA 4.0</span>
+
+    <div class="hero-inner">
+      <div class="anim-up">
+        <div class="hero-version">Sistema activo — arqref</div>
+        <h1>
+          <span class="accent">ARQ</span>REF<br/>
+          <span style="font-size:0.55em; font-weight:300; color:var(--text-1);">Referencia arquitectónica</span>
+        </h1>
+        <p class="hero-tagline">
+          Herramienta de consulta para arquitectos y diseñadores. Estilos, interiores, materiales, floorplans y workspace de proyecto — todo en un lugar.
+        </p>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <span class="hero-stat-val">9</span>
+            <span class="hero-stat-label">Estilos Arq.</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-val">24+</span>
+            <span class="hero-stat-label">Int. + Micro</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-val">40+</span>
+            <span class="hero-stat-label">Floorplans</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-val">∞</span>
+            <span class="hero-stat-label">Proyectos</span>
+          </div>
+        </div>
+        <div class="flex gap-8">
+          <a class="btn btn-primary btn-lg" href="estilos/index.html">→ Explorar estilos</a>
+          <a class="btn btn-ghost btn-lg" href="workspace.html">◈ Mi workspace</a>
+        </div>
+      </div>
+
+      <!-- Search -->
+      <div class="search-box anim-up d2">
+        <div class="search-box-title">
+          <span>◈</span> Búsqueda rápida
+        </div>
+        <div class="search-input-wrap">
+          <input class="input" id="globalSearch" type="text" placeholder="Bauhaus, hormigón, japandi, solarpunk..."/>
+          <button class="btn btn-primary" id="searchBtn">Buscar</button>
+        </div>
+        <div style="margin-bottom:10px;">
+          <div class="label">Filtrar por categoría</div>
+          <div class="search-filters" id="searchFilters">
+            <button class="filter-chip active" data-cat="all">Todo</button>
+            <button class="filter-chip" data-cat="arquitectura">Arquitectura</button>
+            <button class="filter-chip" data-cat="interior">Interiores</button>
+            <button class="filter-chip" data-cat="floorplan">Floorplans</button>
+            <button class="filter-chip" data-cat="material">Materiales</button>
+            <button class="filter-chip" data-cat="eco">🌱 Eco</button>
+          </div>
+        </div>
+        <div class="label" style="margin-top:12px; margin-bottom:8px;">Búsquedas frecuentes</div>
+        <div class="flex gap-4" style="flex-wrap:wrap;">
+          <a class="filter-chip" href="estilos/brutalismo.html">Brutalismo</a>
+          <a class="filter-chip" href="interiores/japandi.html">Japandi</a>
+          <a class="filter-chip" href="estilos/bauhaus.html">Bauhaus</a>
+          <a class="filter-chip" href="interiores/solarpunk.html">Solarpunk 🌱</a>
+          <a class="filter-chip" href="interiores/dark-academia.html">Dark Academia</a>
+          <a class="filter-chip" href="floorplans/index.html">Plantas libres</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MÓDULOS DE ACCESO RÁPIDO -->
+  <div class="container">
+    <div class="modules-grid">
+      <a class="module-btn" href="estilos/index.html">
+        <div class="module-icon">🏛</div>
+        <div class="module-name">Estilos Arq.</div>
+        <div class="module-desc">Brutalismo, Bauhaus, Gótico, Modernismo y más</div>
+        <div class="module-count">9 estilos</div>
+      </a>
+      <a class="module-btn" href="interiores/index.html">
+        <div class="module-icon">🪑</div>
+        <div class="module-name">Interiores</div>
+        <div class="module-desc">Estilos de decoración y micro-estilos completos</div>
+        <div class="module-count">24+ estilos</div>
+      </a>
+      <a class="module-btn" href="floorplans/index.html">
+        <div class="module-icon">📐</div>
+        <div class="module-name">Floorplans</div>
+        <div class="module-desc">Plantas arquitectónicas por tipología y m²</div>
+        <div class="module-count">40+ plantas</div>
+      </a>
+      <a class="module-btn" href="comparador.html">
+        <div class="module-icon">⇄</div>
+        <div class="module-name">Comparador</div>
+        <div class="module-desc">Compará estilos lado a lado</div>
+        <div class="module-count">2–3 estilos</div>
+      </a>
+      <a class="module-btn" href="workspace.html">
+        <div class="module-icon">◈</div>
+        <div class="module-name">Workspace</div>
+        <div class="module-desc">Proyectos, notas, paletas y referencias</div>
+        <div class="module-count">Tus datos locales</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- GRID ESTILOS -->
+  <div class="home-layout">
+    <div class="styles-section">
+      <div class="section-head">
+        <h2>Estilos arquitectónicos destacados</h2>
+        <a class="btn btn-ghost btn-sm" href="estilos/index.html">Ver todos →</a>
+      </div>
+
+      <div class="filter-bar">
+        <span class="filter-bar-label">Época:</span>
+        <button class="filter-chip active" data-filter="all">Todas</button>
+        <button class="filter-chip" data-filter="siglo19">S. XIX</button>
+        <button class="filter-chip" data-filter="1900-1940">1900–1940</button>
+        <button class="filter-chip" data-filter="1940-1970">1940–1970</button>
+        <button class="filter-chip" data-filter="contemporaneo">Contemporáneo</button>
+        <button class="filter-chip" data-filter="eco">🌱 Eco / Futuro</button>
+      </div>
+
+      <div class="styles-grid" id="stylesGrid">
+
+        <!-- Brutalismo -->
+        <a class="style-card" href="estilos/brutalismo.html" data-epoca="1940-1970" data-tags="hormigon texturas monumental">
+          <div class="style-card-img-wrap">
+            <img class="style-card-img" src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=75&fit=crop" alt="Arquitectura Brutalista"/>
+            <span class="style-card-era">1950–1970</span>
+          </div>
+          <div class="style-card-body">
+            <h3>Brutalismo</h3>
+            <p>Hormigón visto, estructuras monumentales y honestidad material en toda su expresión.</p>
+            <div class="style-card-tags">
+              <span class="style-card-tag">Hormigón</span>
+              <span class="style-card-tag">Monumental</span>
+              <span class="style-card-tag">Textura</span>
+            </div>
+            <span class="style-card-cta">Ver ficha →</span>
+          </div>
+        </a>
+
+        <!-- Bauhaus -->
+        <a class="style-card" href="estilos/bauhaus.html" data-epoca="1900-1940" data-tags="funcional geometrico minimalismo">
+          <div class="style-card-img-wrap">
+            <img class="style-card-img" src="https://images.unsplash.com/photo-1545670723-196ed0954986?w=600&q=75&fit=crop" alt="Arquitectura Bauhaus"/>
+            <span class="style-card-era">1919–1933</span>
+          </div>
+          <div class="style-card-body">
+            <h3>Bauhaus</h3>
+            <p>Arte, artesanía y tecnología unificados. La forma sigue a la función.</p>
+            <div class="style-card-tags">
+              <span class="style-card-tag">Funcional</span>
+              <span class="style-card-tag">Geométrico</span>
+              <span class="style-card-tag">Acero</span>
+            </div>
+            <span class="style-card-cta">Ver ficha →</span>
+          </div>
+        </a>
+
+        <!-- Modernismo -->
+        <a class="style-card" href="estilos/modernismo.html" data-epoca="1900-1940" data-tags="lineas limpias vidrio plantas libres">
+          <div class="style-card-img-wrap">
+            <img class="style-card-img" src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&q=75&fit=crop" alt="Arquitectura Modernismo"/>
+            <span class="style-card-era">1920–1960</span>
+          </div>
+          <div class="style-card-body">
+            <h3>Modernismo</h3>
+            <p>Líneas limpias, plantas libres, integración con la naturaleza.</p>
+            <div class="style-card-tags">
+              <span class="style-card-tag">Vidrio</span>
+              <span class="style-card-tag">Planta libre</span>
+              <span class="style-card-tag">Naturaleza</span>
+            </div>
+            <span class="style-card-cta">Ver ficha →</span>
+          </div>
+        </a>
+
+        <!-- Art Decó -->
+        <a class="style-card" href="estilos/art-deco.html" data-epoca="1900-1940" data-tags="geometria lujo ornamentacion dorado">
+          <div class="style-card-img-wrap">
+            <img class="style-card-img" src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=600&q=75&fit=crop" alt="Arquitectura Art Decó"/>
+            <span class="style-card-era">1925–1940</span>
+          </div>
+          <div class="style-card-body">
+            <h3>Art Decó</h3>
+            <p>Elegancia geométrica, ornamentación y lujo moderno en su máxima expresión.</p>
+            <div class="style-card-tags">
+              <span class="style-card-tag">Geometría</span>
+              <span class="style-card-tag">Lujo</span>
+              <span class="style-card-tag">Dorado</span>
+            </div>
+            <span class="style-card-cta">Ver ficha →</span>
+          </div>
+        </a>
+
+        <!-- Gótico -->
+        <a class="style-card" href="estilos/gotico.html" data-epoca="siglo19" data-tags="arco ojival vertical catedral piedra">
+          <div class="style-card-img-wrap">
+            <img class="style-card-img" src="https://images.unsplash.com/photo-1548013146-72479768bada?w=600&q=75&fit=crop" alt="Arquitectura Gótica"/>
+            <span class="style-card-era">S. XII–XV</span>
+          </div>
+          <div class="style-card-body">
+            <h3>Gótico</h3>
+            <p>Verticalidad, luz y espiritualidad. El arco ojival como símbolo de la aspiración hacia lo sublime.</p>
+            <div class="style-card-tags">
+              <span class="style-card-tag">Piedra</span>
+              <span class="style-card-tag">Vertical</span>
+              <span class="style-card-tag">Vitrales</span>
+            </div>
+            <span class="style-card-cta">Ver ficha →</span>
+          </div>
+        </a>
+
+        <!-- Deconstructivismo -->
+        <a class="style-card" href="estilos/deconstructivismo.html" data-epoca="contemporaneo" data-tags="fragmentado titanio digital gehry hadid">
+          <div class="style-card-img-wrap">
+            <img class="style-card-img" src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=600&q=75&fit=crop" alt="Deconstructivismo"/>
+            <span class="style-card-era">1988–hoy</span>
+          </div>
+          <div class="style-card-body">
+            <h3>Deconstructivismo</h3>
+            <p>Fragmentación, dislocación y formas que desafían la geometría convencional.</p>
+            <div class="style-card-tags">
+              <span class="style-card-tag">Titanio</span>
+              <span class="style-card-tag">Digital</span>
+              <span class="style-card-tag">No-lineal</span>
+            </div>
+            <span class="style-card-cta">Ver ficha →</span>
+          </div>
+        </a>
+
+        <!-- Neoclásico -->
+        <a class="style-card" href="estilos/neoclasico.html" data-epoca="siglo19" data-tags="columnas simetria marmol clasico">
+          <div class="style-card-img-wrap">
+            <img class="style-card-img" src="https://images.unsplash.com/photo-1555993539-1732b0258235?w=600&q=75&fit=crop" alt="Arquitectura Neoclásica"/>
+            <span class="style-card-era">S. XVIII–XIX</span>
+          </div>
+          <div class="style-card-body">
+            <h3>Neoclásico</h3>
+            <p>Órdenes griegos y romanos reinterpretados con simetría perfecta y dignidad clásica.</p>
+            <div class="style-card-tags">
+              <span class="style-card-tag">Columnas</span>
+              <span class="style-card-tag">Mármol</span>
+              <span class="style-card-tag">Simetría</span>
+            </div>
+            <span class="style-card-cta">Ver ficha →</span>
+          </div>
+        </a>
+
+        <!-- Organicismo -->
+        <a class="style-card" href="estilos/organicismo.html" data-epoca="contemporaneo" data-tags="naturaleza curvas wright madera">
+          <div class="style-card-img-wrap">
+            <img class="style-card-img" src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=600&q=75&fit=crop" alt="Arquitectura Orgánica"/>
+            <span class="style-card-era">1930–hoy</span>
+          </div>
+          <div class="style-card-body">
+            <h3>Organicismo</h3>
+            <p>Arquitectura en armonía con la naturaleza. Formas curvas, materiales naturales, integración total.</p>
+            <div class="style-card-tags">
+              <span class="style-card-tag">Curvas</span>
+              <span class="style-card-tag">Madera</span>
+              <span class="style-card-tag">Naturaleza</span>
+            </div>
+            <span class="style-card-cta">Ver ficha →</span>
+          </div>
+        </a>
+
+        <!-- Solarpunk / Biofílico -->
+        <a class="style-card" href="estilos/biofilo-solarpunk.html" data-epoca="eco" data-tags="verde sostenible plantas solar biofilia">
+          <div class="style-card-img-wrap">
+            <img class="style-card-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=75&fit=crop" alt="Arquitectura Biofílica Solarpunk"/>
+            <span class="style-card-era">2010–hoy</span>
+            <div class="style-card-eco"><span class="eco-flag">🌱 Eco</span></div>
+          </div>
+          <div class="style-card-body">
+            <h3>Biofílico / Solarpunk</h3>
+            <p>Integración radical de naturaleza y tecnología limpia. El futuro verde de la arquitectura.</p>
+            <div class="style-card-tags">
+              <span class="style-card-tag">Solar</span>
+              <span class="style-card-tag">Verde vivo</span>
+              <span class="style-card-tag">Biofilia</span>
+            </div>
+            <span class="style-card-cta">Ver ficha →</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside>
+      <!-- Proyectos activos -->
+      <div class="sidebar-panel" style="margin-bottom:16px;">
+        <div class="sidebar-panel-header">Mis proyectos</div>
+        <div class="sidebar-panel-body" id="sidebarProyectos">
+          <p class="text-sm text-muted" style="margin-bottom:12px;">No tenés proyectos activos.</p>
+          <a class="btn btn-ghost w-full btn-sm" href="workspace.html" style="justify-content:center;">Ir al Workspace →</a>
+        </div>
+      </div>
+
+      <!-- Últimas notas -->
+      <div class="sidebar-panel" style="margin-bottom:16px;">
+        <div class="sidebar-panel-header">Notas recientes</div>
+        <div class="sidebar-panel-body" id="sidebarNotas">
+          <p class="text-sm text-muted">Sin notas todavía. Las anotaciones que hagas en las fichas aparecen acá.</p>
+        </div>
+      </div>
+
+      <!-- Links útiles -->
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-header">Accesos directos</div>
+        <div class="sidebar-panel-body">
+          <div class="quick-item"><span class="quick-item-icon">📐</span><a href="floorplans/index.html">Plantas unifamiliares</a></div>
+          <div class="quick-item"><span class="quick-item-icon">🪑</span><a href="interiores/japandi.html">Japandi</a></div>
+          <div class="quick-item"><span class="quick-item-icon">🌱</span><a href="interiores/solarpunk.html">Solarpunk</a></div>
+          <div class="quick-item"><span class="quick-item-icon">⇄</span><a href="comparador.html">Comparador de estilos</a></div>
+          <div class="quick-item"><span class="quick-item-icon">▤</span><a href="glosario.html">Glosario técnico</a></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">
+          <div class="nav-logo-mark">AR</div>
+          <span class="nav-logo-text">ARQ<span style="color:var(--accent)">REF</span></span>
+        </div>
+        <p>Herramienta de referencia para arquitectos y diseñadores. Código abierto, sin publicidad, sin tracking.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Arquitectura</h4>
+        <ul>
+          <li><a href="estilos/brutalismo.html">Brutalismo</a></li>
+          <li><a href="estilos/bauhaus.html">Bauhaus</a></li>
+          <li><a href="estilos/modernismo.html">Modernismo</a></li>
+          <li><a href="estilos/gotico.html">Gótico</a></li>
+          <li><a href="estilos/index.html">Ver todos →</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Interiores</h4>
+        <ul>
+          <li><a href="interiores/japandi.html">Japandi</a></li>
+          <li><a href="interiores/solarpunk.html">Solarpunk 🌱</a></li>
+          <li><a href="interiores/dark-academia.html">Dark Academia</a></li>
+          <li><a href="interiores/cottagecore.html">Cottagecore</a></li>
+          <li><a href="interiores/index.html">Ver todos →</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Herramientas</h4>
+        <ul>
+          <li><a href="floorplans/index.html">Floorplans</a></li>
+          <li><a href="comparador.html">Comparador</a></li>
+          <li><a href="workspace.html">Workspace</a></li>
+          <li><a href="glosario.html">Glosario</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>ARQREF © 2025 — Proyecto open source</span>
+      <span>CC BY-SA 4.0 · Imágenes: Unsplash / Wikimedia CC0</span>
+    </div>
+  </footer>
+
+  <div id="toast-container"></div>
+  <script src="js/main.js"></script>
+  <script>
+    // Filtro de época en el grid
+    document.querySelectorAll('.filter-bar .filter-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-bar .filter-chip').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        document.querySelectorAll('.style-card').forEach(card => {
+          const epoca = card.dataset.epoca || '';
+          card.style.display = (filter === 'all' || epoca === filter) ? '' : 'none';
+        });
+      });
+    });
+
+    // Search filters (categoría)
+    document.querySelectorAll('#searchFilters .filter-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#searchFilters .filter-chip').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Search redirect
+    const searchBtn = document.getElementById('searchBtn');
+    const searchInput = document.getElementById('globalSearch');
+    if (searchBtn && searchInput) {
+      const doSearch = () => {
+        const q = searchInput.value.trim();
+        if (q) window.location.href = 'estilos/index.html?q=' + encodeURIComponent(q);
+      };
+      searchBtn.addEventListener('click', doSearch);
+      searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+    }
+
+    // Sidebar: cargar proyectos y notas
+    document.addEventListener('DOMContentLoaded', () => {
+      const proyectos = ARQREF.Proyectos.getAll();
+      const sidebarP = document.getElementById('sidebarProyectos');
+      if (proyectos.length && sidebarP) {
+        sidebarP.innerHTML = proyectos.slice(0, 3).map(p => `
+          <a href="workspace.html" class="quick-item" style="text-decoration:none; display:flex; padding:8px 0; border-bottom:1px solid var(--border); align-items:center; gap:8px;">
+            <span style="color:var(--accent); font-size:0.7rem;">◆</span>
+            <span class="text-sm truncate">${ARQREF.escHtml(p.nombre)}</span>
+            <span class="text-xs text-muted" style="margin-left:auto; flex-shrink:0;">${p.refs.length} refs</span>
+          </a>
+        `).join('') + `<a class="btn btn-ghost w-full btn-sm" href="workspace.html" style="justify-content:center; margin-top:10px;">Ver todos →</a>`;
+      }
+
+      const notas = ARQREF.Notas.getAll();
+      const notasKeys = Object.keys(notas).filter(k => notas[k].trim());
+      const sidebarN = document.getElementById('sidebarNotas');
+      if (notasKeys.length && sidebarN) {
+        sidebarN.innerHTML = notasKeys.slice(0, 4).map(k => `
+          <div class="quick-item">
+            <span class="quick-item-icon">📝</span>
+            <span class="text-sm truncate text-muted">${ARQREF.escHtml(k)}: ${ARQREF.escHtml(notas[k].slice(0, 40))}…</span>
+          </div>
+        `).join('');
+      }
+    });
+  </script>
+</body>
+</html>
