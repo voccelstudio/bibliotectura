@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ARQREF — Referencia Arquitectónica Profesional</title>
+  <meta name="description" content="Herramienta de referencia para arquitectos: estilos arquitectónicos, interiores, micro-estilos, floorplans y workspace de proyecto."/>
+  <link rel="canonical" href="https://voccelstudio.github.io/biblioteca/"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300&family=IBM+Plex+Sans:wght@300;400;500;600&family=Cormorant:ital,wght@0,500;0,700;1,400;1,600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg0:#0C0D0E;--bg1:#111315;--bg2:#181A1C;--bg3:#1F2226;--bg4:#272B30;
+      --t0:#E8EAE6;--t1:#A8ADA8;--t2:#5A6060;--tinv:#0C0D0E;
+      --acc:#4ADE80;--acc-dim:rgba(74,222,128,0.12);--acc-b:rgba(74,222,128,0.3);
+      --amber:#F59E0B;--eco:#86EFAC;--eco-dim:#0F2D1A;
+      --danger:#F87171;--blue:#60A5FA;
+      --border:rgba(255,255,255,0.07);--border-md:rgba(255,255,255,0.12);
+      --glow:0 0 20px rgba(74,222,128,0.12);--shadow:0 4px 24px rgba(0,0,0,0.5);
+      --sans:'IBM Plex Sans',system-ui,sans-serif;
+      --mono:'IBM Plex Mono','Courier New',monospace;
+      --disp:'Cormorant',Georgia,serif;
+      --nav:56px;--max:1400px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;font-size:15px}
+    body{font-family:var(--sans);background:var(--bg1);color:var(--t0);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;height:auto;display:block}
+    button{font-family:var(--sans);cursor:pointer}
+    ::-webkit-scrollbar{width:5px;height:5px}
+    ::-webkit-scrollbar-track{background:var(--bg1)}
+    ::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
+    body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;opacity:.4}
+
+    /* NAV */
+    nav{position:sticky;top:0;z-index:200;height:var(--nav);background:rgba(12,13,14,.94);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+    .nav-in{max-width:var(--max);margin:0 auto;padding:0 20px;height:100%;display:flex;align-items:center}
+    .logo{display:flex;align-items:center;gap:10px;margin-right:28px;flex-shrink:0;text-decoration:none}
+    .logo-mark{width:28px;height:28px;border:1px solid var(--acc);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.58rem;color:var(--acc);position:relative}
+    .logo-mark::before{content:'';position:absolute;inset:3px;border:1px solid rgba(74,222,128,.2)}
+    .logo-text{font-family:var(--mono);font-size:.82rem;font-weight:500;color:var(--t0);letter-spacing:.08em;text-transform:uppercase}
+    .logo-text span{color:var(--acc)}
+    .nav-links{display:flex;align-items:center;gap:2px;list-style:none;flex:1}
+    .nav-links a{display:flex;align-items:center;gap:5px;padding:5px 11px;font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--t1);border:1px solid transparent;transition:all .15s;white-space:nowrap;cursor:pointer}
+    .nav-links a:hover,.nav-links a.act{color:var(--acc);border-color:var(--acc-b);background:var(--acc-dim)}
+    .nav-right{display:flex;align-items:center;gap:8px;margin-left:auto}
+    .nbtn{display:flex;align-items:center;gap:5px;padding:5px 13px;font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;background:none;border:1px solid var(--border-md);color:var(--t1);transition:all .15s}
+    .nbtn:hover{border-color:var(--acc);color:var(--acc);background:var(--acc-dim)}
+    .nbtn.prim{background:var(--acc);border-color:var(--acc);color:var(--tinv);font-weight:600}
+    .nbtn.prim:hover{background:#22c55e;border-color:#22c55e}
+    .nav-tog{display:none;background:none;border:1px solid var(--border-md);color:var(--t0);width:34px;height:34px;align-items:center;justify-content:center;flex-direction:column;gap:4px;padding:8px;margin-left:8px}
+    .nav-tog span{display:block;width:15px;height:1.5px;background:var(--t0);transition:all .25s}
+    @media(max-width:900px){
+      .nav-tog{display:flex}
+      .nav-links{display:none;position:absolute;top:var(--nav);left:0;right:0;background:var(--bg0);border-bottom:1px solid var(--border);flex-direction:column;padding:10px 20px 16px;gap:2px}
+      .nav-links.open{display:flex}
+      .nav-links a{padding:9px 10px;border-bottom:1px solid var(--border)}
+    }
+
+    /* SCROLL BAR */
+    #sb{position:fixed;top:0;left:0;height:2px;width:0%;background:var(--acc);z-index:999;box-shadow:0 0 8px var(--acc)}
+
+    /* VIEWS */
+    .view{display:none;position:relative;z-index:1}
+    .view.act{display:block}
+
+    /* HERO */
+    .hero{background:var(--bg0);border-bottom:1px solid var(--border);padding:64px 20px 52px;position:relative;overflow:hidden}
+    .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(74,222,128,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(74,222,128,.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+    .hero-corner{position:absolute;font-family:var(--mono);font-size:.58rem;color:var(--t2);letter-spacing:.08em}
+    .hero-corner.tl{top:14px;left:20px}.hero-corner.tr{top:14px;right:20px}.hero-corner.bl{bottom:14px;left:20px}
+    .hero-in{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+    @media(max-width:768px){.hero-in{grid-template-columns:1fr;gap:28px}}
+    .hero-tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+    .hero-tag::before{content:'';display:inline-block;width:6px;height:6px;background:var(--acc);border-radius:50%;animation:pulse 2s ease infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+    .hero h1{font-family:var(--mono);font-size:clamp(2rem,5vw,3.8rem);font-weight:400;line-height:1.08;letter-spacing:-.03em;color:var(--t0);margin-bottom:10px}
+    .hero h1 .acc{color:var(--acc)}
+    .hero-sub{font-family:var(--disp);font-style:italic;font-size:1.05rem;color:var(--t1);margin-bottom:26px;line-height:1.65;max-width:460px}
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:28px}
+    .stat{background:var(--bg1);padding:13px 10px;text-align:center}
+    .stat-v{font-family:var(--mono);font-size:1.3rem;font-weight:500;color:var(--acc);display:block;line-height:1;margin-bottom:3px}
+    .stat-l{font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t2)}
+    .hero-btns{display:flex;gap:8px;flex-wrap:wrap}
+    .search-box{background:var(--bg2);border:1px solid var(--border-md);padding:18px}
+    .search-title{font-family:var(--mono);font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--t2);margin-bottom:10px}
+    .search-row{display:flex;gap:0;margin-bottom:10px}
+    .s-input{flex:1;background:var(--bg3);border:1px solid var(--border);border-right:none;color:var(--t0);padding:8px 14px;font-size:.85rem;font-family:var(--sans);outline:none;transition:border-color .15s}
+    .s-input:focus{border-color:var(--acc)}
+    .s-input::placeholder{color:var(--t2)}
+    .s-btn{padding:8px 16px;background:var(--acc);border:1px solid var(--acc);color:var(--tinv);font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;transition:background .15s}
+    .s-btn:hover{background:#22c55e}
+    .chips{display:flex;flex-wrap:wrap;gap:5px}
+    .chip{font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;background:var(--bg3);border:1px solid var(--border);color:var(--t2);cursor:pointer;transition:all .15s}
+    .chip:hover,.chip.act{border-color:var(--acc);color:var(--acc);background:var(--acc-dim)}
+
+    /* MODULES */
+    .modules{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;background:var(--border);border:1px solid var(--border)}
+    @media(max-width:900px){.modules{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:560px){.modules{grid-template-columns:1fr 1fr}}
+    .mod{background:var(--bg1);padding:24px 18px;display:flex;flex-direction:column;gap:8px;border:none;cursor:pointer;transition:background .15s;text-align:left}
+    .mod:hover{background:var(--bg3)}
+    .mod-icon{font-size:1.5rem;line-height:1}
+    .mod-name{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--t0)}
+    .mod-desc{font-size:.73rem;color:var(--t2);line-height:1.5}
+    .mod-count{font-family:var(--mono);font-size:.6rem;color:var(--acc);margin-top:auto}
+
+    /* CARDS */
+    .sect{max-width:var(--max);margin:0 auto;padding:36px 20px}
+    .sect-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+    .sect-title{font-family:var(--mono);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--t1);display:flex;align-items:center;gap:8px}
+    .sect-title::before{content:'';width:10px;height:1px;background:var(--acc)}
+    .filter-bar{display:flex;align-items:center;gap:8px;padding:14px 0;flex-wrap:wrap}
+    .fb-lbl{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t2);flex-shrink:0}
+    .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2px;background:var(--border)}
+    .card{background:var(--bg2);display:block;cursor:pointer;transition:background .15s;position:relative;overflow:hidden;border:none}
+    .card:hover{background:var(--bg3)}
+    .card::before,.card::after{content:'';position:absolute;width:8px;height:8px;border-color:var(--acc);border-style:solid;opacity:0;transition:opacity .2s;z-index:2}
+    .card::before{top:-1px;left:-1px;border-width:1px 0 0 1px}
+    .card::after{bottom:-1px;right:-1px;border-width:0 1px 1px 0}
+    .card:hover::before,.card:hover::after{opacity:1}
+    .card-img-wrap{overflow:hidden;position:relative}
+    .card-img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;filter:brightness(.75) saturate(.6);transition:filter .4s,transform .4s}
+    .card:hover .card-img{filter:brightness(.88) saturate(.85);transform:scale(1.04)}
+    .card-img-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(12,13,14,.7) 0%,transparent 55%)}
+    .card-era{position:absolute;top:9px;right:9px;font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t0);background:rgba(12,13,14,.75);padding:2px 7px;z-index:2;backdrop-filter:blur(4px)}
+    .eco-badge{position:absolute;top:9px;left:9px;z-index:2;font-family:var(--mono);font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--eco);border:1px solid var(--eco-dim);background:var(--eco-dim);padding:2px 7px}
+    .card-body{padding:14px 16px 16px}
+    .card-name{font-family:var(--disp);font-size:1.25rem;font-weight:700;color:var(--t0);margin-bottom:5px}
+    .card-desc{font-size:.78rem;color:var(--t1);line-height:1.55;margin-bottom:10px}
+    .card-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+    .ctag{font-family:var(--mono);font-size:.56rem;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;background:var(--bg4);color:var(--t2);border:1px solid var(--border)}
+    .card-cta{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--acc)}
+
+    /* FICHA */
+    .page-hdr{background:var(--bg0);border-bottom:1px solid var(--border);padding:44px 20px 36px;position:relative;overflow:hidden}
+    .page-hdr::after{content:attr(data-lbl);position:absolute;right:16px;bottom:-16px;font-family:var(--mono);font-size:clamp(4rem,12vw,9rem);font-weight:300;color:rgba(255,255,255,.025);letter-spacing:-.05em;pointer-events:none;line-height:1;text-transform:uppercase}
+    .breadcrumb{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:.65rem;letter-spacing:.08em;color:var(--t2);margin-bottom:18px;text-transform:uppercase}
+    .breadcrumb a{color:var(--t1);transition:color .15s;cursor:pointer}.breadcrumb a:hover{color:var(--acc)}
+    .eyebrow{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+    .eyebrow::before{content:'';width:16px;height:1px;background:var(--acc)}
+    .page-title{font-family:var(--disp);font-size:clamp(2rem,5vw,3.2rem);font-weight:700;line-height:1.08;letter-spacing:-.02em;color:var(--t0);margin-bottom:12px}
+    .page-title em{font-style:italic;color:var(--acc)}
+    .badge-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+    .bdg{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--border);color:var(--t1);background:transparent}
+    .bdg.g{color:var(--acc);border-color:var(--acc-b);background:var(--acc-dim)}
+    .bdg.e{color:var(--eco);border-color:var(--eco-dim);background:var(--eco-dim)}
+    .bdg.a{color:var(--amber);border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.08)}
+    .ficha-wrap{max-width:var(--max);margin:0 auto;padding:32px 20px;display:grid;grid-template-columns:1fr 280px;gap:24px;align-items:start}
+    @media(max-width:960px){.ficha-wrap{grid-template-columns:1fr}}
+    .ficha-sidebar{position:sticky;top:calc(var(--nav) + 14px);display:flex;flex-direction:column;gap:12px}
+    .gallery3{display:grid;grid-template-columns:2fr 1fr;grid-template-rows:200px 160px;gap:3px}
+    .gallery3 .gi:first-child{grid-row:span 2}
+    .gi{overflow:hidden;position:relative}
+    .gi img{width:100%;height:100%;object-fit:cover;transition:transform .5s;filter:brightness(.8) saturate(.7)}
+    .gi:hover img{transform:scale(1.05);filter:brightness(.9) saturate(.85)}
+    @media(max-width:600px){.gallery3{grid-template-columns:1fr;grid-template-rows:auto}.gallery3 .gi:first-child{grid-row:span 1}.gi{height:180px}}
+    .tabs-root .tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:18px;overflow-x:auto}
+    .tab-btn{padding:9px 16px;font-family:var(--mono);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t2);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .15s;white-space:nowrap;margin-bottom:-1px}
+    .tab-btn:hover{color:var(--t1)}.tab-btn.act{color:var(--acc);border-bottom-color:var(--acc)}
+    .tab-panel{display:none}.tab-panel.act{display:block}
+    .combo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-bottom:20px}
+    .combo-card{background:var(--bg3);border:1px solid var(--border);padding:14px;position:relative;transition:border-color .15s;cursor:pointer}
+    .combo-card:hover{border-color:var(--acc-b)}
+    .combo-card::before{content:'';position:absolute;left:0;top:0;width:2px;height:100%;background:var(--acc);transform:scaleY(0);transition:transform .2s;transform-origin:bottom}
+    .combo-card:hover::before{transform:scaleY(1)}
+    .combo-score{font-family:var(--mono);font-size:1.2rem;font-weight:500;color:var(--acc);display:block;margin-bottom:4px}
+    .combo-score.am{color:var(--amber)}
+    .combo-name{font-family:var(--disp);font-size:1rem;font-weight:700;margin-bottom:6px;color:var(--t0)}
+    .combo-desc{font-size:.75rem;color:var(--t1);line-height:1.55}
+    .color-chip{display:flex;align-items:center;gap:9px;padding:7px 10px;background:var(--bg3);border:1px solid var(--border);cursor:pointer;transition:border-color .15s;margin-bottom:5px}
+    .color-chip:hover{border-color:var(--acc)}
+    .swatch{width:22px;height:22px;flex-shrink:0;border:1px solid rgba(255,255,255,.1)}
+    .cc-info{flex:1}.cc-name{font-size:.78rem;color:var(--t0);display:block}.cc-hex{font-family:var(--mono);font-size:.65rem;color:var(--t2)}
+    .cc-copy{font-family:var(--mono);font-size:.58rem;color:var(--t2);opacity:0;transition:opacity .15s;text-transform:uppercase;letter-spacing:.05em}
+    .color-chip:hover .cc-copy{opacity:1;color:var(--acc)}
+    .score-bar{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+    .sc-lbl{font-family:var(--mono);font-size:.65rem;color:var(--t1);min-width:100px}
+    .sc-track{flex:1;height:2px;background:var(--bg4);position:relative}
+    .sc-fill{position:absolute;left:0;top:0;height:100%;background:var(--acc);transition:width .8s cubic-bezier(.16,1,.3,1)}
+    .sc-val{font-family:var(--mono);font-size:.65rem;color:var(--acc);min-width:32px;text-align:right}
+    .info-bl{background:var(--bg2);border:1px solid var(--border)}
+    .info-bl-hdr{padding:9px 13px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--t2);display:flex;align-items:center;gap:6px}
+    .info-bl-hdr::before{content:'';width:5px;height:1px;background:var(--acc)}
+    .info-bl-body{padding:12px 13px}
+    .info-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--border);font-size:.78rem}
+    .info-row:last-child{border-bottom:none}
+    .ir-lbl{color:var(--t2);font-family:var(--mono);font-size:.65rem;letter-spacing:.06em}
+    .ir-val{color:var(--t0);text-align:right;max-width:58%}
+    .nota-wrap{background:var(--bg2);border:1px solid var(--border)}
+    .nota-hdr{padding:9px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+    .nota-hdr-t{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--t2)}
+    .nota-status{font-family:var(--mono);font-size:.6rem;color:var(--t2)}
+    .nota-ta{width:100%;background:var(--bg3);border:none;border-top:1px solid var(--border);color:var(--t0);padding:12px 13px;font-size:.82rem;font-family:var(--sans);min-height:90px;resize:vertical;outline:none;line-height:1.65}
+    .nota-ta:focus{border-top-color:var(--acc)}
+    .blockquote{border-left:2px solid var(--acc);padding:10px 16px;margin:18px 0;background:var(--bg3)}
+    .blockquote p{font-family:var(--disp);font-style:italic;font-size:1rem;color:var(--t1);line-height:1.7;margin:0}
+    .blockquote cite{font-family:var(--mono);font-size:.65rem;color:var(--t2);letter-spacing:.08em;margin-top:6px;display:block}
+
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;font-weight:500;border:1px solid;transition:all .15s;cursor:pointer;white-space:nowrap}
+    .btn-p{background:var(--acc);border-color:var(--acc);color:var(--tinv)}.btn-p:hover{background:#22c55e;border-color:#22c55e}
+    .btn-g{background:transparent;border-color:var(--border-md);color:var(--t1)}.btn-g:hover{border-color:var(--acc);color:var(--acc);background:var(--acc-dim)}
+    .btn-sm{padding:5px 11px;font-size:.62rem}.btn-w{width:100%;justify-content:center}
+
+    /* INPUTS */
+    .inp{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--t0);padding:8px 13px;font-size:.85rem;font-family:var(--sans);outline:none;transition:border-color .15s}
+    .inp:focus{border-color:var(--acc)}.inp::placeholder{color:var(--t2)}
+    .lbl{display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--t2);margin-bottom:5px}
+    .fg{margin-bottom:14px}
+    select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%235A6060' d='M5 7L0 2h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;cursor:pointer}
+
+    /* TOAST */
+    #tc{position:fixed;bottom:18px;right:18px;z-index:9999;display:flex;flex-direction:column;gap:7px;pointer-events:none}
+    .toast{background:var(--bg3);border:1px solid var(--border-md);border-left:3px solid var(--acc);color:var(--t0);padding:10px 14px;font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;box-shadow:var(--shadow);transform:translateX(110%);transition:transform .3s cubic-bezier(.16,1,.3,1);max-width:300px;pointer-events:all}
+    .toast.show{transform:translateX(0)}.toast.warn{border-left-color:var(--amber)}.toast.err{border-left-color:var(--danger)}
+
+    /* MODAL */
+    .modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(6px)}
+    .modal-ov.open{opacity:1;pointer-events:all}
+    .modal{background:var(--bg2);border:1px solid var(--border-md);width:100%;max-width:560px;max-height:85vh;overflow-y:auto;box-shadow:var(--shadow);transform:scale(.95) translateY(10px);transition:transform .3s cubic-bezier(.16,1,.3,1)}
+    .modal-ov.open .modal{transform:scale(1) translateY(0)}
+    .modal-hdr{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg2);z-index:1}
+    .modal-t{font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t0)}
+    .modal-x{background:none;border:1px solid var(--border);color:var(--t1);width:28px;height:28px;font-size:.85rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s}
+    .modal-x:hover{border-color:var(--danger);color:var(--danger)}
+    .modal-body{padding:18px}
+
+    /* WORKSPACE */
+    .ws-layout{max-width:var(--max);margin:0 auto;padding:24px 20px;display:grid;grid-template-columns:250px 1fr;gap:18px;align-items:start;min-height:calc(100vh - var(--nav))}
+    @media(max-width:860px){.ws-layout{grid-template-columns:1fr}}
+    .ws-sb{background:var(--bg2);border:1px solid var(--border);position:sticky;top:calc(var(--nav) + 14px)}
+    .ws-panel{background:var(--bg2);border:1px solid var(--border);margin-bottom:16px}
+    .ws-ph{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .ws-pt{font-family:var(--mono);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--t1);display:flex;align-items:center;gap:7px}
+    .ws-pt::before{content:'';width:6px;height:1px;background:var(--acc)}
+    .ws-pb{padding:16px}
+    .p-item{padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:9px}
+    .p-item:hover{background:var(--bg3)}.p-item.act{background:var(--acc-dim);border-left:2px solid var(--acc);padding-left:12px}
+    .p-dot{width:5px;height:5px;background:var(--acc);flex-shrink:0;opacity:.4}.p-item.act .p-dot{opacity:1}
+    .p-info{flex:1;min-width:0}
+    .p-name{font-size:.82rem;color:var(--t0);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .p-meta{font-family:var(--mono);font-size:.6rem;color:var(--t2);margin-top:1px}
+    .ref-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:8px}
+    .ref-card{background:var(--bg3);border:1px solid var(--border);padding:11px;position:relative}
+    .ref-type{font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t2);margin-bottom:5px}
+    .ref-name{font-size:.82rem;color:var(--t0);font-weight:500;margin-bottom:7px}
+    .ref-del{position:absolute;top:7px;right:7px;background:none;border:1px solid transparent;color:var(--t2);width:20px;height:20px;font-size:.65rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s}
+    .ref-card:hover .ref-del{border-color:var(--danger);color:var(--danger)}
+    .pal-wrap{display:flex;flex-wrap:wrap;gap:5px}
+    .pal-item{display:flex;align-items:center;gap:5px;background:var(--bg3);border:1px solid var(--border);padding:5px 9px;cursor:pointer;transition:border-color .15s}
+    .pal-item:hover{border-color:var(--acc)}
+    .pal-sw{width:18px;height:18px;flex-shrink:0;border:1px solid rgba(255,255,255,.1)}
+    .pal-hex{font-family:var(--mono);font-size:.63rem;color:var(--t1)}
+    .pal-del{background:none;border:none;color:var(--t2);font-size:.63rem;cursor:pointer;padding:0 2px;transition:color .15s}
+    .pal-del:hover{color:var(--danger)}
+    .nota-area{background:var(--bg3);border:1px solid var(--border);color:var(--t0);padding:12px 14px;font-size:.84rem;font-family:var(--sans);width:100%;min-height:110px;resize:vertical;outline:none;line-height:1.65}
+    .nota-area:focus{border-color:var(--acc)}
+    .new-p-form{padding:14px;background:var(--bg0);border-top:1px solid var(--border)}
+    .empty-state{text-align:center;padding:44px 20px;color:var(--t2)}
+    .es-icon{font-size:2.2rem;margin-bottom:14px;opacity:.25}
+    .es-text{font-family:var(--disp);font-style:italic;font-size:.95rem;margin-bottom:14px}
+
+    /* GLOSARIO */
+    .glos-table{width:100%;border-collapse:collapse;font-size:.82rem}
+    .glos-table th{font-family:var(--mono);font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;padding:10px 14px;background:var(--bg0);color:var(--acc);text-align:left;font-weight:500}
+    .glos-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--t1)}
+    .glos-table tr:nth-child(even) td{background:var(--bg2)}
+    .glos-table tr:hover td{background:var(--bg3)}
+
+    /* FOOTER */
+    footer{background:var(--bg0);border-top:1px solid var(--border);padding:36px 0 20px;margin-top:64px;position:relative;z-index:1}
+    .ft-grid{max-width:var(--max);margin:0 auto;padding:0 20px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;margin-bottom:28px}
+    @media(max-width:768px){.ft-grid{grid-template-columns:1fr 1fr;gap:20px}}
+    .ft-brand p{font-size:.78rem;color:var(--t2);line-height:1.7;margin-top:10px;max-width:240px}
+    .ft-col h4{font-family:var(--mono);font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--acc);margin-bottom:12px}
+    .ft-col ul{list-style:none}.ft-col li{margin-bottom:7px}
+    .ft-col a{font-size:.78rem;color:var(--t2);transition:color .15s;cursor:pointer}.ft-col a:hover{color:var(--t0)}
+    .ft-bot{max-width:var(--max);margin:0 auto;padding:14px 20px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;font-family:var(--mono);font-size:.62rem;color:var(--t2);letter-spacing:.06em;text-transform:uppercase}
+
+    /* MISC */
+    .divider{border:none;border-top:1px solid var(--border);margin:24px 0}
+    .text-acc{color:var(--acc)}.text-m{color:var(--t2)}.text-sm{font-size:.78rem}.text-xs{font-size:.68rem}
+    .font-mono{font-family:var(--mono)}.font-disp{font-family:var(--disp)}
+    .flex{display:flex}.items-c{align-items:center}.jc-b{justify-content:space-between}
+    .gap-8{gap:8px}.gap-12{gap:12px}.gap-16{gap:16px}
+    .w-full{width:100%}.truncate{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+    .aup{animation:fadeUp .45s ease forwards;opacity:0}
+    .d1{animation-delay:.05s}.d2{animation-delay:.1s}.d3{animation-delay:.15s}
+  </style>
+</head>
+<body>
+
+<div id="sb"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-in">
+    <a class="logo" onclick="sv('home')">
+      <div class="logo-mark">AR</div>
+      <span class="logo-text">ARQ<span>REF</span></span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a onclick="sv('home')" data-v="home">⊞ Inicio</a></li>
+      <li><a onclick="sv('estilos')" data-v="estilos">🏛 Estilos</a></li>
+      <li><a onclick="sv('interiores')" data-v="interiores">🪑 Interiores</a></li>
+      <li><a onclick="sv('floorplans')" data-v="floorplans">📐 Floorplans</a></li>
+      <li><a onclick="sv('comparador')" data-v="comparador">⇄ Comparador</a></li>
+      <li><a onclick="sv('glosario')" data-v="glosario">▤ Glosario</a></li>
+      <li><a onclick="sv('workspace')" data-v="workspace">◈ Workspace</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="nbtn prim" onclick="sv('workspace')">◈ Proyectos</button>
+      <button class="nav-tog" id="navTog"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- VIEW: HOME -->
+<div class="view act" id="v-home">
+  <div class="hero">
+    <div class="hero-grid"></div>
+    <span class="hero-corner tl">v2.0 · 2025</span>
+    <span class="hero-corner tr">GitHub Pages · Static JSON</span>
+    <span class="hero-corner bl">CC BY-SA 4.0</span>
+    <div class="hero-in">
+      <div class="aup">
+        <div class="hero-tag">Sistema activo — arqref</div>
+        <h1><span class="acc">ARQ</span>REF<br/><span style="font-size:.52em;font-weight:300;color:var(--t1)">Referencia arquitectónica</span></h1>
+        <p class="hero-sub">Herramienta de consulta profesional para arquitectos. Estilos, interiores, micro-estilos, floorplans y workspace de proyecto — sin backend.</p>
+        <div class="stats-row">
+          <div class="stat"><span class="stat-v" id="stE">—</span><span class="stat-l">Estilos Arq.</span></div>
+          <div class="stat"><span class="stat-v" id="stI">—</span><span class="stat-l">Interiores</span></div>
+          <div class="stat"><span class="stat-v" id="stF">—</span><span class="stat-l">Floorplans</span></div>
+          <div class="stat"><span class="stat-v">∞</span><span class="stat-l">Proyectos</span></div>
+        </div>
+        <div class="hero-btns">
+          <button class="btn btn-p" onclick="sv('estilos')">→ Explorar estilos</button>
+          <button class="btn btn-g" onclick="sv('workspace')">◈ Mi workspace</button>
+        </div>
+      </div>
+      <div class="search-box aup d2">
+        <div class="search-title">◈ Búsqueda rápida</div>
+        <div class="search-row">
+          <input class="s-input" id="gSearch" type="text" placeholder="Bauhaus, japandi, solarpunk..."/>
+          <button class="s-btn" id="gSearchBtn">Buscar</button>
+        </div>
+        <div style="margin-bottom:9px">
+          <div class="lbl" style="margin-bottom:5px">Filtrar por</div>
+          <div class="chips" id="sCats">
+            <button class="chip act" data-cat="all">Todo</button>
+            <button class="chip" data-cat="est">Arquitectura</button>
+            <button class="chip" data-cat="int">Interiores</button>
+            <button class="chip" data-cat="eco">🌱 Eco</button>
+          </div>
+        </div>
+        <div class="lbl" style="margin-bottom:6px">Frecuentes</div>
+        <div class="chips">
+          <button class="chip" onclick="oF('est','brutalismo')">Brutalismo</button>
+          <button class="chip" onclick="oF('int','japandi')">Japandi</button>
+          <button class="chip" onclick="oF('est','bauhaus')">Bauhaus</button>
+          <button class="chip" onclick="oF('int','solarpunk')">Solarpunk 🌱</button>
+          <button class="chip" onclick="oF('int','dark-academia')">Dark Academia</button>
+          <button class="chip" onclick="sv('floorplans')">Floorplans</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modules" style="position:relative;z-index:1">
+    <button class="mod" onclick="sv('estilos')"><div class="mod-icon">🏛</div><div class="mod-name">Estilos Arq.</div><div class="mod-desc">Fichas técnicas completas</div><div class="mod-count" id="mcE">—</div></button>
+    <button class="mod" onclick="sv('interiores')"><div class="mod-icon">🪑</div><div class="mod-name">Interiores</div><div class="mod-desc">Estilos y micro-estilos</div><div class="mod-count" id="mcI">—</div></button>
+    <button class="mod" onclick="sv('floorplans')"><div class="mod-icon">📐</div><div class="mod-name">Floorplans</div><div class="mod-desc">Plantas por tipología y m²</div><div class="mod-count" id="mcF">—</div></button>
+    <button class="mod" onclick="sv('comparador')"><div class="mod-icon">⇄</div><div class="mod-name">Comparador</div><div class="mod-desc">Side-by-side de estilos</div><div class="mod-count">2 estilos</div></button>
+    <button class="mod" onclick="sv('workspace')"><div class="mod-icon">◈</div><div class="mod-name">Workspace</div><div class="mod-desc">Proyectos, notas y paletas</div><div class="mod-count">Local storage</div></button>
+  </div>
+  <div class="sect">
+    <div class="sect-head"><span class="sect-title">Estilos arquitectónicos</span><button class="btn btn-g btn-sm" onclick="sv('estilos')">Ver todos →</button></div>
+    <div class="cards-grid" id="hEGrid"></div>
+  </div>
+  <div class="sect" style="padding-top:0">
+    <div class="sect-head"><span class="sect-title">Interiores destacados</span><button class="btn btn-g btn-sm" onclick="sv('interiores')">Ver todos →</button></div>
+    <div class="cards-grid" id="hIGrid"></div>
+  </div>
+</div>
+
+<!-- VIEW: ESTILOS -->
+<div class="view" id="v-estilos">
+  <div class="page-hdr" data-lbl="ESTILOS">
+    <div style="max-width:var(--max);margin:0 auto;padding:0 20px">
+      <div class="breadcrumb"><a onclick="sv('home')">ARQREF</a><span>/</span><span>Estilos</span></div>
+      <div class="eyebrow">Enciclopedia</div>
+      <h1 class="page-title"><em>Estilos</em> Arquitectónicos</h1>
+    </div>
+  </div>
+  <div class="sect">
+    <div class="filter-bar">
+      <span class="fb-lbl">Época:</span>
+      <button class="chip act" data-ep="all">Todas</button>
+      <button class="chip" data-ep="medieval">Medieval</button>
+      <button class="chip" data-ep="clasico">Clásico</button>
+      <button class="chip" data-ep="moderno">1900–1970</button>
+      <button class="chip" data-ep="contemporaneo">Contemporáneo</button>
+      <button class="chip" data-ep="eco">🌱 Eco</button>
+    </div>
+    <div class="cards-grid" id="eGrid"></div>
+  </div>
+</div>
+
+<!-- VIEW: INTERIORES -->
+<div class="view" id="v-interiores">
+  <div class="page-hdr" data-lbl="INT">
+    <div style="max-width:var(--max);margin:0 auto;padding:0 20px">
+      <div class="breadcrumb"><a onclick="sv('home')">ARQREF</a><span>/</span><span>Interiores</span></div>
+      <div class="eyebrow">Decoración & Micro-estilos</div>
+      <h1 class="page-title"><em>Estilos</em> de Interior</h1>
+    </div>
+  </div>
+  <div class="sect">
+    <div class="filter-bar">
+      <span class="fb-lbl">Tipo:</span>
+      <button class="chip act" data-ci="all">Todos</button>
+      <button class="chip" data-ci="principal">Principal</button>
+      <button class="chip" data-ci="micro">Micro-estilo</button>
+      <button class="chip" data-ci="eco">🌱 Eco</button>
+    </div>
+    <div class="cards-grid" id="iGrid"></div>
+  </div>
+</div>
+
+<!-- VIEW: FLOORPLANS -->
+<div class="view" id="v-floorplans">
+  <div class="page-hdr" data-lbl="FP">
+    <div style="max-width:var(--max);margin:0 auto;padding:0 20px">
+      <div class="breadcrumb"><a onclick="sv('home')">ARQREF</a><span>/</span><span>Floorplans</span></div>
+      <div class="eyebrow">Biblioteca de plantas</div>
+      <h1 class="page-title"><em>Floorplans</em></h1>
+    </div>
+  </div>
+  <div class="sect">
+    <div class="filter-bar">
+      <span class="fb-lbl">Tipología:</span>
+      <button class="chip act" data-tp="all">Todas</button>
+      <button class="chip" data-tp="residencial">Residencial</button>
+      <button class="chip" data-tp="residencial colectivo">Colectivo</button>
+      <button class="chip" data-tp="institucional">Institucional</button>
+      <button class="chip" data-tp="cultural">Cultural</button>
+    </div>
+    <div class="cards-grid" id="fpGrid"></div>
+    <hr class="divider"/>
+    <div class="sect-head"><span class="sect-title">Paisajismo complementario</span></div>
+    <div class="cards-grid" id="pGrid"></div>
+  </div>
+</div>
+
+<!-- VIEW: COMPARADOR -->
+<div class="view" id="v-comparador">
+  <div class="page-hdr" data-lbl="COMP">
+    <div style="max-width:var(--max);margin:0 auto;padding:0 20px">
+      <div class="breadcrumb"><a onclick="sv('home')">ARQREF</a><span>/</span><span>Comparador</span></div>
+      <div class="eyebrow">Herramienta</div>
+      <h1 class="page-title"><em>Comparador</em> de estilos</h1>
+    </div>
+  </div>
+  <div class="sect">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+      <div class="fg"><label class="lbl">Estilo A</label><select class="inp" id="cmpA"><option value="">Seleccionar...</option></select></div>
+      <div class="fg"><label class="lbl">Estilo B</label><select class="inp" id="cmpB"><option value="">Seleccionar...</option></select></div>
+    </div>
+    <button class="btn btn-p" id="cmpBtn" style="margin-bottom:24px">⇄ Comparar</button>
+    <div id="cmpResult"></div>
+  </div>
+</div>
+
+<!-- VIEW: GLOSARIO -->
+<div class="view" id="v-glosario">
+  <div class="page-hdr" data-lbl="GLOS">
+    <div style="max-width:var(--max);margin:0 auto;padding:0 20px">
+      <div class="breadcrumb"><a onclick="sv('home')">ARQREF</a><span>/</span><span>Glosario</span></div>
+      <div class="eyebrow">Referencia técnica</div>
+      <h1 class="page-title"><em>Glosario</em> Arquitectónico</h1>
+    </div>
+  </div>
+  <div class="sect">
+    <input class="inp" id="glosQ" type="text" placeholder="Buscar término..." style="max-width:400px;margin-bottom:20px"/>
+    <table class="glos-table">
+      <thead><tr><th>Término</th><th>Definición</th><th>Origen</th></tr></thead>
+      <tbody id="glosTbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- VIEW: WORKSPACE -->
+<div class="view" id="v-workspace">
+  <div style="background:var(--bg0);border-bottom:1px solid var(--border);padding:20px 0;position:relative;z-index:1">
+    <div style="max-width:var(--max);margin:0 auto;padding:0 20px">
+      <div class="breadcrumb"><a onclick="sv('home')">ARQREF</a><span>/</span><span>Workspace</span></div>
+      <div class="flex items-c jc-b gap-12" style="flex-wrap:wrap">
+        <div><div class="eyebrow">Sistema de trabajo</div><h1 class="page-title">Mi <em>Workspace</em></h1></div>
+        <div class="flex gap-8">
+          <button class="btn btn-g" id="wsExp">⬇ Exportar JSON</button>
+          <button class="btn btn-p" id="wsNew">+ Nuevo proyecto</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ws-layout">
+    <div class="ws-sb">
+      <div style="padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+        <span style="font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--t1)">Proyectos</span>
+        <span class="bdg g" id="wsCount">0</span>
+      </div>
+      <div id="wsList"></div>
+      <div class="new-p-form">
+        <div class="fg"><label class="lbl">Nombre</label><input class="inp" id="wsNom" type="text" placeholder="Casa Rodríguez..."/></div>
+        <div class="fg"><label class="lbl">Tipo</label>
+          <select class="inp" id="wsTipo">
+            <option value="">Sin especificar</option>
+            <option value="vivienda-unifamiliar">Vivienda unifamiliar</option>
+            <option value="vivienda-colectiva">Vivienda colectiva</option>
+            <option value="comercial">Local comercial</option>
+            <option value="oficina">Oficina</option>
+            <option value="reforma">Reforma</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <button class="btn btn-p w-full" id="wsCreate">Crear proyecto</button>
+      </div>
+    </div>
+    <div id="wsMain"></div>
+  </div>
+</div>
+
+<!-- VIEW: FICHA (dinámica) -->
+<div class="view" id="v-ficha"></div>
+
+<!-- MODALS -->
+<div class="modal-ov" id="mProj">
+  <div class="modal"><div class="modal-hdr"><span class="modal-t">Agregar a proyecto</span><button class="modal-x" onclick="cm('mProj')">✕</button></div><div class="modal-body" id="mProjBody"></div></div>
+</div>
+<div class="modal-ov" id="mColor">
+  <div class="modal" style="max-width:360px">
+    <div class="modal-hdr"><span class="modal-t">Agregar color</span><button class="modal-x" onclick="cm('mColor')">✕</button></div>
+    <div class="modal-body">
+      <div class="fg"><label class="lbl">Color</label>
+        <div class="flex gap-8"><input type="color" id="cPicker" style="width:44px;height:38px;background:none;border:1px solid var(--border);cursor:pointer;padding:2px" value="#4ADE80"/><input class="inp" id="cHex" type="text" placeholder="#4ADE80" style="flex:1"/></div>
+      </div>
+      <div class="fg"><label class="lbl">Nombre</label><input class="inp" id="cName" type="text" placeholder="Verde acento..."/></div>
+      <button class="btn btn-p w-full" id="cConfirm">Agregar a paleta</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="ft-grid">
+    <div class="ft-brand">
+      <div class="logo"><div class="logo-mark">AR</div><span class="logo-text">ARQ<span>REF</span></span></div>
+      <p>Herramienta de referencia para arquitectos. Código abierto, sin publicidad, sin tracking.</p>
+    </div>
+    <div class="ft-col"><h4>Arquitectura</h4><ul id="ftE"></ul></div>
+    <div class="ft-col"><h4>Interiores</h4><ul id="ftI"></ul></div>
+    <div class="ft-col"><h4>Herramientas</h4><ul>
+      <li><a onclick="sv('floorplans')">Floorplans</a></li>
+      <li><a onclick="sv('comparador')">Comparador</a></li>
+      <li><a onclick="sv('workspace')">Workspace</a></li>
+      <li><a onclick="sv('glosario')">Glosario</a></li>
+    </ul></div>
+  </div>
+  <div class="ft-bot"><span>ARQREF © 2025 — MIT License</span><span>Fotos: Unsplash CC0 · Contenido: CC BY-SA 4.0</span></div>
+</footer>
+
+<div id="tc"></div>
+
+<script>
+/* ══════════════════════════════════════════════════
+   ARQREF ENGINE v2 — JSON-driven SPA
+══════════════════════════════════════════════════ */
+'use strict';
+
+// ── Data ──────────────────────────────────────────
+let EST=[], INT=[], PAIS=[], FP=[];
+
+async function loadData() {
+  try {
+    const [e,i,pf] = await Promise.all([
+      fetch('data/estilos.json').then(r=>r.json()),
+      fetch('data/interiores.json').then(r=>r.json()),
+      fetch('data/paisajismo-floorplans.json').then(r=>r.json())
+    ]);
+    EST=e; INT=i; PAIS=pf.paisajismo||[]; FP=pf.floorplans||[];
+    boot();
+  } catch(err) {
+    console.error(err);
+    toast('Error cargando datos. ¿Está la carpeta /data/ en el mismo directorio?','err');
+  }
+}
+
+function boot() {
+  // Stats
+  _('stE').textContent = EST.length;
+  _('stI').textContent = INT.length;
+  _('stF').textContent = FP.length;
+  _('mcE').textContent = EST.length + ' estilos';
+  _('mcI').textContent = INT.length + ' estilos';
+  _('mcF').textContent = FP.length + ' plantas';
+  // Grids home
+  renderCards(EST.slice(0,6), 'hEGrid', 'est');
+  renderCards(INT.slice(0,6), 'hIGrid', 'int');
+  // Grids secciones
+  renderCards(EST, 'eGrid', 'est');
+  renderCards(INT, 'iGrid', 'int');
+  renderFPGrid(FP, 'fpGrid');
+  renderPGrid(PAIS, 'pGrid', 6);
+  // Footer links
+  EST.slice(0,5).forEach(e => { _('ftE').innerHTML += `<li><a onclick="oF('est','${e.id}')">${esc(e.nombre)}</a></li>`; });
+  INT.slice(0,5).forEach(i => { _('ftI').innerHTML += `<li><a onclick="oF('int','${i.id}')">${esc(i.nombre)}</a></li>`; });
+  // Comparador selects
+  ['cmpA','cmpB'].forEach(sid => {
+    const sel = _(sid);
+    [...EST.map(e=>({...e,_t:'est'})),...INT.map(i=>({...i,_t:'int'}))].forEach(item => {
+      sel.innerHTML += `<option value="${item.id}|${item._t}">${esc(item.nombre)}</option>`;
+    });
+  });
+  renderGlosario();
+}
+
+// ── Helpers ───────────────────────────────────────
+const _ = id => document.getElementById(id);
+const $$ = s => document.querySelectorAll(s);
+const esc = s => String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const gE = id => EST.find(e=>e.id===id);
+const gI = id => INT.find(i=>i.id===id);
+
+// ── View router ───────────────────────────────────
+let cur = 'home';
+function sv(name) {
+  $$('.view').forEach(v=>v.classList.remove('act'));
+  const el = _('v-'+name);
+  if(el) { el.classList.add('act'); cur=name; }
+  $$('.nav-links a').forEach(a => a.classList.toggle('act', a.dataset.v===name));
+  window.scrollTo(0,0);
+  _('navLinks').classList.remove('open');
+  // Init workspace on enter
+  if(name==='workspace') wsInit();
+}
+
+function oF(tipo, id) {
+  const item = tipo==='est' ? gE(id) : gI(id);
+  if(!item) { toast('Ficha no encontrada','warn'); return; }
+  _('v-ficha').innerHTML = buildFicha(item, tipo);
+  sv('ficha');
+  initFicha(item, tipo);
+}
+
+// ── Card renderer ─────────────────────────────────
+function renderCards(data, containerId, tipo) {
+  const el = _(containerId); if(!el) return;
+  el.innerHTML = data.map(item => `
+    <div class="card" onclick="oF('${tipo}','${item.id}')">
+      <div class="card-img-wrap">
+        <img class="card-img" src="${esc(item.imagen||'')}" alt="${esc(item.nombre)}" loading="lazy"/>
+        ${item.era ? `<span class="card-era">${esc(item.era)}</span>` : ''}
+        ${item.eco ? `<span class="eco-badge">🌱 Eco</span>` : ''}
+      </div>
+      <div class="card-body">
+        <div class="card-name">${esc(item.nombre)}</div>
+        <div class="card-desc">${esc((item.descripcion||'').slice(0,90))}…</div>
+        <div class="card-tags">${(item.tags||[]).slice(0,4).map(t=>`<span class="ctag">${esc(t)}</span>`).join('')}</div>
+        <span class="card-cta">Ver ficha →</span>
+      </div>
+    </div>`).join('');
+}
+
+function renderFPGrid(data, id) {
+  const el = _(id); if(!el) return;
+  el.innerHTML = data.map(fp => `
+    <div class="card" onclick="oFP('${fp.id}')">
+      <div class="card-img-wrap" style="height:160px">
+        <img class="card-img" src="${esc(fp.imagen)}" alt="${esc(fp.nombre)}" loading="lazy" onerror="this.parentElement.style.background='var(--bg4)'"/>
+      </div>
+      <div class="card-body">
+        <div class="card-name">${esc(fp.nombre)}</div>
+        <div class="card-desc">${esc((fp.descripcion||'').slice(0,80))}…</div>
+        <div class="card-tags">
+          <span class="ctag">${esc(fp.tipologia)}</span>
+          ${fp.m2_min?`<span class="ctag">${fp.m2_min}–${fp.m2_max} m²</span>`:''}
+        </div>
+        <span class="card-cta" style="color:var(--t2);font-size:.58rem">${esc(fp.fuente||'dominio público')}</span>
+      </div>
+    </div>`).join('');
+}
+
+function renderPGrid(data, id, limit) {
+  const el = _(id); if(!el) return;
+  const items = limit ? data.slice(0,limit) : data;
+  el.innerHTML = items.map(p => `
+    <div class="card">
+      <div class="card-img-wrap"><img class="card-img" src="${esc(p.imagen)}" alt="${esc(p.nombre)}" loading="lazy"/></div>
+      <div class="card-body">
+        <div class="card-name">${esc(p.nombre)}</div>
+        <div class="card-desc">${esc((p.descripcion||'').slice(0,80))}…</div>
+        <div class="card-tags">
+          ${p.eco?`<span class="ctag" style="color:var(--eco);border-color:var(--eco-dim)">🌱 eco</span>`:''}
+          <span class="ctag">Agua: ${esc(p.agua)}</span>
+          <span class="ctag">Mant.: ${esc(p.mantenimiento)}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ── Ficha builder ─────────────────────────────────
+function buildFicha(item, tipo) {
+  const compatInts = tipo==='est'
+    ? (item.interiores_compatibles||[]).map(id=>gI(id)).filter(Boolean)
+    : [];
+  const compatEsts = tipo==='int'
+    ? (item.estilos_arq_compatibles||[]).map(id=>gE(id)).filter(Boolean)
+    : [];
+  const mats = item.materiales||{};
+
+  const scoresHTML = tipo==='int'
+    ? Object.entries(item).filter(([k])=>k.startsWith('score_')).map(([k,v])=>{
+        const id = k.slice(6).replace(/_/g,'-');
+        const e = gE(id);
+        return e ? `<div class="score-bar"><span class="sc-lbl">${esc(e.nombre)}</span><div class="sc-track"><div class="sc-fill" data-score="${v}" style="width:0%"></div></div><span class="sc-val">${v}%</span></div>` : '';
+      }).join('') : '';
+
+  return `
+  <div class="page-hdr" data-lbl="${esc((item.nombre||'').slice(0,5).toUpperCase())}">
+    <div style="max-width:var(--max);margin:0 auto;padding:0 20px">
+      <div class="breadcrumb">
+        <a onclick="sv('home')">ARQREF</a><span>/</span>
+        <a onclick="sv('${tipo==='est'?'estilos':'interiores'}')">${tipo==='est'?'Estilos':'Interiores'}</a><span>/</span>
+        <span>${esc(item.nombre)}</span>
+      </div>
+      <div class="flex items-c jc-b gap-12" style="flex-wrap:wrap">
+        <div>
+          <div class="eyebrow">${esc(item.era||'')}${item.origen?' · '+esc(item.origen):''}</div>
+          <h1 class="page-title"><em>${esc(item.nombre)}</em></h1>
+          <div class="badge-row">
+            ${(item.caracteristicas||[]).slice(0,3).map(c=>`<span class="bdg">${esc(c)}</span>`).join('')}
+            ${item.eco?'<span class="bdg e">🌱 Eco</span>':''}
+          </div>
+        </div>
+        <div class="flex gap-8" style="flex-wrap:wrap">
+          <button class="btn btn-g" onclick="addToProj('${esc(item.id)}','${tipo}','${esc(item.nombre)}')">+ Proyecto</button>
+          <button class="btn btn-g" onclick="window.print()">⎙ PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  ${item.imagen ? `
+  <div style="max-width:var(--max);margin:0 auto;padding:20px 20px 0;position:relative;z-index:1">
+    <div class="gallery3">
+      <div class="gi"><img src="${esc(item.imagen)}" alt="${esc(item.nombre)}" loading="lazy"/></div>
+      ${item.imagen_2?`<div class="gi"><img src="${esc(item.imagen_2)}" alt="${esc(item.nombre)}" loading="lazy"/></div>`:''}
+      ${item.imagen_3?`<div class="gi"><img src="${esc(item.imagen_3)}" alt="${esc(item.nombre)}" loading="lazy"/></div>`:''}
+    </div>
+    <p style="font-family:var(--mono);font-size:.58rem;color:var(--t2);margin-top:5px">Fotos: Unsplash (CC0)</p>
+  </div>` : ''}
+
+  <div class="ficha-wrap">
+    <div>
+      ${item.quote?`<div class="blockquote"><p>"${esc(item.quote)}"</p><cite>— ${esc(item.quote_autor||'')}</cite></div>`:''}
+      <p style="color:var(--t1);line-height:1.8;margin-bottom:24px;font-size:.9rem">${esc(item.descripcion||'')}</p>
+      ${item.concepto_clave?`<div style="background:var(--bg3);border:1px solid var(--acc-b);padding:11px 14px;margin-bottom:24px;font-family:var(--mono);font-size:.72rem;color:var(--acc)">Concepto: "${esc(item.concepto_clave)}"</div>`:''}
+
+      <div class="sect-head" style="margin-bottom:12px"><span class="sect-title">Características</span></div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:28px">
+        ${(item.caracteristicas||[]).map(c=>`<span class="bdg">${esc(c)}</span>`).join('')}
+      </div>
+
+      ${(item.figuras||[]).length?`
+      <div class="sect-head" style="margin-bottom:12px"><span class="sect-title">Figuras clave</span></div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:28px">
+        ${item.figuras.map(f=>`<span class="bdg g">${esc(f)}</span>`).join('')}
+      </div>`:''}
+
+      ${(item.obras||[]).length?`
+      <div class="sect-head" style="margin-bottom:12px"><span class="sect-title">Obras de referencia</span></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;margin-bottom:28px">
+        ${item.obras.map(o=>`<div class="info-bl"><div class="info-bl-body">
+          <div style="font-size:.82rem;color:var(--t0);font-weight:500;margin-bottom:3px">${esc(o.nombre)}</div>
+          <div class="text-xs text-m">${esc(o.autor||'')} · ${esc(o.lugar||'')}${o.año?', '+o.año:''}</div>
+        </div></div>`).join('')}
+      </div>`:''}
+
+      <!-- TABS -->
+      <div class="tabs-root">
+        <div class="tabs" id="fTabs">
+          ${tipo==='est'?'<button class="tab-btn act" data-tab="int">🪑 Interiores</button><button class="tab-btn" data-tab="pais">🌿 Paisajismo</button>':''}
+          ${tipo==='int'?'<button class="tab-btn act" data-tab="compat">🏛 Compatibilidad</button>':''}
+          <button class="tab-btn" data-tab="mats">🎨 Materiales</button>
+          ${tipo==='int'&&item.iluminacion?'<button class="tab-btn" data-tab="extra">💡 Extras</button>':''}
+        </div>
+
+        ${tipo==='est'?`
+        <div class="tab-panel act" data-panel="int">
+          <div class="combo-grid">
+            ${compatInts.map(c=>{
+              const scoreKey = 'score_'+c.id; // simple match
+              const score = item[scoreKey]||item['score_'+c.id.replace(/-/g,'_')]||'';
+              return `<div class="combo-card" onclick="oF('int','${c.id}')">
+                ${score?`<span class="combo-score ${score<85?'am':''}">${score}%</span>`:''}
+                <div class="combo-name">${esc(c.nombre)}</div>
+                <p class="combo-desc">${esc((c.descripcion||'').slice(0,100))}…</p>
+                ${c.eco?'<span class="bdg e" style="margin-top:8px">🌱 Eco</span>':''}
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+        <div class="tab-panel" data-panel="pais">
+          <div class="combo-grid">
+            ${(item.paisajismo_compatible||[]).map(pid=>{
+              const p = PAIS.find(x=>x.id===pid); if(!p) return '';
+              return `<div class="combo-card">
+                <div class="combo-name">${esc(p.nombre)}</div>
+                <p class="combo-desc">${esc((p.descripcion||'').slice(0,100))}…</p>
+                <div style="margin-top:8px;font-family:var(--mono);font-size:.6rem;color:var(--t2)">Agua: ${esc(p.agua)} · Mant.: ${esc(p.mantenimiento)}</div>
+                ${p.eco?'<span class="bdg e" style="margin-top:6px">🌱 Eco</span>':''}
+              </div>`;
+            }).join('')}
+          </div>
+        </div>`:''}
+
+        ${tipo==='int'?`
+        <div class="tab-panel act" data-panel="compat">
+          ${scoresHTML?`<div style="margin-bottom:16px">${scoresHTML}</div>`:''}
+          <div class="combo-grid">
+            ${compatEsts.map(c=>`<div class="combo-card" onclick="oF('est','${c.id}')">
+              <div class="combo-name">${esc(c.nombre)}</div>
+              <p class="combo-desc">${esc((c.descripcion||'').slice(0,90))}…</p>
+            </div>`).join('')}
+          </div>
+        </div>`:''}
+
+        <div class="tab-panel" data-panel="mats">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+            ${Object.entries(mats).map(([cat,items])=>`
+            <div class="info-bl">
+              <div class="info-bl-hdr">${esc(cat)}</div>
+              <div class="info-bl-body">
+                ${(items||[]).map(m=>`<div class="color-chip" data-hex="${esc(m.hex)}" title="Copiar HEX">
+                  <div class="swatch" style="background:${esc(m.hex)}"></div>
+                  <div class="cc-info"><span class="cc-name">${esc(m.nombre)}</span><span class="cc-hex">${esc(m.hex)}</span></div>
+                  <span class="cc-copy">copiar</span>
+                </div>`).join('')}
+              </div>
+            </div>`).join('')}
+          </div>
+          ${(item.plantas_interior||[]).length?`
+          <div style="margin-top:18px">
+            <div class="sect-head" style="margin-bottom:10px"><span class="sect-title">Plantas de interior recomendadas</span></div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px">
+              ${item.plantas_interior.map(p=>`<span class="bdg">${esc(p)}</span>`).join('')}
+            </div>
+          </div>`:''}
+          ${(item.plantas_eco_recomendadas||[]).length?`
+          <div style="margin-top:14px">
+            <div class="sect-head" style="margin-bottom:10px"><span class="sect-title">Plantas eco recomendadas 🌱</span></div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px">
+              ${item.plantas_eco_recomendadas.map(p=>`<span class="bdg e">${esc(p)}</span>`).join('')}
+            </div>
+          </div>`:''}
+        </div>
+
+        ${tipo==='int'&&item.iluminacion?`
+        <div class="tab-panel" data-panel="extra">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="info-bl"><div class="info-bl-hdr">Iluminación</div><div class="info-bl-body"><p class="text-sm" style="color:var(--t1)">${esc(item.iluminacion)}</p></div></div>
+            <div class="info-bl"><div class="info-bl-hdr">Textiles</div><div class="info-bl-body"><p class="text-sm" style="color:var(--t1)">${esc(item.textiles||'')}</p></div></div>
+          </div>
+        </div>`:''}
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;padding-top:20px;border-top:1px solid var(--border);margin-top:28px">
+        <button class="btn btn-p" onclick="addToProj('${esc(item.id)}','${tipo}','${esc(item.nombre)}')">+ Guardar en proyecto</button>
+      </div>
+    </div>
+
+    <!-- Sidebar ficha -->
+    <aside class="ficha-sidebar">
+      <div class="info-bl">
+        <div class="info-bl-hdr">Datos técnicos</div>
+        <div class="info-bl-body">
+          ${item.era?`<div class="info-row"><span class="ir-lbl">Período</span><span class="ir-val">${esc(item.era)}</span></div>`:''}
+          ${item.origen?`<div class="info-row"><span class="ir-lbl">Origen</span><span class="ir-val">${esc(item.origen)}</span></div>`:''}
+          ${item.costo_constructivo?`<div class="info-row"><span class="ir-lbl">Costo</span><span class="ir-val">${esc(item.costo_constructivo)}</span></div>`:''}
+          ${item.mantenimiento?`<div class="info-row"><span class="ir-lbl">Mantenimiento</span><span class="ir-val">${esc(item.mantenimiento)}</span></div>`:''}
+          ${item.programa_tipico?`<div class="info-row"><span class="ir-lbl">Programa</span><span class="ir-val">${esc(item.programa_tipico)}</span></div>`:''}
+          ${item.agua?`<div class="info-row"><span class="ir-lbl">Agua</span><span class="ir-val">${esc(item.agua)}</span></div>`:''}
+        </div>
+      </div>
+      <div class="nota-wrap" data-estilo="${esc(item.id)}" id="nWidget">
+        <div class="nota-hdr">
+          <span class="nota-hdr-t">📝 Mis notas</span>
+          <span class="nota-status" id="nStatus"></span>
+        </div>
+        <textarea class="nota-ta" id="nTa" placeholder="Tus observaciones..."></textarea>
+      </div>
+      <button class="btn btn-p btn-w" onclick="addToProj('${esc(item.id)}','${tipo}','${esc(item.nombre)}')">+ Agregar a proyecto</button>
+      <div class="info-bl">
+        <div class="info-bl-hdr">Relacionados</div>
+        <div class="info-bl-body" style="display:flex;flex-direction:column;gap:5px">
+          ${(tipo==='est'?EST:INT).filter(x=>x.id!==item.id).slice(0,4).map(x=>`<button class="btn btn-g btn-sm btn-w" style="justify-content:flex-start" onclick="oF('${tipo}','${x.id}')">→ ${esc(x.nombre)}</button>`).join('')}
+        </div>
+      </div>
+    </aside>
+  </div>`;
+}
+
+function initFicha(item, tipo) {
+  // Tabs
+  $$('#fTabs .tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      $$('#fTabs .tab-btn').forEach(b=>b.classList.remove('act'));
+      btn.classList.add('act');
+      const t = btn.dataset.tab;
+      $$('.tab-panel').forEach(p=>p.classList.toggle('act', p.dataset.panel===t));
+    });
+  });
+  // Score bars
+  setTimeout(() => { $$('.sc-fill[data-score]').forEach(f => { f.style.width=f.dataset.score+'%'; }); }, 80);
+  // Color chips
+  initChips();
+  // Nota
+  const ta = _('nTa'), ns = _('nStatus');
+  if(ta) {
+    ta.value = getNota(item.id);
+    let t;
+    ta.addEventListener('input', () => {
+      clearTimeout(t);
+      if(ns) ns.textContent='···';
+      t = setTimeout(() => { setNota(item.id, ta.value); if(ns){ns.textContent='✓'; setTimeout(()=>ns.textContent='',1500);} }, 700);
+    });
+  }
+}
+
+function oFP(id) {
+  const fp = FP.find(f=>f.id===id); if(!fp) return;
+  _('v-ficha').innerHTML = `
+    <div class="page-hdr" data-lbl="FP">
+      <div style="max-width:var(--max);margin:0 auto;padding:0 20px">
+        <div class="breadcrumb"><a onclick="sv('home')">ARQREF</a><span>/</span><a onclick="sv('floorplans')">Floorplans</a><span>/</span><span>${esc(fp.nombre)}</span></div>
+        <h1 class="page-title"><em>${esc(fp.nombre)}</em></h1>
+        <div class="badge-row"><span class="bdg">${esc(fp.tipologia)}</span>${fp.m2_min?`<span class="bdg">${fp.m2_min}–${fp.m2_max} m²</span>`:''}</div>
+      </div>
+    </div>
+    <div style="max-width:var(--max);margin:0 auto;padding:28px 20px;position:relative;z-index:1;display:grid;grid-template-columns:1fr 280px;gap:24px;align-items:start">
+      <div>
+        <img src="${esc(fp.imagen)}" alt="${esc(fp.nombre)}" style="width:100%;border:1px solid var(--border);margin-bottom:12px" onerror="this.style.display='none'"/>
+        <p class="text-xs text-m" style="font-family:var(--mono);margin-bottom:18px">Fuente: ${esc(fp.fuente)}</p>
+        <p style="color:var(--t1);line-height:1.8;margin-bottom:18px">${esc(fp.descripcion)}</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">${(fp.caracteristicas||[]).map(c=>`<span class="bdg">${esc(c)}</span>`).join('')}</div>
+      </div>
+      <div class="info-bl">
+        <div class="info-bl-hdr">Estilos compatibles</div>
+        <div class="info-bl-body" style="display:flex;flex-direction:column;gap:5px">
+          ${(fp.estilos_arq||[]).map(id=>{
+            const e=gE(id); return e?`<button class="btn btn-g btn-sm btn-w" style="justify-content:flex-start" onclick="oF('est','${id}')">→ ${esc(e.nombre)}</button>`:'';
+          }).join('')}
+        </div>
+      </div>
+    </div>`;
+  sv('ficha');
+}
+
+// ── Storage ───────────────────────────────────────
+const SK = {n:'arqref_notas_v2', p:'arqref_proj_v2'};
+const dbG = (k,fb) => { try{const v=localStorage.getItem(k);return v?JSON.parse(v):fb;}catch{return fb;} };
+const dbS = (k,v) => { try{localStorage.setItem(k,JSON.stringify(v));}catch{} };
+const getNota = id => dbG(SK.n,{})[id]||'';
+const setNota = (id,txt) => { const n=dbG(SK.n,{}); n[id]=txt; dbS(SK.n,n); };
+
+const Proj = {
+  all() { return dbG(SK.p,[]); },
+  get(id) { return this.all().find(p=>p.id===id); },
+  create(nom,tipo) {
+    const ps=this.all();
+    const p={id:'p_'+Date.now(),nombre:nom,tipo,createdAt:Date.now(),refs:[],notas:'',paleta:[]};
+    ps.unshift(p); dbS(SK.p,ps); toast('✓ Proyecto "'+nom+'" creado'); return p;
+  },
+  update(id,ch) {
+    const ps=this.all(); const i=ps.findIndex(p=>p.id===id);
+    if(i<0) return; ps[i]={...ps[i],...ch,updatedAt:Date.now()}; dbS(SK.p,ps); return ps[i];
+  },
+  delete(id) { dbS(SK.p,this.all().filter(p=>p.id!==id)); toast('Proyecto eliminado','warn'); },
+  addRef(pid,ref) {
+    const p=this.get(pid); if(!p) return;
+    if(!p.refs.find(r=>r.id===ref.id)) { p.refs.push(ref); this.update(pid,{refs:p.refs}); toast('✓ Agregado al proyecto'); }
+    else toast('Ya está en este proyecto','warn');
+  }
+};
+
+// ── Add to project ────────────────────────────────
+function addToProj(id, tipo, nombre) {
+  const ps = Proj.all();
+  if(!ps.length) { toast('Primero creá un proyecto en el Workspace','warn'); sv('workspace'); return; }
+  if(ps.length===1) { Proj.addRef(ps[0].id,{id,tipo,nombre}); return; }
+  _('mProjBody').innerHTML = `<p class="text-sm text-m" style="margin-bottom:12px">¿A cuál proyecto agregás <strong style="color:var(--t0)">${esc(nombre)}</strong>?</p>
+    <div style="display:flex;flex-direction:column;gap:7px">
+      ${ps.map(p=>`<button class="btn btn-g btn-w" style="justify-content:flex-start" onclick="Proj.addRef('${p.id}',{id:'${id}',tipo:'${tipo}',nombre:'${esc(nombre)}'});cm('mProj')">${esc(p.nombre)} <span class="text-xs text-m" style="margin-left:auto">${p.refs.length} refs</span></button>`).join('')}
+    </div>`;
+  om('mProj');
+}
+
+// ── Color chips ───────────────────────────────────
+function initChips() {
+  $$('.color-chip[data-hex]').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const hex = chip.dataset.hex;
+      navigator.clipboard.writeText(hex).catch(()=>{
+        const i=document.createElement('input');i.value=hex;document.body.appendChild(i);i.select();document.execCommand('copy');i.remove();
+      });
+      toast('✓ Copiado: '+hex);
+    });
+  });
+}
+
+// ── Toast ─────────────────────────────────────────
+function toast(msg, type='ok', ms=2800) {
+  const el=document.createElement('div');
+  el.className='toast'+(type==='warn'?' warn':type==='err'?' err':'');
+  el.textContent=msg;
+  _('tc').appendChild(el);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('show')));
+  setTimeout(()=>{el.classList.remove('show');setTimeout(()=>el.remove(),400);},ms);
+}
+
+// ── Modal ─────────────────────────────────────────
+const om = id => { const el=_(id);if(el){el.classList.add('open');document.body.style.overflow='hidden';} };
+const cm = id => { const el=_(id);if(el){el.classList.remove('open');document.body.style.overflow='';} };
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') $$('.modal-ov.open').forEach(m=>{m.classList.remove('open');document.body.style.overflow='';}) });
+$$('.modal-ov').forEach(ov=>ov.addEventListener('click',e=>{if(e.target===ov){ov.classList.remove('open');document.body.style.overflow='';}}));
+
+// ── Nav ───────────────────────────────────────────
+_('navTog').addEventListener('click',()=>_('navLinks').classList.toggle('open'));
+window.addEventListener('scroll',()=>{
+  const p=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight))*100;
+  _('sb').style.width=Math.min(p,100)+'%';
+},{passive:true});
+
+// ── Search ────────────────────────────────────────
+_('gSearchBtn').addEventListener('click',doSearch);
+_('gSearch').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
+function doSearch() {
+  const q=_('gSearch').value.trim().toLowerCase();
+  const cat=document.querySelector('.chip.act[data-cat]')?.dataset.cat||'all';
+  if(!q) return;
+  if(cat==='all'||cat==='est') {
+    const r=EST.filter(e=>JSON.stringify(e).toLowerCase().includes(q));
+    if(r.length){renderCards(r,'eGrid','est');sv('estilos');return;}
+  }
+  if(cat==='all'||cat==='int') {
+    const r=INT.filter(i=>JSON.stringify(i).toLowerCase().includes(q));
+    if(r.length){renderCards(r,'iGrid','int');sv('interiores');return;}
+  }
+  if(cat==='eco') {
+    const re=EST.filter(e=>e.eco&&JSON.stringify(e).toLowerCase().includes(q));
+    const ri=INT.filter(i=>i.eco&&JSON.stringify(i).toLowerCase().includes(q));
+    if(re.length){renderCards(re,'eGrid','est');sv('estilos');return;}
+    if(ri.length){renderCards(ri,'iGrid','int');sv('interiores');return;}
+  }
+  toast('Sin resultados para "'+q+'"','warn');
+}
+$$('#sCats .chip').forEach(btn=>{
+  btn.addEventListener('click',()=>{$$('#sCats .chip').forEach(b=>b.classList.remove('act'));btn.classList.add('act');});
+});
+
+// ── Filtros ───────────────────────────────────────
+// Épocas estilos
+$$('[data-ep]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    $$('[data-ep]').forEach(b=>b.classList.remove('act'));btn.classList.add('act');
+    const ep=btn.dataset.ep;
+    const f=ep==='all'?EST:ep==='eco'?EST.filter(e=>e.eco):EST.filter(e=>{
+      const era=e.era||'';
+      if(ep==='medieval') return era.includes('XII')||era.includes('XV')||era.includes('S. XII')||era.includes('S. XV');
+      if(ep==='clasico')  return era.includes('XVIII')||era.includes('XIX')||era.includes('S. XVIII')||era.includes('S. XIX');
+      if(ep==='moderno')  return era.includes('1919')||era.includes('1920')||era.includes('1925')||era.includes('1930')||era.includes('1950');
+      if(ep==='contemporaneo') return era.includes('hoy')||era.includes('1988')||era.includes('2010');
+      return true;
+    });
+    renderCards(f,'eGrid','est');
+  });
+});
+// Categorías interiores
+$$('[data-ci]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    $$('[data-ci]').forEach(b=>b.classList.remove('act'));btn.classList.add('act');
+    const c=btn.dataset.ci;
+    const f=c==='all'?INT:c==='eco'?INT.filter(i=>i.eco):INT.filter(i=>i.categoria===c);
+    renderCards(f,'iGrid','int');
+  });
+});
+// Tipologías floorplans
+$$('[data-tp]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    $$('[data-tp]').forEach(b=>b.classList.remove('act'));btn.classList.add('act');
+    const t=btn.dataset.tp;
+    renderFPGrid(t==='all'?FP:FP.filter(f=>f.tipologia===t),'fpGrid');
+  });
+});
+
+// ── Comparador ────────────────────────────────────
+_('cmpBtn').addEventListener('click',()=>{
+  const [aId,aT]=((_('cmpA').value)||'|').split('|');
+  const [bId,bT]=((_('cmpB').value)||'|').split('|');
+  if(!aId||!bId){toast('Seleccioná dos estilos','warn');return;}
+  const a=aT==='est'?gE(aId):gI(aId);
+  const b=bT==='est'?gE(bId):gI(bId);
+  if(!a||!b) return;
+  const rows=['era','origen','costo_constructivo','mantenimiento','programa_tipico'];
+  _('cmpResult').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border)">
+      <div style="background:var(--bg2);padding:20px">
+        <h2 style="font-family:var(--disp);font-size:1.5rem;font-weight:700;margin-bottom:12px;color:var(--acc)">${esc(a.nombre)}</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px">${(a.caracteristicas||[]).slice(0,5).map(c=>`<span class="bdg">${esc(c)}</span>`).join('')}</div>
+        ${rows.map(r=>a[r]?`<div class="info-row"><span class="ir-lbl">${r.replace(/_/g,' ')}</span><span class="ir-val">${esc(a[r])}</span></div>`:'').join('')}
+        <button class="btn btn-g btn-sm" style="margin-top:12px" onclick="oF('${aT}','${aId}')">Ver ficha →</button>
+      </div>
+      <div style="background:var(--bg2);padding:20px">
+        <h2 style="font-family:var(--disp);font-size:1.5rem;font-weight:700;margin-bottom:12px;color:var(--acc)">${esc(b.nombre)}</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px">${(b.caracteristicas||[]).slice(0,5).map(c=>`<span class="bdg">${esc(c)}</span>`).join('')}</div>
+        ${rows.map(r=>b[r]?`<div class="info-row"><span class="ir-lbl">${r.replace(/_/g,' ')}</span><span class="ir-val">${esc(b[r])}</span></div>`:'').join('')}
+        <button class="btn btn-g btn-sm" style="margin-top:12px" onclick="oF('${bT}','${bId}')">Ver ficha →</button>
+      </div>
+    </div>`;
+});
+
+// ── Glosario ──────────────────────────────────────
+const GLOS=[
+  {t:'Béton brut',d:'Hormigón en bruto, sin revestir. Término acuñado por Le Corbusier que da nombre al Brutalismo.',o:'Francés'},
+  {t:'Planta libre',d:'Sistema estructural donde los pilares soportan la carga, liberando los tabiques de función portante.',o:'Modernismo'},
+  {t:'Arbotante',d:'Arco exterior que transmite el empuje de las bóvedas hacia los contrafuertes. Clave en el Gótico.',o:'Gótico'},
+  {t:'Biofilia',d:'Hipótesis de E.O. Wilson sobre la atracción innata de los humanos hacia otras formas de vida.',o:'Biología / Arquitectura'},
+  {t:'Kintsugi',d:'Arte japonés de reparar cerámicas con oro. Metáfora del wabi-sabi: la cicatriz embellece el objeto.',o:'Japonés'},
+  {t:'Wabi-Sabi',d:'Concepto estético japonés: belleza en la imperfección, impermanencia e incompletitud.',o:'Japonés'},
+  {t:'Hygge',d:'Concepto danés de confort acogedor y calidez colectiva. Pilar del diseño escandinavo.',o:'Danés'},
+  {t:'Existenzminimum',d:'Estudio bauhaus sobre el mínimo habitable digno. Influyó en el diseño de vivienda social del s.XX.',o:'Bauhaus / Alemán'},
+  {t:'CLT',d:'Cross Laminated Timber. Madera contralaminada estructural, material sostenible de alta resistencia.',o:'Ingeniería estructural'},
+  {t:'Xeriscape',d:'Paisajismo diseñado para reducir o eliminar el riego suplementario. Del griego "xero" (seco).',o:'Inglés / Ecología'},
+  {t:'Paramétrico',d:'Diseño generado por algoritmos computacionales que permite formas complejas no-euclidianas.',o:'Arquitectura digital'},
+  {t:'Pilotes',d:'Pilares que elevan el edificio del suelo. Uno de los Cinco Puntos de la Arquitectura de Le Corbusier.',o:'Modernismo'},
+  {t:'Solarpunk',d:'Movimiento que imagina un futuro donde tecnología limpia, naturaleza y justicia social coexisten.',o:'Ficción especulativa / Global'},
+  {t:'Japandi',d:'Fusión del minimalismo escandinavo (hygge) y la filosofía japonesa del wabi-sabi.',o:'Tendencia global'},
+  {t:'Cubierta jardín',d:'Techo vegetalizado, parte de los Cinco Puntos de Le Corbusier. Recupera el terreno ocupado.',o:'Modernismo'},
+  {t:'Béton brut',d:'Hormigón en bruto, sin revestir. Técnicamente: encofrado a la vista con textura de encofrado impresa.',o:'Francés / Brutalismo'},
+  {t:'Hempcrete',d:'Material de construcción compuesto de cáñamo y cal. Excelente aislante, carbono negativo.',o:'Construcción sostenible'},
+  {t:'CLT',d:'Cross Laminated Timber. Tableros de madera maciza contralaminada de alta resistencia estructural.',o:'Ingeniería forestal'},
+  {t:'Biomímesis',d:'Diseño inspirado en estrategias y formas de la naturaleza para resolver problemas humanos.',o:'Biología / Diseño'},
+  {t:'Passive house',d:'Estándar de construcción ultrabaja energía que se basa en aislación, hermeticidad y ventilación controlada.',o:'Alemania / Internacional'},
+];
+function renderGlosario(q){
+  const data=q?GLOS.filter(g=>g.t.toLowerCase().includes(q)||g.d.toLowerCase().includes(q)):GLOS;
+  _('glosTbody').innerHTML=data.map(g=>`<tr>
+    <td style="color:var(--acc);font-weight:500;font-family:var(--mono);font-size:.75rem">${esc(g.t)}</td>
+    <td>${esc(g.d)}</td>
+    <td style="color:var(--t2);font-size:.75rem">${esc(g.o)}</td>
+  </tr>`).join('');
+}
+_('glosQ').addEventListener('input',e=>renderGlosario(e.target.value.toLowerCase().trim()));
+
+// ── Workspace ─────────────────────────────────────
+let wsAct=null;
+function wsInit() { wsRSB(); const f=Proj.all()[0]; if(f&&!wsAct){wsAct=f.id;} wsRSB(); wsRM(); }
+
+function wsRSB() {
+  const ps=Proj.all();
+  _('wsCount').textContent=ps.length;
+  _('wsList').innerHTML=!ps.length?`<div class="empty-state" style="padding:24px 14px"><div class="es-icon">◈</div><p class="es-text">Sin proyectos</p></div>`:
+    ps.map(p=>`<div class="p-item ${wsAct===p.id?'act':''}" data-pid="${p.id}">
+      <div class="p-dot"></div>
+      <div class="p-info"><div class="p-name">${esc(p.nombre)}</div><div class="p-meta">${esc(p.tipo||'sin tipo')} · ${p.refs.length} refs</div></div>
+      <button style="background:none;border:1px solid transparent;color:var(--t2);width:18px;height:18px;font-size:.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s" onmouseover="this.style.color='var(--danger)'" onmouseout="this.style.color='var(--t2)'" data-del="${p.id}">✕</button>
+    </div>`).join('');
+  $$('#wsList .p-item').forEach(item=>{
+    item.addEventListener('click',e=>{if(e.target.dataset.del)return;wsAct=item.dataset.pid;wsRSB();wsRM();});
+  });
+  $$('#wsList [data-del]').forEach(btn=>{
+    btn.addEventListener('click',e=>{e.stopPropagation();if(confirm('¿Eliminar?')){Proj.delete(btn.dataset.del);if(wsAct===btn.dataset.del){wsAct=null;}wsRSB();wsRM();}});
+  });
+}
+
+function wsRM() {
+  const main=_('wsMain');
+  if(!wsAct){main.innerHTML=`<div class="empty-state ws-panel" style="padding:52px 20px"><div class="es-icon">◈</div><p class="es-text">Seleccioná o creá un proyecto</p></div>`;return;}
+  const p=Proj.get(wsAct);if(!p)return;
+  main.innerHTML=`
+    <div class="ws-panel">
+      <div class="ws-ph"><span class="ws-pt">${esc(p.nombre)}</span>
+        <div class="flex gap-8">${p.tipo?`<span class="bdg">${esc(p.tipo)}</span>`:''}<button class="btn btn-g btn-sm" onclick="window.print()">⎙ PDF</button></div>
+      </div>
+      <div class="ws-pb"><div class="flex gap-16" style="flex-wrap:wrap">
+        <div><span style="font-family:var(--mono);font-size:.6rem;color:var(--t2)">Creado</span><br/><span class="text-sm">${new Date(p.createdAt).toLocaleDateString('es-AR')}</span></div>
+        <div><span style="font-family:var(--mono);font-size:.6rem;color:var(--t2)">Referencias</span><br/><span class="text-sm text-acc">${p.refs.length}</span></div>
+        <div><span style="font-family:var(--mono);font-size:.6rem;color:var(--t2)">Colores</span><br/><span class="text-sm text-acc">${p.paleta.length}</span></div>
+      </div></div>
+    </div>
+    <div class="ws-panel">
+      <div class="ws-ph"><span class="ws-pt">Notas del proyecto</span><span style="font-family:var(--mono);font-size:.6rem;color:var(--t2)" id="wNS"></span></div>
+      <div class="ws-pb"><textarea class="nota-area" id="wNota" placeholder="Requerimientos, ideas, restricciones del cliente...">${esc(p.notas||'')}</textarea></div>
+    </div>
+    <div class="ws-panel">
+      <div class="ws-ph"><span class="ws-pt">Referencias guardadas</span><span class="bdg g">${p.refs.length}</span></div>
+      <div class="ws-pb">
+        ${p.refs.length?`<div class="ref-grid">${p.refs.map((r,i)=>`
+          <div class="ref-card">
+            <div class="ref-type">${esc(r.tipo||'referencia')}</div>
+            <div class="ref-name">${esc(r.nombre||r.id)}</div>
+            <button class="btn btn-g btn-sm" style="margin-top:5px" onclick="oF('${r.tipo==='estilo-arquitectonico'||r.tipo==='est'?'est':'int'}','${r.id}')">Ver ficha →</button>
+            <button class="ref-del" data-ri="${i}">✕</button>
+          </div>`).join('')}</div>`:
+          '<p class="text-sm text-m">Sin referencias. Explorá estilos e interiores y usá "+ Proyecto".</p>'}
+      </div>
+    </div>
+    <div class="ws-panel">
+      <div class="ws-ph"><span class="ws-pt">Paleta del proyecto</span><button class="btn btn-g btn-sm" onclick="om('mColor')">+ Color</button></div>
+      <div class="ws-pb">
+        ${p.paleta.length?`<div class="pal-wrap">${p.paleta.map((c,i)=>`
+          <div class="pal-item color-chip" data-hex="${esc(c.hex)}" title="Copiar">
+            <div class="pal-sw" style="background:${esc(c.hex)}"></div>
+            <span class="pal-hex">${esc(c.hex)}</span>
+            ${c.nombre?`<span class="text-xs text-m">${esc(c.nombre)}</span>`:''}
+            <button class="pal-del" data-pi="${i}">✕</button>
+          </div>`).join('')}</div>`:
+          '<p class="text-sm text-m">Paleta vacía. Agregá colores o copialos desde las fichas de materiales.</p>'}
+      </div>
+    </div>`;
+
+  const wn=_('wNota'),wns=_('wNS');
+  let wt;
+  wn?.addEventListener('input',()=>{clearTimeout(wt);if(wns)wns.textContent='···';wt=setTimeout(()=>{Proj.update(wsAct,{notas:wn.value});if(wns){wns.textContent='✓';setTimeout(()=>wns.textContent='',1500);}},700);});
+  $$('#wsMain [data-ri]').forEach(btn=>btn.addEventListener('click',()=>{const pp=Proj.get(wsAct);pp.refs.splice(parseInt(btn.dataset.ri),1);Proj.update(wsAct,{refs:pp.refs});wsRM();}));
+  $$('#wsMain [data-pi]').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();const pp=Proj.get(wsAct);pp.paleta.splice(parseInt(btn.dataset.pi),1);Proj.update(wsAct,{paleta:pp.paleta});wsRM();}));
+  initChips();
+  wsRSB();
+}
+
+_('wsCreate').addEventListener('click',()=>{
+  const n=_('wsNom').value.trim();if(!n){toast('Escribí un nombre','warn');return;}
+  const p=Proj.create(n,_('wsTipo').value);wsAct=p.id;_('wsNom').value='';wsRSB();wsRM();
+});
+_('wsNom').addEventListener('keydown',e=>{if(e.key==='Enter')_('wsCreate').click();});
+_('wsNew').addEventListener('click',()=>_('wsNom').focus());
+_('wsExp').addEventListener('click',()=>{
+  const data={proyectos:Proj.all(),notas:dbG(SK.n,{}),exportedAt:new Date().toISOString()};
+  const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+  const a=document.createElement('a');a.href=url;a.download='arqref-workspace.json';a.click();URL.revokeObjectURL(url);
+  toast('✓ Workspace exportado');
+});
+
+// Color modal
+const cp=_('cPicker'),ch=_('cHex');
+cp.addEventListener('input',()=>ch.value=cp.value.toUpperCase());
+ch.addEventListener('input',()=>{if(/^#[0-9A-Fa-f]{6}$/.test(ch.value))cp.value=ch.value;});
+_('cConfirm').addEventListener('click',()=>{
+  if(!wsAct){toast('Seleccioná un proyecto','warn');return;}
+  const hex=ch.value.trim()||cp.value, nombre=_('cName').value.trim();
+  const p=Proj.get(wsAct);p.paleta.push({hex,nombre});Proj.update(wsAct,{paleta:p.paleta});
+  cm('mColor');_('cName').value='';wsRM();toast('✓ Color agregado');
+});
+
+// Workspace nav trigger
+document.querySelector('[data-v="workspace"]').addEventListener('click',()=>wsInit());
+
+// ── Boot ──────────────────────────────────────────
+loadData();
+</script>
+</body>
+</html>
