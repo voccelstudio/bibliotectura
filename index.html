@@ -308,6 +308,7 @@
       <li><a onclick="sv('interiores')" data-v="interiores">🪑 Interiores</a></li>
       <li><a onclick="sv('floorplans')" data-v="floorplans">📐 Floorplans</a></li>
       <li><a onclick="sv('comparador')" data-v="comparador">⇄ Comparador</a></li>
+      <li><a onclick="sv('materiales')" data-v="materiales">🧱 Materiales</a></li>
       <li><a onclick="sv('glosario')" data-v="glosario">▤ Glosario</a></li>
       <li><a onclick="sv('workspace')" data-v="workspace">◈ Workspace</a></li>
     </ul>
@@ -372,6 +373,7 @@
     <button class="mod" onclick="sv('estilos')"><div class="mod-icon">🏛</div><div class="mod-name">Estilos Arq.</div><div class="mod-desc">Fichas técnicas completas</div><div class="mod-count" id="mcE">—</div></button>
     <button class="mod" onclick="sv('interiores')"><div class="mod-icon">🪑</div><div class="mod-name">Interiores</div><div class="mod-desc">Estilos y micro-estilos</div><div class="mod-count" id="mcI">—</div></button>
     <button class="mod" onclick="sv('floorplans')"><div class="mod-icon">📐</div><div class="mod-name">Floorplans</div><div class="mod-desc">Plantas por tipología y m²</div><div class="mod-count" id="mcF">—</div></button>
+    <button class="mod" onclick="sv('materiales')"><div class="mod-icon">🧱</div><div class="mod-name">Materiales</div><div class="mod-desc">Fichas técnicas + huella carbono</div><div class="mod-count" id="mcM">—</div></button>
     <button class="mod" onclick="sv('comparador')"><div class="mod-icon">⇄</div><div class="mod-name">Comparador</div><div class="mod-desc">Side-by-side de estilos</div><div class="mod-count">2 estilos</div></button>
     <button class="mod" onclick="sv('workspace')"><div class="mod-icon">◈</div><div class="mod-name">Workspace</div><div class="mod-desc">Proyectos, notas y paletas</div><div class="mod-count">Local storage</div></button>
   </div>
@@ -451,6 +453,30 @@
     <hr class="divider"/>
     <div class="sect-head"><span class="sect-title">Paisajismo complementario</span></div>
     <div class="cards-grid" id="pGrid"></div>
+  </div>
+</div>
+
+<!-- VIEW: MATERIALES -->
+<div class="view" id="v-materiales">
+  <div class="page-hdr" data-lbl="MAT">
+    <div style="max-width:var(--max);margin:0 auto;padding:0 20px">
+      <div class="breadcrumb"><a onclick="sv('home')">ARQREF</a><span>/</span><span>Materiales</span></div>
+      <div class="eyebrow">Fichas técnicas</div>
+      <h1 class="page-title"><em>Materiales</em> de Construcción</h1>
+      <p style="font-size:.88rem;color:var(--t1);max-width:500px">Resistencia, huella de carbono, costo, vida útil y proveedores en Latinoamérica.</p>
+    </div>
+  </div>
+  <div class="sect">
+    <div class="filter-bar">
+      <span class="fb-lbl">Categoría:</span>
+      <button class="chip act" data-cm="all">Todos</button>
+      <button class="chip" data-cm="estructura">Estructura</button>
+      <button class="chip" data-cm="revestimiento">Revestimiento</button>
+      <button class="chip" data-cm="aislacion">Aislación</button>
+      <button class="chip" data-cm="tecnologia">Tecnología</button>
+      <button class="chip" data-cm="eco">🌱 Eco</button>
+    </div>
+    <div class="cards-grid" id="matGrid"></div>
   </div>
 </div>
 
@@ -597,32 +623,30 @@ async function loadData() {
 }
 
 function boot() {
-  // Stats
-  _('stE').textContent = EST.length;
-  _('stI').textContent = INT.length;
-  _('stF').textContent = FP.length;
-  _('mcE').textContent = EST.length + ' estilos';
-  _('mcI').textContent = INT.length + ' estilos';
-  _('mcF').textContent = FP.length + ' plantas';
-  // Grids home
-  renderCards(EST.slice(0,6), 'hEGrid', 'est');
-  renderCards(INT.slice(0,6), 'hIGrid', 'int');
-  // Grids secciones
-  renderCards(EST, 'eGrid', 'est');
-  renderCards(INT, 'iGrid', 'int');
-  renderFPGrid(FP, 'fpGrid');
-  renderPGrid(PAIS, 'pGrid', 6);
-  // Footer links
-  EST.slice(0,5).forEach(e => { _('ftE').innerHTML += `<li><a onclick="oF('est','${e.id}')">${esc(e.nombre)}</a></li>`; });
-  INT.slice(0,5).forEach(i => { _('ftI').innerHTML += `<li><a onclick="oF('int','${i.id}')">${esc(i.nombre)}</a></li>`; });
-  // Comparador selects
-  ['cmpA','cmpB'].forEach(sid => {
-    const sel = _(sid);
-    [...EST.map(e=>({...e,_t:'est'})),...INT.map(i=>({...i,_t:'int'}))].forEach(item => {
-      sel.innerHTML += `<option value="${item.id}|${item._t}">${esc(item.nombre)}</option>`;
+  _('stE').textContent=EST.length;_('stI').textContent=INT.length;_('stF').textContent=FP.length;
+  _('mcE').textContent=EST.length+' estilos';_('mcI').textContent=INT.length+' estilos';
+  _('mcF').textContent=FP.length+' plantas';if(_('mcM'))_('mcM').textContent=MAT.length+' materiales';
+  renderCards(EST.slice(0,6),'hEGrid','est');renderCards(INT.slice(0,6),'hIGrid','int');
+  renderCards(EST,'eGrid','est');renderCards(INT,'iGrid','int');
+  renderFPGrid(FP,'fpGrid');renderPGrid(PAIS,'pGrid',6);
+  renderMatGrid(MAT,'matGrid');
+  EST.slice(0,5).forEach(e=>{_('ftE').innerHTML+=`<li><a onclick="oF('est','${e.id}')">${esc(e.nombre)}</a></li>`;});
+  INT.slice(0,5).forEach(i=>{_('ftI').innerHTML+=`<li><a onclick="oF('int','${i.id}')">${esc(i.nombre)}</a></li>`;});
+  ['cmpA','cmpB'].forEach(sid=>{
+    const sel=_(sid);
+    [...EST.map(e=>({...e,_t:'est'})),...INT.map(i=>({...i,_t:'int'}))].forEach(item=>{
+      sel.innerHTML+=`<option value="${item.id}|${item._t}">${esc(item.nombre)}</option>`;
     });
   });
   renderGlosario();
+  // Filtros materiales
+  $$('[data-cm]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      $$('[data-cm]').forEach(b=>b.classList.remove('act'));btn.classList.add('act');
+      const c=btn.dataset.cm;
+      renderMatGrid(c==='all'?MAT:c==='eco'?MAT.filter(m=>m.eco):MAT.filter(m=>m.categoria===c),'matGrid');
+    });
+  });
 }
 
 // ── Helpers ───────────────────────────────────────
@@ -745,7 +769,7 @@ function buildFicha(item, tipo) {
         </div>
         <div class="flex gap-8" style="flex-wrap:wrap">
           <button class="btn btn-g" onclick="addToProj('${esc(item.id)}','${tipo}','${esc(item.nombre)}')">+ Proyecto</button>
-          <button class="btn btn-g" onclick="window.print()">⎙ PDF</button>
+          <button class="btn btn-g" onclick="printFicha(item,'${tipo}')">⎙ PDF</button>
         </div>
       </div>
     </div>
@@ -1266,7 +1290,132 @@ _('cConfirm').addEventListener('click',()=>{
 // Workspace nav trigger
 document.querySelector('[data-v="workspace"]').addEventListener('click',()=>wsInit());
 
-// ── Boot ──────────────────────────────────────────
+// ── Hash routing ──────────────────────────────────
+function updateHash(tipo, id) {
+  history.pushState(null,'','#'+tipo+'/'+id);
+  const item = tipo==='est'?gE(id):tipo==='int'?gI(id):MAT.find(x=>x.id===id);
+  if(item) document.title = 'ARQREF — '+item.nombre;
+}
+function readHash() {
+  const h=location.hash.replace('#',''); if(!h) return;
+  const [tipo,id]=h.split('/'); if(!id){sv(tipo||'home');return;}
+  if(tipo==='est'&&gE(id)) oF('est',id);
+  else if(tipo==='int'&&gI(id)) oF('int',id);
+  else if(tipo==='mat') oFMat(id);
+}
+window.addEventListener('popstate',readHash);
+
+// ── Materiales ────────────────────────────────────
+let MAT=[];
+function renderMatGrid(data,containerId){
+  const el=_(containerId);if(!el)return;
+  el.innerHTML=data.map(m=>`
+    <div class="card" onclick="oFMat('${m.id}')">
+      <div class="card-img-wrap"><img class="card-img" src="${esc(m.imagen)}" alt="${esc(m.nombre)}" loading="lazy"/></div>
+      <div class="card-body">
+        <div class="card-name">${esc(m.nombre)}</div>
+        <div class="card-desc">${esc((m.descripcion||'').slice(0,80))}…</div>
+        <div class="card-tags">
+          <span class="ctag">${esc(m.categoria)}</span>
+          ${m.eco?'<span class="ctag" style="color:var(--eco);border-color:var(--eco-dim)">🌱 eco</span>':''}
+          <span class="ctag">CO₂: ${esc((m.huella_carbono||'—').slice(0,10))}</span>
+        </div>
+        <span class="card-cta">Ver ficha →</span>
+      </div>
+    </div>`).join('');
+}
+function oFMat(id){
+  const m=MAT.find(x=>x.id===id);if(!m)return;
+  updateHash('mat',id);
+  _('v-ficha').innerHTML=`
+    <div class="page-hdr" data-lbl="MAT">
+      <div style="max-width:var(--max);margin:0 auto;padding:0 20px">
+        <div class="breadcrumb"><a onclick="sv('home')">ARQREF</a><span>/</span><a onclick="sv('materiales')">Materiales</a><span>/</span><span>${esc(m.nombre)}</span></div>
+        <div class="flex items-c jc-b gap-12" style="flex-wrap:wrap">
+          <div><div class="eyebrow">${esc(m.categoria)}</div><h1 class="page-title"><em>${esc(m.nombre)}</em></h1>
+            <div class="badge-row"><span class="bdg">${esc(m.categoria)}</span>${m.eco?'<span class="bdg e">🌱 Eco / Carbono negativo</span>':''}</div>
+          </div>
+          <button class="btn btn-g" onclick="window.print()">⎙ PDF</button>
+        </div>
+      </div>
+    </div>
+    <div style="max-width:var(--max);margin:0 auto;padding:28px 20px;position:relative;z-index:1;display:grid;grid-template-columns:1fr 280px;gap:24px;align-items:start">
+      <div>
+        <img src="${esc(m.imagen)}" alt="${esc(m.nombre)}" style="width:100%;aspect-ratio:16/9;object-fit:cover;border:1px solid var(--border);margin-bottom:16px;filter:brightness(.8) saturate(.7)" loading="lazy"/>
+        <p style="color:var(--t1);line-height:1.8;margin-bottom:20px">${esc(m.descripcion)}</p>
+        <div class="sect-head" style="margin-bottom:10px"><span class="sect-title">Paleta de color</span></div>
+        <div style="display:flex;height:44px;margin-bottom:8px">
+          ${(m.paleta||[m.hex_principal]).map(hex=>`<div style="flex:1;background:${esc(hex)};cursor:pointer" class="color-chip" data-hex="${esc(hex)}" title="${esc(hex)}"></div>`).join('')}
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px">
+          ${(m.paleta||[m.hex_principal]).map(hex=>`<div class="color-chip" data-hex="${esc(hex)}"><div class="swatch" style="background:${esc(hex)}"></div><div class="cc-info"><span class="cc-hex">${esc(hex)}</span></div><span class="cc-copy">copiar</span></div>`).join('')}
+        </div>
+        <div class="sect-head" style="margin-bottom:14px"><span class="sect-title">Ficha técnica</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px">
+          ${[['Resistencia',m.resistencia],['Aislación térmica',m.aislacion_termica],['Huella de carbono',m.huella_carbono],['Costo relativo',m.costo_relativo],['Mantenimiento',m.mantenimiento],['Vida útil',m.vida_util],['Norma',m.norma]].filter(([,v])=>v).map(([k,v])=>`<div style="padding:10px;background:var(--bg2);border:1px solid var(--border)"><span class="ir-lbl">${esc(k)}</span><p style="font-size:.85rem;color:${m.eco&&k==='Huella de carbono'?'var(--eco)':'var(--t0)'};margin-top:3px">${esc(v)}</p></div>`).join('')}
+        </div>
+        ${m.alternativa_eco?`<div style="background:var(--eco-dim);border:1px solid rgba(134,239,172,.2);padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:10px"><span style="color:var(--eco);font-size:1.2rem">🌱</span><div><span class="ir-lbl">Alternativa eco</span><p style="font-size:.85rem;color:var(--t0);margin-top:3px">${esc(m.alternativa_eco)}</p></div></div>`:''}
+        <div class="sect-head" style="margin-bottom:10px"><span class="sect-title">Aplicaciones</span></div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px">${(m.aplicaciones||[]).map(a=>`<span class="bdg">${esc(a)}</span>`).join('')}</div>
+        <div class="sect-head" style="margin-bottom:10px"><span class="sect-title">Estilos que lo usan</span></div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px">${(m.estilos_arq||[]).map(id=>{const e=gE(id);return e?`<button class="btn btn-g btn-sm" onclick="oF('est','${id}')">${esc(e.nombre)}</button>`:''}).join('')}</div>
+        ${(m.proveedores_latam||[]).length?`<div class="sect-head" style="margin-bottom:10px"><span class="sect-title">Proveedores LATAM</span></div><div style="display:flex;flex-direction:column;gap:5px">${m.proveedores_latam.map(p=>`<div style="font-size:.82rem;color:var(--t1);display:flex;align-items:center;gap:8px"><span style="color:var(--acc)">◆</span>${esc(p)}</div>`).join('')}</div>`:''}
+      </div>
+      <aside style="position:sticky;top:calc(var(--nav)+14px);display:flex;flex-direction:column;gap:12px">
+        <div class="info-bl"><div class="info-bl-hdr">Color principal</div><div class="info-bl-body"><div style="height:60px;background:${esc(m.hex_principal)};margin-bottom:8px;border:1px solid rgba(255,255,255,.1)"></div><div class="color-chip" data-hex="${esc(m.hex_principal)}"><div class="swatch" style="background:${esc(m.hex_principal)}"></div><div class="cc-info"><span class="cc-hex">${esc(m.hex_principal)}</span></div><span class="cc-copy">copiar</span></div></div></div>
+        <button class="btn btn-p w-full" onclick="addToProj('${esc(m.id)}','material','${esc(m.nombre)}')">+ Agregar a proyecto</button>
+        <div class="info-bl"><div class="info-bl-hdr">Otros materiales</div><div class="info-bl-body" style="display:flex;flex-direction:column;gap:5px">${MAT.filter(x=>x.id!==m.id).slice(0,5).map(x=>`<button class="btn btn-g btn-sm w-full" style="justify-content:flex-start" onclick="oFMat('${x.id}')">→ ${esc(x.nombre)}</button>`).join('')}</div></div>
+      </aside>
+    </div>`;
+  sv('ficha');initChips();
+}
+
+// ── PDF profesional ───────────────────────────────
+function printFicha(item, tipo) {
+  const mats=item.materiales||{};
+  const compatInts=tipo==='est'?(item.interiores_compatibles||[]).map(id=>gI(id)).filter(Boolean):[];
+  const compatEsts=tipo==='int'?(item.estilos_arq_compatibles||[]).map(id=>gE(id)).filter(Boolean):[];
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>ARQREF — ${item.nombre}</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant:wght@500;700&display=swap" rel="stylesheet"/>
+  <style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:'IBM Plex Sans',sans-serif;color:#1A1A18;background:white;padding:40px;font-size:13px;line-height:1.6}h1{font-family:'Cormorant',serif;font-size:36px;font-weight:700;margin-bottom:8px}h2{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#5A6060;margin:24px 0 10px;padding-bottom:6px;border-bottom:1px solid #e0e0e0}.hdr{border-bottom:3px solid #1A1A18;padding-bottom:16px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:flex-end}.logo{font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:500}.logo span{color:#4ADE80}.meta{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5A6060;text-align:right}.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}.tag{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border:1px solid #d0d0d0;color:#5A6060}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px}.dr{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f0f0f0;font-size:12px}.dl{color:#5A6060;font-family:'IBM Plex Mono',monospace;font-size:10px}.sw{display:flex;height:36px;margin-bottom:8px}.sb{flex:1}.combo{background:#f8f8f8;border:1px solid #e8e8e8;padding:12px}.cn{font-weight:600;font-size:13px;margin-bottom:4px}.cd{font-size:11px;color:#5A6060;line-height:1.5}.eco{background:#0F2D1A;color:#86EFAC;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;display:inline-block;margin-top:6px}.ft{margin-top:32px;padding-top:12px;border-top:1px solid #e0e0e0;font-family:'IBM Plex Mono',monospace;font-size:9px;color:#9A9A9A;display:flex;justify-content:space-between}@media print{body{padding:24px}}</style>
+  </head><body>
+    <div class="hdr"><div><div class="logo">ARQ<span>REF</span></div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5A6060;margin-top:3px">${tipo==='est'?'Estilo Arquitectónico':'Estilo de Interior'}</div></div><div class="meta">Generado: ${new Date().toLocaleDateString('es-AR')}<br/>arqref · CC BY-SA 4.0</div></div>
+    <h1>${item.nombre}</h1>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5A6060;margin-bottom:12px">${item.era||''} ${item.origen?'· '+item.origen:''}</div>
+    <div class="tags">${(item.caracteristicas||[]).slice(0,6).map(c=>`<span class="tag">${c}</span>`).join('')}${item.eco?'<span class="tag" style="color:#4ADE80;border-color:#4ADE80">🌱 Eco</span>':''}</div>
+    <p style="color:#3D3D3A;line-height:1.75;margin-bottom:20px">${item.descripcion||''}</p>
+    ${item.quote?`<div style="border-left:3px solid #4ADE80;padding:10px 16px;background:#f8f8f8;margin-bottom:20px"><p style="font-family:'Cormorant',serif;font-style:italic;font-size:16px">"${item.quote}"</p><p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#9A9A9A;margin-top:6px">— ${item.quote_autor||''}</p></div>`:''}
+    ${(item.figuras||[]).length?`<h2>Figuras clave</h2><div class="tags">${item.figuras.map(f=>`<span class="tag" style="color:#1A1A18;border-color:#1A1A18">${f}</span>`).join('')}</div>`:''}
+    ${Object.keys(mats).length?`<h2>Paleta de materiales</h2><div class="grid3">${Object.entries(mats).map(([cat,items])=>`<div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#9A9A9A;margin-bottom:8px">${cat}</div>${(items||[]).map(m=>`<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5A6060"><div style="width:14px;height:14px;background:${m.hex};border:1px solid rgba(0,0,0,.1)"></div>${m.nombre} <span style="color:#B0B0B0">${m.hex}</span></div>`).join('')}</div>`).join('')}</div>`:''}
+    ${compatInts.length?`<h2>Interiores compatibles</h2><div class="grid2">${compatInts.slice(0,4).map(c=>`<div class="combo"><div class="cn">${c.nombre}</div><div class="cd">${(c.descripcion||'').slice(0,100)}…</div>${c.eco?'<span class="eco">🌱 Eco</span>':''}</div>`).join('')}</div>`:''}
+    ${compatEsts.length?`<h2>Arquitectura compatible</h2><div class="grid2">${compatEsts.slice(0,4).map(c=>`<div class="combo"><div class="cn">${c.nombre}</div><div class="cd">${(c.descripcion||'').slice(0,100)}…</div></div>`).join('')}</div>`:''}
+    ${(item.obras||[]).length?`<h2>Obras de referencia</h2><div class="grid2">${item.obras.map(o=>`<div class="dr"><span>${o.nombre} · ${o.lugar||''}</span><span class="dl">${o.autor||''}, ${o.año||''}</span></div>`).join('')}</div>`:''}
+    <div class="ft"><span>ARQREF — Referencia Arquitectónica Profesional</span><span>voccelstudio.github.io/biblioteca</span></div>
+  </body></html>`;
+  const w=window.open('','_blank');w.document.write(html);w.document.close();setTimeout(()=>w.print(),600);
+}
+
+// ── Boot actualizado ──────────────────────────────
+async function loadData() {
+  try {
+    const [e,ex,i,ix,pf,mat]=await Promise.all([
+      fetch('data/estilos.json').then(r=>r.json()),
+      fetch('data/estilos-extra.json').then(r=>r.json()).catch(()=>[]),
+      fetch('data/interiores.json').then(r=>r.json()),
+      fetch('data/interiores-extra.json').then(r=>r.json()).catch(()=>[]),
+      fetch('data/paisajismo-floorplans.json').then(r=>r.json()),
+      fetch('data/materiales.json').then(r=>r.json()).catch(()=>[])
+    ]);
+    EST=[...e,...ex]; INT=[...i,...ix];
+    PAIS=pf.paisajismo||[]; FP=pf.floorplans||[];
+    MAT=mat;
+    boot();
+    setTimeout(readHash,50);
+  } catch(err){
+    console.error(err);
+    toast('Error cargando datos. ¿Está la carpeta /data/ en el mismo directorio?','err');
+  }
+}
 loadData();
 </script>
 </body>
