@@ -969,33 +969,65 @@ function buildFicha(item, tipo) {
         </div>`:''}
 
         <div class="tab-panel" data-panel="mats">
-          ${Object.keys(mats).length ? `
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:20px">
-            ${Object.entries(mats).map(([cat,mitems])=>`
-            <div class="info-bl">
-              <div class="info-bl-hdr">${esc(cat)}</div>
-              <div class="info-bl-body">
-                ${(mitems||[]).map(m=>{
-                  const hex = typeof m === 'string' ? m : (m.hex||'#888');
-                  const nom = typeof m === 'string' ? hex : (m.nombre||hex);
-                  return `<div class="color-chip" data-hex="${esc(hex)}" title="Copiar HEX">
-                    <div class="swatch" style="background:${esc(hex)}"></div>
-                    <div class="cc-info"><span class="cc-name">${esc(nom)}</span><span class="cc-hex">${esc(hex)}</span></div>
-                    <span class="cc-copy">copiar</span>
+          ${(() => {
+            // mats puede ser: array [{nombre,hex}] (interiores) u objeto {cat:[{nombre,hex}]} (estilos arq)
+            const matsArr = Array.isArray(mats) ? mats : null;
+            const matsObj = (!Array.isArray(mats) && typeof mats==='object') ? mats : null;
+            const hasMatsObj = matsObj && Object.keys(matsObj).length > 0;
+            const hasMatsArr = matsArr && matsArr.length > 0;
+            const hasPaleta  = (item.paleta||[]).length > 0;
+
+            const chipHTML = (hex, nom) => `<div class="color-chip" data-hex="${esc(hex)}" title="Copiar HEX">
+              <div class="swatch" style="background:${esc(hex)}"></div>
+              <div class="cc-info"><span class="cc-name">${esc(nom)}</span><span class="cc-hex">${esc(hex)}</span></div>
+              <span class="cc-copy">copiar</span>
+            </div>`;
+
+            let html = '';
+
+            // Caso 1: objeto con categorías {arquitectura:[...], interior:[...], exterior:[...]}
+            if (hasMatsObj) {
+              html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:20px">
+                ${Object.entries(matsObj).map(([cat, items]) => {
+                  if (!Array.isArray(items)) return '';
+                  return `<div class="info-bl">
+                    <div class="info-bl-hdr">${esc(cat)}</div>
+                    <div class="info-bl-body">
+                      ${items.map(m => {
+                        const hex = typeof m==='string' ? m : (m.hex||'#888');
+                        const nom = typeof m==='string' ? hex : (m.nombre||hex);
+                        return chipHTML(hex, nom);
+                      }).join('')}
+                    </div>
                   </div>`;
                 }).join('')}
-              </div>
-            </div>`).join('')}
-          </div>` : ''}
+              </div>`;
+            }
 
-          ${(item.paleta||[]).length && !Object.keys(mats).length ? `
-          <div class="sect-head" style="margin-bottom:10px"><span class="sect-title">Paleta de color</span></div>
-          <div style="display:flex;height:48px;margin-bottom:12px">
-            ${item.paleta.map(hex=>`<div style="flex:1;background:${esc(hex)}" class="color-chip" data-hex="${esc(hex)}" title="${esc(hex)}"></div>`).join('')}
-          </div>
-          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px">
-            ${item.paleta.map(hex=>`<div class="color-chip" data-hex="${esc(hex)}"><div class="swatch" style="background:${esc(hex)}"></div><span class="cc-hex">${esc(hex)}</span><span class="cc-copy">copiar</span></div>`).join('')}
-          </div>` : ''}
+            // Caso 2: array plano [{nombre, hex}] (interiores)
+            if (hasMatsArr) {
+              html += `<div class="sect-head" style="margin-bottom:10px"><span class="sect-title">Paleta de materiales</span></div>
+              <div style="display:flex;height:44px;margin-bottom:10px">
+                ${matsArr.map(m=>`<div style="flex:1;background:${esc(m.hex||'#888')}" class="color-chip" data-hex="${esc(m.hex||'#888')}" title="${esc(m.nombre||'')}"></div>`).join('')}
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:20px">
+                ${matsArr.map(m => chipHTML(m.hex||'#888', m.nombre||m.hex||'')).join('')}
+              </div>`;
+            }
+
+            // Caso 3: paleta de color (cuando no hay materiales)
+            if (!hasMatsObj && !hasMatsArr && hasPaleta) {
+              html += `<div class="sect-head" style="margin-bottom:10px"><span class="sect-title">Paleta de color</span></div>
+              <div style="display:flex;height:44px;margin-bottom:10px">
+                ${item.paleta.map(hex=>`<div style="flex:1;background:${esc(hex)}" class="color-chip" data-hex="${esc(hex)}" title="${esc(hex)}"></div>`).join('')}
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px">
+                ${item.paleta.map(hex=>chipHTML(hex,hex)).join('')}
+              </div>`;
+            }
+
+            return html || '<p class="text-sm text-m">Sin datos de materiales para este estilo.</p>';
+          })()}
 
           ${(item.iluminacion||item.textiles) ? `
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
@@ -1008,6 +1040,7 @@ function buildFicha(item, tipo) {
           <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">
             ${(item.plantas_recomendadas||item.plantas_interior||[]).map(p=>`<span class="bdg">${esc(p)}</span>`).join('')}
           </div>`:''}
+
           ${(item.plantas_eco_recomendadas||[]).length?`
           <div class="sect-head" style="margin-bottom:10px"><span class="sect-title">Plantas eco 🌱</span></div>
           <div style="display:flex;flex-wrap:wrap;gap:6px">
