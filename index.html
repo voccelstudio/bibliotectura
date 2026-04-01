@@ -815,9 +815,8 @@ function buildFicha(item, tipo) {
       <div class="tabs-root">
         <div class="tabs" id="fTabs">
           ${tipo==='est'?'<button class="tab-btn act" data-tab="int">🪑 Interiores</button><button class="tab-btn" data-tab="pais">🌿 Paisajismo</button>':''}
-          ${tipo==='int'?'<button class="tab-btn act" data-tab="compat">🏛 Compatibilidad</button>':''}
-          <button class="tab-btn" data-tab="mats">🎨 Materiales</button>
-          ${tipo==='int'&&item.iluminacion?'<button class="tab-btn" data-tab="extra">💡 Extras</button>':''}
+          ${tipo==='int'?'<button class="tab-btn act" data-tab="compat">🏛 Arquitectura</button>':''}
+          <button class="tab-btn" data-tab="mats">🎨 Materiales & Plantas</button>
         </div>
 
         ${tipo==='est'?`
@@ -861,42 +860,52 @@ function buildFicha(item, tipo) {
         </div>`:''}
 
         <div class="tab-panel" data-panel="mats">
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
-            ${Object.entries(mats).map(([cat,items])=>`
+          ${Object.keys(mats).length ? `
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:20px">
+            ${Object.entries(mats).map(([cat,mitems])=>`
             <div class="info-bl">
               <div class="info-bl-hdr">${esc(cat)}</div>
               <div class="info-bl-body">
-                ${(items||[]).map(m=>`<div class="color-chip" data-hex="${esc(m.hex)}" title="Copiar HEX">
-                  <div class="swatch" style="background:${esc(m.hex)}"></div>
-                  <div class="cc-info"><span class="cc-name">${esc(m.nombre)}</span><span class="cc-hex">${esc(m.hex)}</span></div>
-                  <span class="cc-copy">copiar</span>
-                </div>`).join('')}
+                ${(mitems||[]).map(m=>{
+                  const hex = typeof m === 'string' ? m : (m.hex||'#888');
+                  const nom = typeof m === 'string' ? hex : (m.nombre||hex);
+                  return `<div class="color-chip" data-hex="${esc(hex)}" title="Copiar HEX">
+                    <div class="swatch" style="background:${esc(hex)}"></div>
+                    <div class="cc-info"><span class="cc-name">${esc(nom)}</span><span class="cc-hex">${esc(hex)}</span></div>
+                    <span class="cc-copy">copiar</span>
+                  </div>`;
+                }).join('')}
               </div>
             </div>`).join('')}
+          </div>` : ''}
+
+          ${(item.paleta||[]).length && !Object.keys(mats).length ? `
+          <div class="sect-head" style="margin-bottom:10px"><span class="sect-title">Paleta de color</span></div>
+          <div style="display:flex;height:48px;margin-bottom:12px">
+            ${item.paleta.map(hex=>`<div style="flex:1;background:${esc(hex)}" class="color-chip" data-hex="${esc(hex)}" title="${esc(hex)}"></div>`).join('')}
           </div>
-          ${(item.plantas_interior||[]).length?`
-          <div style="margin-top:18px">
-            <div class="sect-head" style="margin-bottom:10px"><span class="sect-title">Plantas de interior recomendadas</span></div>
-            <div style="display:flex;flex-wrap:wrap;gap:6px">
-              ${item.plantas_interior.map(p=>`<span class="bdg">${esc(p)}</span>`).join('')}
-            </div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px">
+            ${item.paleta.map(hex=>`<div class="color-chip" data-hex="${esc(hex)}"><div class="swatch" style="background:${esc(hex)}"></div><span class="cc-hex">${esc(hex)}</span><span class="cc-copy">copiar</span></div>`).join('')}
+          </div>` : ''}
+
+          ${(item.iluminacion||item.textiles) ? `
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+            ${item.iluminacion?`<div class="info-bl"><div class="info-bl-hdr">Iluminación</div><div class="info-bl-body"><p style="font-size:.82rem;color:var(--t1)">${esc(item.iluminacion)}</p></div></div>`:''}
+            ${item.textiles?`<div class="info-bl"><div class="info-bl-hdr">Textiles</div><div class="info-bl-body"><p style="font-size:.82rem;color:var(--t1)">${esc(item.textiles)}</p></div></div>`:''}
+          </div>` : ''}
+
+          ${(item.plantas_recomendadas||item.plantas_interior||[]).length?`
+          <div class="sect-head" style="margin-bottom:10px"><span class="sect-title">Plantas recomendadas</span></div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">
+            ${(item.plantas_recomendadas||item.plantas_interior||[]).map(p=>`<span class="bdg">${esc(p)}</span>`).join('')}
           </div>`:''}
           ${(item.plantas_eco_recomendadas||[]).length?`
-          <div style="margin-top:14px">
-            <div class="sect-head" style="margin-bottom:10px"><span class="sect-title">Plantas eco recomendadas 🌱</span></div>
-            <div style="display:flex;flex-wrap:wrap;gap:6px">
-              ${item.plantas_eco_recomendadas.map(p=>`<span class="bdg e">${esc(p)}</span>`).join('')}
-            </div>
+          <div class="sect-head" style="margin-bottom:10px"><span class="sect-title">Plantas eco 🌱</span></div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            ${item.plantas_eco_recomendadas.map(p=>`<span class="bdg e">${esc(p)}</span>`).join('')}
           </div>`:''}
         </div>
 
-        ${tipo==='int'&&item.iluminacion?`
-        <div class="tab-panel" data-panel="extra">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-            <div class="info-bl"><div class="info-bl-hdr">Iluminación</div><div class="info-bl-body"><p class="text-sm" style="color:var(--t1)">${esc(item.iluminacion)}</p></div></div>
-            <div class="info-bl"><div class="info-bl-hdr">Textiles</div><div class="info-bl-body"><p class="text-sm" style="color:var(--t1)">${esc(item.textiles||'')}</p></div></div>
-          </div>
-        </div>`:''}
       </div>
 
       <div style="display:flex;justify-content:flex-end;padding-top:20px;border-top:1px solid var(--border);margin-top:28px">
@@ -936,15 +945,18 @@ function buildFicha(item, tipo) {
 }
 
 function initFicha(item, tipo) {
-  // Tabs
-  $$('#fTabs .tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      $$('#fTabs .tab-btn').forEach(b=>b.classList.remove('act'));
-      btn.classList.add('act');
-      const t = btn.dataset.tab;
-      $$('.tab-panel').forEach(p=>p.classList.toggle('act', p.dataset.panel===t));
+  // Tabs — scope limitado a la ficha actual
+  const tabsRoot = document.querySelector('#v-ficha .tabs-root');
+  if(tabsRoot) {
+    tabsRoot.querySelectorAll('#fTabs .tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabsRoot.querySelectorAll('#fTabs .tab-btn').forEach(b=>b.classList.remove('act'));
+        btn.classList.add('act');
+        const t = btn.dataset.tab;
+        tabsRoot.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('act', p.dataset.panel===t));
+      });
     });
-  });
+  }
   // Score bars
   setTimeout(() => { $$('.sc-fill[data-score]').forEach(f => { f.style.width=f.dataset.score+'%'; }); }, 80);
   // Color chips
