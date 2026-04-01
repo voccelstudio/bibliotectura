@@ -506,12 +506,36 @@
       <div class="breadcrumb"><a onclick="sv('home')">ARQREF</a><span>/</span><span>Glosario</span></div>
       <div class="eyebrow">Referencia técnica</div>
       <h1 class="page-title"><em>Glosario</em> Arquitectónico</h1>
+      <p style="font-size:.88rem;color:var(--t1);max-width:500px">Términos técnicos de arquitectura, diseño de interiores, paisajismo y construcción sostenible.</p>
     </div>
   </div>
   <div class="sect">
-    <input class="inp" id="glosQ" type="text" placeholder="Buscar término..." style="max-width:400px;margin-bottom:20px"/>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:20px">
+      <input class="inp" id="glosQ" type="text" placeholder="Buscar término..." style="max-width:320px;flex:1"/>
+      <select class="inp" id="glosCat" style="max-width:200px">
+        <option value="all">Todas las categorías</option>
+        <option value="estructura">Estructura</option>
+        <option value="elementos">Elementos</option>
+        <option value="materiales">Materiales</option>
+        <option value="conceptos">Conceptos</option>
+        <option value="movimientos">Movimientos</option>
+        <option value="espacios">Espacios</option>
+        <option value="sistemas">Sistemas</option>
+        <option value="sustentabilidad">Sustentabilidad</option>
+        <option value="paisajismo">Paisajismo</option>
+        <option value="ornamentacion">Ornamentación</option>
+        <option value="tipologias">Tipologías</option>
+        <option value="urbanismo">Urbanismo</option>
+        <option value="representacion">Representación</option>
+        <option value="proceso">Proceso</option>
+        <option value="arte">Arte</option>
+        <option value="iluminacion">Iluminación</option>
+        <option value="construccion">Construcción</option>
+      </select>
+      <span class="font-mono" style="font-size:.65rem;color:var(--t2);letter-spacing:.1em;text-transform:uppercase" id="glosCount">cargando...</span>
+    </div>
     <table class="glos-table">
-      <thead><tr><th>Término</th><th>Definición</th><th>Origen</th></tr></thead>
+      <thead><tr><th>Término</th><th>Definición</th><th>Origen / Categoría</th><th>Estilos</th></tr></thead>
       <tbody id="glosTbody"></tbody>
     </table>
   </div>
@@ -638,7 +662,7 @@ function boot() {
       sel.innerHTML+=`<option value="${item.id}|${item._t}">${esc(item.nombre)}</option>`;
     });
   });
-  renderGlosario();
+  renderGlosario('', 'all');
   // Filtros materiales
   $$('[data-cm]').forEach(btn=>{
     btn.addEventListener('click',()=>{
@@ -719,18 +743,103 @@ function renderPGrid(data, id, limit) {
   const el = _(id); if(!el) return;
   const items = limit ? data.slice(0,limit) : data;
   el.innerHTML = items.map(p => `
-    <div class="card">
+    <div class="card" onclick="oFPais('${p.id}')">
       <div class="card-img-wrap"><img class="card-img" src="${esc(p.imagen)}" alt="${esc(p.nombre)}" loading="lazy"/></div>
       <div class="card-body">
         <div class="card-name">${esc(p.nombre)}</div>
         <div class="card-desc">${esc((p.descripcion||'').slice(0,80))}…</div>
         <div class="card-tags">
           ${p.eco?`<span class="ctag" style="color:var(--eco);border-color:var(--eco-dim)">🌱 eco</span>`:''}
-          <span class="ctag">Agua: ${esc(p.agua)}</span>
-          <span class="ctag">Mant.: ${esc(p.mantenimiento)}</span>
+          <span class="ctag">💧 ${esc(p.agua)}</span>
+          <span class="ctag">🔧 ${esc(p.mantenimiento)}</span>
         </div>
+        <span class="card-cta">Ver ficha →</span>
       </div>
     </div>`).join('');
+}
+
+function oFPais(id) {
+  const p = PAIS.find(x=>x.id===id); if(!p) return;
+  _('v-ficha').innerHTML = `
+    <div class="page-hdr" data-lbl="${esc((p.nombre||'').slice(0,5).toUpperCase())}">
+      <div style="max-width:var(--max);margin:0 auto;padding:0 20px">
+        <div class="breadcrumb"><a onclick="sv('home')">ARQREF</a><span>/</span><a onclick="sv('floorplans')">Paisajismo</a><span>/</span><span>${esc(p.nombre)}</span></div>
+        <div class="flex items-c jc-b gap-12" style="flex-wrap:wrap">
+          <div>
+            <div class="eyebrow">Paisajismo · ${esc(p.tipo||'')}</div>
+            <h1 class="page-title"><em>${esc(p.nombre)}</em></h1>
+            <div class="badge-row">
+              <span class="bdg">💧 ${esc(p.agua)}</span>
+              <span class="bdg">🔧 ${esc(p.mantenimiento)}</span>
+              ${p.eco?'<span class="bdg e">🌱 Eco</span>':''}
+            </div>
+          </div>
+          <button class="btn btn-g" onclick="window.print()">⎙ PDF</button>
+        </div>
+      </div>
+    </div>
+    <div style="max-width:var(--max);margin:0 auto;padding:28px 20px;position:relative;z-index:1;display:grid;grid-template-columns:1fr 280px;gap:24px;align-items:start">
+      <div>
+        <img src="${esc(p.imagen)}" alt="${esc(p.nombre)}" style="width:100%;aspect-ratio:16/9;object-fit:cover;border:1px solid var(--border);margin-bottom:16px;filter:brightness(.8) saturate(.7)" loading="lazy"/>
+        <p style="color:var(--t1);line-height:1.8;margin-bottom:20px">${esc(p.descripcion||'')}</p>
+
+        ${(p.plantas_clave||[]).length?`
+        <div class="sect-head" style="margin-bottom:14px"><span class="sect-title">Plantas clave</span></div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">
+          ${p.plantas_clave.map(pl=>{
+            const nom = typeof pl==='string'?pl:(pl.nombre||pl);
+            const nota = typeof pl==='object'?pl.nota:'';
+            return `<div style="background:var(--bg2);border:1px solid var(--border);padding:12px 14px;display:flex;gap:12px;align-items:flex-start">
+              <span style="color:var(--eco);font-size:1rem;flex-shrink:0">🌿</span>
+              <div><div style="font-size:.85rem;color:var(--t0);font-weight:500;margin-bottom:2px">${esc(nom)}</div>${nota?`<div style="font-size:.75rem;color:var(--t2)">${esc(nota)}</div>`:''}</div>
+            </div>`;
+          }).join('')}
+        </div>`:''}
+
+        ${(p.elementos_clave||[]).length?`
+        <div class="sect-head" style="margin-bottom:12px"><span class="sect-title">Elementos clave</span></div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px">
+          ${p.elementos_clave.map(e2=>`<span class="bdg">${esc(e2)}</span>`).join('')}
+        </div>`:''}
+
+        ${(p.clima_ideal||[]).length?`
+        <div class="sect-head" style="margin-bottom:12px"><span class="sect-title">Clima ideal</span></div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px">
+          ${p.clima_ideal.map(c=>`<span class="bdg">${esc(c)}</span>`).join('')}
+        </div>`:''}
+
+        <div class="sect-head" style="margin-bottom:12px"><span class="sect-title">Estilos arquitectónicos compatibles</span></div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px">
+          ${(p.estilos_arq||[]).map(eid=>{const e3=gE(eid);return e3?`<button class="btn btn-g btn-sm" onclick="oF('est','${eid}')">${esc(e3.nombre)}</button>`:''}).join('')}
+        </div>
+
+        ${(p.paleta||[]).length?`
+        <div class="sect-head" style="margin-bottom:10px"><span class="sect-title">Paleta de color</span></div>
+        <div style="display:flex;height:40px;margin-bottom:8px">
+          ${p.paleta.map(hex=>`<div style="flex:1;background:${esc(hex)}" class="color-chip" data-hex="${esc(hex)}" title="${esc(hex)}"></div>`).join('')}
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          ${p.paleta.map(hex=>`<div class="color-chip" data-hex="${esc(hex)}"><div class="swatch" style="background:${esc(hex)}"></div><span style="font-family:var(--mono);font-size:.65rem;color:var(--t2)">${esc(hex)}</span><span class="cc-copy">copiar</span></div>`).join('')}
+        </div>`:''}
+      </div>
+      <aside style="position:sticky;top:calc(var(--nav) + 14px);display:flex;flex-direction:column;gap:12px">
+        <div class="info-bl">
+          <div class="info-bl-hdr">Datos técnicos</div>
+          <div class="info-bl-body">
+            <div class="info-row"><span class="ir-lbl">Tipo</span><span class="ir-val">${esc(p.tipo||'—')}</span></div>
+            <div class="info-row"><span class="ir-lbl">Agua</span><span class="ir-val" style="${p.eco?'color:var(--eco)':''}">${esc(p.agua)}</span></div>
+            <div class="info-row"><span class="ir-lbl">Mantenimiento</span><span class="ir-val">${esc(p.mantenimiento)}</span></div>
+          </div>
+        </div>
+        <div class="info-bl">
+          <div class="info-bl-hdr">Otros paisajismos</div>
+          <div class="info-bl-body" style="display:flex;flex-direction:column;gap:5px">
+            ${PAIS.filter(x=>x.id!==p.id).slice(0,5).map(x=>`<button class="btn btn-g btn-sm w-full" style="justify-content:flex-start" onclick="oFPais('${x.id}')">→ ${esc(x.nombre)}</button>`).join('')}
+          </div>
+        </div>
+      </aside>
+    </div>`;
+  sv('ficha'); initChips();
 }
 
 // ── Ficha builder ─────────────────────────────────
@@ -1167,37 +1276,34 @@ _('cmpBtn').addEventListener('click',()=>{
 });
 
 // ── Glosario ──────────────────────────────────────
-const GLOS=[
-  {t:'Béton brut',d:'Hormigón en bruto, sin revestir. Término acuñado por Le Corbusier que da nombre al Brutalismo.',o:'Francés'},
-  {t:'Planta libre',d:'Sistema estructural donde los pilares soportan la carga, liberando los tabiques de función portante.',o:'Modernismo'},
-  {t:'Arbotante',d:'Arco exterior que transmite el empuje de las bóvedas hacia los contrafuertes. Clave en el Gótico.',o:'Gótico'},
-  {t:'Biofilia',d:'Hipótesis de E.O. Wilson sobre la atracción innata de los humanos hacia otras formas de vida.',o:'Biología / Arquitectura'},
-  {t:'Kintsugi',d:'Arte japonés de reparar cerámicas con oro. Metáfora del wabi-sabi: la cicatriz embellece el objeto.',o:'Japonés'},
-  {t:'Wabi-Sabi',d:'Concepto estético japonés: belleza en la imperfección, impermanencia e incompletitud.',o:'Japonés'},
-  {t:'Hygge',d:'Concepto danés de confort acogedor y calidez colectiva. Pilar del diseño escandinavo.',o:'Danés'},
-  {t:'Existenzminimum',d:'Estudio bauhaus sobre el mínimo habitable digno. Influyó en el diseño de vivienda social del s.XX.',o:'Bauhaus / Alemán'},
-  {t:'CLT',d:'Cross Laminated Timber. Madera contralaminada estructural, material sostenible de alta resistencia.',o:'Ingeniería estructural'},
-  {t:'Xeriscape',d:'Paisajismo diseñado para reducir o eliminar el riego suplementario. Del griego "xero" (seco).',o:'Inglés / Ecología'},
-  {t:'Paramétrico',d:'Diseño generado por algoritmos computacionales que permite formas complejas no-euclidianas.',o:'Arquitectura digital'},
-  {t:'Pilotes',d:'Pilares que elevan el edificio del suelo. Uno de los Cinco Puntos de la Arquitectura de Le Corbusier.',o:'Modernismo'},
-  {t:'Solarpunk',d:'Movimiento que imagina un futuro donde tecnología limpia, naturaleza y justicia social coexisten.',o:'Ficción especulativa / Global'},
-  {t:'Japandi',d:'Fusión del minimalismo escandinavo (hygge) y la filosofía japonesa del wabi-sabi.',o:'Tendencia global'},
-  {t:'Cubierta jardín',d:'Techo vegetalizado, parte de los Cinco Puntos de Le Corbusier. Recupera el terreno ocupado.',o:'Modernismo'},
-  {t:'Béton brut',d:'Hormigón en bruto, sin revestir. Técnicamente: encofrado a la vista con textura de encofrado impresa.',o:'Francés / Brutalismo'},
-  {t:'Hempcrete',d:'Material de construcción compuesto de cáñamo y cal. Excelente aislante, carbono negativo.',o:'Construcción sostenible'},
-  {t:'CLT',d:'Cross Laminated Timber. Tableros de madera maciza contralaminada de alta resistencia estructural.',o:'Ingeniería forestal'},
-  {t:'Biomímesis',d:'Diseño inspirado en estrategias y formas de la naturaleza para resolver problemas humanos.',o:'Biología / Diseño'},
-  {t:'Passive house',d:'Estándar de construcción ultrabaja energía que se basa en aislación, hermeticidad y ventilación controlada.',o:'Alemania / Internacional'},
-];
-function renderGlosario(q){
-  const data=q?GLOS.filter(g=>g.t.toLowerCase().includes(q)||g.d.toLowerCase().includes(q)):GLOS;
-  _('glosTbody').innerHTML=data.map(g=>`<tr>
-    <td style="color:var(--acc);font-weight:500;font-family:var(--mono);font-size:.75rem">${esc(g.t)}</td>
-    <td>${esc(g.d)}</td>
-    <td style="color:var(--t2);font-size:.75rem">${esc(g.o)}</td>
+let GLOS_DATA = [];
+
+function renderGlosario(q, cat) {
+  let data = GLOS_DATA.length ? GLOS_DATA : GLOS_FALLBACK;
+  if (q) data = data.filter(g => g.termino.toLowerCase().includes(q) || g.definicion.toLowerCase().includes(q));
+  if (cat && cat !== 'all') data = data.filter(g => g.categoria === cat);
+  _('glosTbody').innerHTML = data.map(g => `<tr>
+    <td style="color:var(--acc);font-weight:500;font-family:var(--mono);font-size:.75rem;white-space:nowrap">${esc(g.termino)}</td>
+    <td style="font-size:.8rem">${esc(g.definicion)}</td>
+    <td style="color:var(--t2);font-size:.72rem;white-space:nowrap">${esc(g.origen||g.categoria||'')}</td>
+    <td style="white-space:nowrap">${(g.estilos_relacionados||[]).slice(0,2).map(id=>{const e=gE(id);return e?`<span class="ctag" style="font-size:.55rem;cursor:pointer" onclick="oF('est','${id}')">${esc(e.nombre)}</span>`:''}).join(' ')}</td>
   </tr>`).join('');
+  _('glosCount').textContent = data.length + ' términos';
 }
-_('glosQ').addEventListener('input',e=>renderGlosario(e.target.value.toLowerCase().trim()));
+_('glosQ').addEventListener('input', e => renderGlosario(e.target.value.toLowerCase().trim(), _('glosCat')?.value));
+document.getElementById('glosCat')?.addEventListener('change', e => renderGlosario(_('glosQ')?.value?.toLowerCase().trim()||'', e.target.value));
+
+// Glosario fallback mínimo (por si falla la carga del JSON)
+const GLOS_FALLBACK = [
+  {termino:'Béton brut',definicion:'Hormigón en bruto, sin revestir. Término de Le Corbusier que da nombre al Brutalismo.',categoria:'materiales',origen:'Francés',estilos_relacionados:['brutalismo']},
+  {termino:'Planta libre',definicion:'Sistema donde los pilares soportan la carga, liberando los tabiques de función portante.',categoria:'sistemas',origen:'Modernismo',estilos_relacionados:['modernismo','bauhaus']},
+  {termino:'Wabi-Sabi',definicion:'Concepto estético japonés: belleza en la imperfección, impermanencia e incompletitud.',categoria:'conceptos',origen:'Japonés',estilos_relacionados:['wabi-sabi','japandi']},
+  {termino:'Hygge',definicion:'Concepto danés de confort acogedor y calidez colectiva. Pilar del diseño escandinavo.',categoria:'conceptos',origen:'Danés',estilos_relacionados:['escandinavo','japandi']},
+  {termino:'CLT',definicion:'Cross Laminated Timber. Madera contralaminada estructural, material sostenible de alta resistencia.',categoria:'materiales',origen:'Austria, 1990s',estilos_relacionados:['biofilo-solarpunk']},
+  {termino:'Xeriscape',definicion:'Paisajismo diseñado para reducir o eliminar el riego suplementario.',categoria:'paisajismo',origen:'Denver, 1981',estilos_relacionados:['brutalismo','biofilo-solarpunk']},
+  {termino:'Japandi',definicion:'Fusión del minimalismo escandinavo y la filosofía japonesa del wabi-sabi.',categoria:'estilos',origen:'Tendencia global',estilos_relacionados:['modernismo']},
+  {termino:'Solarpunk',definicion:'Movimiento que imagina tecnología limpia, naturaleza y justicia social en armonía.',categoria:'movimientos',origen:'Ficción especulativa',estilos_relacionados:['biofilo-solarpunk']},
+];
 
 // ── Workspace ─────────────────────────────────────
 let wsAct=null;
@@ -1410,17 +1516,19 @@ function printFicha(item, tipo) {
 // ── Boot actualizado ──────────────────────────────
 async function loadData() {
   try {
-    const [e,ex,i,ix,pf,mat]=await Promise.all([
+    const [e,ex,i,ix,pf,mat,matx,glos]=await Promise.all([
       fetch('data/estilos.json').then(r=>r.json()),
       fetch('data/estilos-extra.json').then(r=>r.json()).catch(()=>[]),
       fetch('data/interiores.json').then(r=>r.json()),
       fetch('data/interiores-extra.json').then(r=>r.json()).catch(()=>[]),
       fetch('data/paisajismo-floorplans.json').then(r=>r.json()),
-      fetch('data/materiales.json').then(r=>r.json()).catch(()=>[])
+      fetch('data/materiales.json').then(r=>r.json()).catch(()=>[]),
+      fetch('data/materiales-extra.json').then(r=>r.json()).catch(()=>[]),
+      fetch('data/glosario.json').then(r=>r.json()).catch(()=>[])
     ]);
     EST=[...e,...ex]; INT=[...i,...ix];
     PAIS=pf.paisajismo||[]; FP=pf.floorplans||[];
-    MAT=mat;
+    MAT=[...mat,...matx]; GLOS_DATA=glos;
     boot();
     setTimeout(readHash,50);
   } catch(err){

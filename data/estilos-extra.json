@@ -1,150 +1,5 @@
 [
   {
-    "id": "renacimiento",
-    "nombre": "Renacimiento",
-    "era": "S. XV–XVI",
-    "origen": "Italia / Europa",
-    "descripcion": "El Renacimiento recuperó los principios clásicos de Grecia y Roma aplicando razón matemática y geometría al espacio. Filippo Brunelleschi redescubrió la perspectiva y la proporción. Leon Battista Alberti sistematizó los órdenes clásicos. El resultado: edificios que equilibran escala humana, simetría y belleza racional.",
-    "concepto_clave": "razón y proporción al servicio de la belleza",
-    "imagen": "https://images.unsplash.com/photo-1555993539-1732b0258235?w=900&q=80&fit=crop",
-    "imagen_2": "https://images.unsplash.com/photo-1548013146-72479768bada?w=500&q=80&fit=crop",
-    "imagen_3": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=500&q=80&fit=crop",
-    "caracteristicas": ["Proporción y simetría matemática", "Órdenes clásicos reinterpretados", "Cúpulas y arcos de medio punto", "Perspectiva en fachadas", "Pilastras y cornisas", "Planta central o basilical"],
-    "figuras": ["Filippo Brunelleschi", "Leon Battista Alberti", "Donato Bramante", "Andrea Palladio", "Michelangelo"],
-    "obras": [
-      { "nombre": "Cúpula del Duomo de Florencia", "autor": "Brunelleschi", "lugar": "Florencia", "año": 1436 },
-      { "nombre": "Tempietto", "autor": "Bramante", "lugar": "Roma", "año": 1502 },
-      { "nombre": "Villa Rotonda", "autor": "Palladio", "lugar": "Vicenza", "año": 1592 },
-      { "nombre": "Basílica de San Pedro", "autor": "Bramante / Miguel Ángel", "lugar": "Roma", "año": 1626 }
-    ],
-    "interiores_compatibles": ["neoclasico-interior", "empire", "transitional", "mediterranean"],
-    "paisajismo_compatible": ["jardin-formal-frances", "jardin-romantico-ingles", "jardin-italiano"],
-    "floorplans_compatibles": ["villa-simetrica", "planta-cruciforme"],
-    "materiales": {
-      "arquitectura": [
-        { "nombre": "Mármol de Carrara", "hex": "#F0EDE4" },
-        { "nombre": "Piedra travertina", "hex": "#D4C5A9" },
-        { "nombre": "Ladrillo florentino", "hex": "#B85C38" }
-      ],
-      "interior": [
-        { "nombre": "Fresco al temple", "hex": "#C4A882" },
-        { "nombre": "Madera dorada", "hex": "#C9A84C" },
-        { "nombre": "Seda y brocados", "hex": "#6A3A8A" }
-      ],
-      "exterior": [
-        { "nombre": "Cipréses", "hex": "#2D4A1E" },
-        { "nombre": "Boj recortado", "hex": "#2D5016" },
-        { "nombre": "Grava toscana", "hex": "#D4C8A8" }
-      ]
-    },
-    "plantas_interior": ["Laurel (Laurus nobilis)", "Boj en topiary", "Limonero en maceta de terracota", "Myrtle"],
-    "costo_constructivo": "Muy alto",
-    "mantenimiento": "Muy alto",
-    "programa_tipico": "Palacios, iglesias, villas aristocráticas, edificios públicos",
-    "tags": ["proporcion", "clasico", "italia", "simetria", "cupula", "marmol"],
-    "eco": false,
-    "quote": "La belleza es la concordancia y unión armoniosa de las partes en relación con el todo.",
-    "quote_autor": "Leon Battista Alberti",
-    "color_acento": "#C9A84C"
-  },
-  {
-    "id": "barroco",
-    "nombre": "Barroco",
-    "era": "S. XVII–XVIII",
-    "origen": "Roma / Europa",
-    "descripcion": "El Barroco es el lenguaje de la emoción, el movimiento y el poder. Nacido al servicio de la Contrarreforma católica y las monarquías absolutas, rompió con la serenidad renacentista para crear espacios dramáticos que impactan los sentidos. Curvas, diagonales, claroscuro y teatralidad son sus herramientas.",
-    "concepto_clave": "emoción, movimiento y poder a través del espacio",
-    "imagen": "https://images.unsplash.com/photo-1548013146-72479768bada?w=900&q=80&fit=crop",
-    "imagen_2": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=500&q=80&fit=crop",
-    "imagen_3": "https://images.unsplash.com/photo-1555993539-1732b0258235?w=500&q=80&fit=crop",
-    "caracteristicas": ["Movimiento y dinamismo", "Curvas y contracurvas", "Juego dramático de luz y sombra", "Ornamentación exuberante", "Teatralidad espacial", "Ejes visuales infinitos", "Bóvedas pintadas con trampantojo"],
-    "figuras": ["Gian Lorenzo Bernini", "Francesco Borromini", "Pietro da Cortona", "Jules Hardouin-Mansart", "Johann Bernhard Fischer von Erlach"],
-    "obras": [
-      { "nombre": "Plaza de San Pedro", "autor": "Bernini", "lugar": "Roma", "año": 1667 },
-      { "nombre": "San Carlo alle Quattro Fontane", "autor": "Borromini", "lugar": "Roma", "año": 1646 },
-      { "nombre": "Palacio de Versalles", "autor": "Hardouin-Mansart", "lugar": "Versalles", "año": 1710 },
-      { "nombre": "Iglesia de los Inválidos", "autor": "Hardouin-Mansart", "lugar": "París", "año": 1708 }
-    ],
-    "interiores_compatibles": ["maximalism", "hollywood-regency", "grandmillennial", "eclectic-romantico"],
-    "paisajismo_compatible": ["jardin-formal-frances", "jardin-de-invierno", "terraza-ornamental"],
-    "floorplans_compatibles": ["villa-simetrica", "edificio-publico-simetrico"],
-    "materiales": {
-      "arquitectura": [
-        { "nombre": "Mármol polícromo", "hex": "#8B6056" },
-        { "nombre": "Estuco dorado", "hex": "#C9A84C" },
-        { "nombre": "Piedra caliza blanca", "hex": "#F0EDE4" }
-      ],
-      "interior": [
-        { "nombre": "Terciopelo burdeos", "hex": "#6B1A2A" },
-        { "nombre": "Dorado pan de oro", "hex": "#C9A84C" },
-        { "nombre": "Espejo biselado", "hex": "#A8B8C8" }
-      ],
-      "exterior": [
-        { "nombre": "Boj en topiary complejo", "hex": "#2D5016" },
-        { "nombre": "Fuentes ornamentales", "hex": "#7B9EB0" },
-        { "nombre": "Estatuaria de mármol", "hex": "#E8E4DC" }
-      ]
-    },
-    "plantas_interior": ["Naranjo amargo en maceta", "Laurel en topiary", "Palmera Chamaerops", "Flores de corte en urnas"],
-    "costo_constructivo": "Muy alto",
-    "mantenimiento": "Muy alto",
-    "programa_tipico": "Iglesias, palacios reales, teatros, jardines monumentales",
-    "tags": ["dorado", "ornamental", "drama", "curvas", "iglesia", "palacio", "versalles"],
-    "eco": false,
-    "quote": "La arquitectura es música congelada hecha espectáculo para los sentidos.",
-    "quote_autor": "Gian Lorenzo Bernini",
-    "color_acento": "#C9A84C"
-  },
-  {
-    "id": "art-nouveau",
-    "nombre": "Art Nouveau",
-    "era": "1890–1910",
-    "origen": "Bélgica / Europa",
-    "descripcion": "El Art Nouveau fue la primera rebelión total contra el historicismo. Inspirado en las formas orgánicas de la naturaleza —tallos, flores, insectos, el cuerpo humano— creó un lenguaje ornamental completamente nuevo. Cada elemento, desde la fachada hasta el pomo de la puerta, forma parte de un todo integrado.",
-    "concepto_clave": "la naturaleza como sistema ornamental total",
-    "imagen": "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=900&q=80&fit=crop",
-    "imagen_2": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80&fit=crop",
-    "imagen_3": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=500&q=80&fit=crop",
-    "caracteristicas": ["Líneas curvas inspiradas en la naturaleza", "Ornamentación vegetal y animal", "Vidrieras de colores", "Hierro forjado artístico", "Integración de todas las artes", "Fachadas como obras totales", "Cerámica y azulejería"],
-    "figuras": ["Victor Horta", "Hector Guimard", "Antoni Gaudí", "Otto Wagner", "Alphonse Mucha"],
-    "obras": [
-      { "nombre": "Casa Batlló", "autor": "Antoni Gaudí", "lugar": "Barcelona", "año": 1906 },
-      { "nombre": "Casa Milà (La Pedrera)", "autor": "Antoni Gaudí", "lugar": "Barcelona", "año": 1912 },
-      { "nombre": "Hôtel Tassel", "autor": "Victor Horta", "lugar": "Bruselas", "año": 1893 },
-      { "nombre": "Entradas del Metro de París", "autor": "Hector Guimard", "lugar": "París", "año": 1900 }
-    ],
-    "interiores_compatibles": ["bohemian", "maximalism", "cottagecore", "mediterranean"],
-    "paisajismo_compatible": ["jardin-naturalista", "jardines-verticales", "jardin-romantico-ingles"],
-    "floorplans_compatibles": ["planta-organica", "villa-simetrica"],
-    "materiales": {
-      "arquitectura": [
-        { "nombre": "Hierro forjado verde", "hex": "#2D4A1E" },
-        { "nombre": "Cerámica vidriada azul", "hex": "#2A6A8A" },
-        { "nombre": "Piedra tallada curva", "hex": "#C8B89A" }
-      ],
-      "interior": [
-        { "nombre": "Madera de caoba curvada", "hex": "#4A2010" },
-        { "nombre": "Vidrio emplomado ámbar", "hex": "#C4903A" },
-        { "nombre": "Tela Liberty floral", "hex": "#4A6A3A" }
-      ],
-      "exterior": [
-        { "nombre": "Glicinia trepadora", "hex": "#7A5A9A" },
-        { "nombre": "Rosa trepadora", "hex": "#C45A6A" },
-        { "nombre": "Musgo y helecho", "hex": "#3D5A2E" }
-      ]
-    },
-    "plantas_interior": ["Palmera kentia", "Helecho maidenhair", "Orquídea Cattleya", "Hiedra trepadora"],
-    "plantas_eco_recomendadas": ["Glicinia nativa", "Rosal silvestre", "Madreselva (Lonicera)", "Clematis"],
-    "costo_constructivo": "Alto (artesanía especializada)",
-    "mantenimiento": "Alto",
-    "programa_tipico": "Residencias privadas, comercios de lujo, estaciones de metro, museos",
-    "tags": ["curvas", "floral", "organico", "gaudi", "hierro", "vidrieras", "belgica"],
-    "eco": false,
-    "quote": "Nada es arte si no viene de la naturaleza.",
-    "quote_autor": "Antoni Gaudí",
-    "color_acento": "#2D4A1E"
-  },
-  {
     "id": "high-tech-arq",
     "nombre": "High-Tech / Arquitectura Tecnológica",
     "era": "1970–1990",
@@ -154,89 +9,127 @@
     "imagen": "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=900&q=80&fit=crop",
     "imagen_2": "https://images.unsplash.com/photo-1545670723-196ed0954986?w=500&q=80&fit=crop",
     "imagen_3": "https://images.unsplash.com/photo-1500916434205-0c77489c6cf7?w=500&q=80&fit=crop",
-    "caracteristicas": ["Estructura como ornamento", "Instalaciones codificadas por colores", "Acero y vidrio de alta performance", "Transparencia radical", "Flexibilidad de planta", "Prefabricación y precisión"],
-    "figuras": ["Renzo Piano", "Richard Rogers", "Norman Foster", "Nicholas Grimshaw", "Michael Hopkins"],
-    "obras": [
-      { "nombre": "Centro Pompidou", "autor": "Piano + Rogers", "lugar": "París", "año": 1977 },
-      { "nombre": "Lloyd's de Londres", "autor": "Richard Rogers", "lugar": "Londres", "año": 1986 },
-      { "nombre": "Terminal 4 Barajas", "autor": "Richard Rogers", "lugar": "Madrid", "año": 2006 },
-      { "nombre": "30 St Mary Axe (Gherkin)", "autor": "Norman Foster", "lugar": "Londres", "año": 2003 }
+    "caracteristicas": [
+      "Estructura como ornamento",
+      "Instalaciones codificadas por colores",
+      "Acero y vidrio de alta performance",
+      "Transparencia radical",
+      "Flexibilidad de planta",
+      "Prefabricación y precisión"
     ],
-    "interiores_compatibles": ["high-tech", "industrial", "minimalismo", "contemporaneo-radical"],
-    "paisajismo_compatible": ["jardin-geometrico-moderno", "jardin-grava-zen", "xeriscape"],
-    "floorplans_compatibles": ["planta-libre-modular", "edificio-verde"],
+    "figuras": [
+      "Renzo Piano",
+      "Richard Rogers",
+      "Norman Foster",
+      "Nicholas Grimshaw",
+      "Michael Hopkins"
+    ],
+    "obras": [
+      {
+        "nombre": "Centro Pompidou",
+        "autor": "Piano + Rogers",
+        "lugar": "París",
+        "año": 1977
+      },
+      {
+        "nombre": "Lloyd's de Londres",
+        "autor": "Richard Rogers",
+        "lugar": "Londres",
+        "año": 1986
+      },
+      {
+        "nombre": "Terminal 4 Barajas",
+        "autor": "Richard Rogers",
+        "lugar": "Madrid",
+        "año": 2006
+      },
+      {
+        "nombre": "30 St Mary Axe (Gherkin)",
+        "autor": "Norman Foster",
+        "lugar": "Londres",
+        "año": 2003
+      }
+    ],
+    "interiores_compatibles": [
+      "high-tech",
+      "industrial",
+      "minimalismo",
+      "contemporaneo-radical"
+    ],
+    "paisajismo_compatible": [
+      "jardin-geometrico-moderno",
+      "jardin-grava-zen",
+      "xeriscape"
+    ],
+    "floorplans_compatibles": [
+      "planta-libre-modular",
+      "edificio-verde"
+    ],
     "materiales": {
       "arquitectura": [
-        { "nombre": "Acero cromado", "hex": "#C0C8D0" },
-        { "nombre": "Aluminio anodizado", "hex": "#A8A8A8" },
-        { "nombre": "Vidrio de alto rendimiento", "hex": "#B8D4E8" }
+        {
+          "nombre": "Acero cromado",
+          "hex": "#C0C8D0"
+        },
+        {
+          "nombre": "Aluminio anodizado",
+          "hex": "#A8A8A8"
+        },
+        {
+          "nombre": "Vidrio de alto rendimiento",
+          "hex": "#B8D4E8"
+        }
       ],
       "interior": [
-        { "nombre": "Acero pulido", "hex": "#C0C8D0" },
-        { "nombre": "Gris industrial", "hex": "#6A6A6A" },
-        { "nombre": "Rojo señalización", "hex": "#C42020" }
+        {
+          "nombre": "Acero pulido",
+          "hex": "#C0C8D0"
+        },
+        {
+          "nombre": "Gris industrial",
+          "hex": "#6A6A6A"
+        },
+        {
+          "nombre": "Rojo señalización",
+          "hex": "#C42020"
+        }
       ],
       "exterior": [
-        { "nombre": "Acero corten", "hex": "#8B4513" },
-        { "nombre": "Grava blanca industrial", "hex": "#E8E4DC" },
-        { "nombre": "Bambú estructural", "hex": "#8A9A5A" }
+        {
+          "nombre": "Acero corten",
+          "hex": "#8B4513"
+        },
+        {
+          "nombre": "Grava blanca industrial",
+          "hex": "#E8E4DC"
+        },
+        {
+          "nombre": "Bambú estructural",
+          "hex": "#8A9A5A"
+        }
       ]
     },
-    "plantas_interior": ["Cactus columnar", "Ficus de tronco único", "Bambú en macetero minimalista", "Sansevieria"],
+    "plantas_interior": [
+      "Cactus columnar",
+      "Ficus de tronco único",
+      "Bambú en macetero minimalista",
+      "Sansevieria"
+    ],
     "costo_constructivo": "Alto",
     "mantenimiento": "Medio-Alto",
     "programa_tipico": "Museos, aeropuertos, oficinas corporativas, espacios culturales",
-    "tags": ["acero", "vidrio", "tecnico", "transparente", "piano", "rogers", "industrial"],
+    "tags": [
+      "acero",
+      "vidrio",
+      "tecnico",
+      "transparente",
+      "piano",
+      "rogers",
+      "industrial"
+    ],
     "eco": false,
     "quote": "Un edificio debería revelar cómo está hecho, no esconderlo.",
     "quote_autor": "Richard Rogers",
     "color_acento": "#C0C8D0"
-  },
-  {
-    "id": "metabolismo",
-    "nombre": "Metabolismo Japonés",
-    "era": "1960–1970",
-    "origen": "Japón",
-    "descripcion": "El Metabolismo fue el movimiento vanguardista japonés de posguerra que concibió los edificios como organismos vivos: células intercambiables que crecen, se reemplazan y evolucionan. Kenzo Tange y el grupo Metabolist imaginaron megaestructuras urbanas que se adaptaban a las necesidades cambiantes de la sociedad de masas.",
-    "concepto_clave": "el edificio como organismo vivo y reemplazable",
-    "imagen": "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=900&q=80&fit=crop",
-    "imagen_2": "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=500&q=80&fit=crop",
-    "imagen_3": "https://images.unsplash.com/photo-1545670723-196ed0954986?w=500&q=80&fit=crop",
-    "caracteristicas": ["Cápsulas habitacionales intercambiables", "Megaestructuras de hormigón", "Metabolismo como metáfora biológica", "Tecnología prefabricada", "Densidad urbana extrema", "Utopía tecno-orgánica"],
-    "figuras": ["Kenzo Tange", "Kisho Kurokawa", "Fumihiko Maki", "Arata Isozaki", "Noboru Kawazoe"],
-    "obras": [
-      { "nombre": "Torre Cápsula Nakagin", "autor": "Kisho Kurokawa", "lugar": "Tokio", "año": 1972 },
-      { "nombre": "Plan de la Bahía de Tokio", "autor": "Kenzo Tange", "lugar": "Tokio", "año": 1960 },
-      { "nombre": "Expo Tower", "autor": "Kikutake", "lugar": "Osaka", "año": 1970 }
-    ],
-    "interiores_compatibles": ["minimalismo", "japandi", "high-tech", "wabi-sabi"],
-    "paisajismo_compatible": ["jardin-grava-zen", "jardin-geometrico-moderno", "techo-vivo"],
-    "floorplans_compatibles": ["vivienda-minima", "planta-libre-modular"],
-    "materiales": {
-      "arquitectura": [
-        { "nombre": "Hormigón prefabricado", "hex": "#6B6B6B" },
-        { "nombre": "Acero galvanizado", "hex": "#9A9A9A" },
-        { "nombre": "Aluminio gris", "hex": "#B0B0B0" }
-      ],
-      "interior": [
-        { "nombre": "Madera de cerezo japonés", "hex": "#C4826A" },
-        { "nombre": "Tatami", "hex": "#C4B47A" },
-        { "nombre": "Laca negra", "hex": "#1A1A0A" }
-      ],
-      "exterior": [
-        { "nombre": "Musgo japonés", "hex": "#3D5A2E" },
-        { "nombre": "Bambú", "hex": "#8A9A5A" },
-        { "nombre": "Grava de río rastrillada", "hex": "#C4B89A" }
-      ]
-    },
-    "plantas_interior": ["Bonsai de pino", "Kokedama", "Bambu de interior", "Musgo en terrario"],
-    "costo_constructivo": "Alto",
-    "mantenimiento": "Medio",
-    "programa_tipico": "Vivienda colectiva, espacios culturales, utopías urbanas",
-    "tags": ["japon", "capsulas", "prefabricado", "megaestructura", "utopia", "modular"],
-    "eco": false,
-    "quote": "La ciudad es un organismo que debe poder crecer y cambiar como un ser vivo.",
-    "quote_autor": "Kenzo Tange",
-    "color_acento": "#6B6B6B"
   }
 ]
