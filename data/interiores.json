@@ -4,13 +4,13 @@
     "nombre": "Industrial",
     "categoria": "principal",
     "imagen": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=700&q=80&fit=crop",
-    "descripcion": "El estilo industrial celebra la arquitectura de las f\u00e1bricas y almacenes del siglo XIX reconvertidos. Estructuras met\u00e1licas vistas, ladrillo expuesto, ductos y tuber\u00edas como ornamento.",
+    "descripcion": "El estilo industrial celebra la arquitectura de las fábricas y almacenes del siglo XIX reconvertidos. Estructuras metálicas vistas, ladrillo expuesto, ductos y tuberías como ornamento.",
     "origen": "Nueva York / Manchester",
-    "era": "1970s\u2013hoy",
+    "era": "1970s–hoy",
     "caracteristicas": [
       "Acero y hierro expuestos",
       "Ladrillo visto",
-      "Tuber\u00edas visibles",
+      "Tuberías visibles",
       "Ventanas industriales",
       "Pisos de cemento pulido",
       "Paleta neutra y oscura"
@@ -53,7 +53,7 @@
     "score_bauhaus": 80,
     "score_modernismo": 65,
     "plantas_recomendadas": [
-      "Tillandsia (a\u00e9reas)",
+      "Tillandsia (aéreas)",
       "Cactus saguaro",
       "Sansevieria",
       "Ficus lyrata"
@@ -75,17 +75,17 @@
     "nombre": "Japandi",
     "categoria": "micro",
     "imagen": "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=700&q=80&fit=crop",
-    "descripcion": "Fusi\u00f3n perfecta entre el minimalismo escandinavo (hygge) y la filosof\u00eda japonesa del wabi-sabi. Colores neutros c\u00e1lidos, madera clara, funcionalidad zen y una calidez discreta que invita a la calma.",
-    "origen": "Jap\u00f3n + Escandinavia",
-    "era": "2010s\u2013hoy",
+    "descripcion": "Fusión perfecta entre el minimalismo escandinavo (hygge) y la filosofía japonesa del wabi-sabi. Colores neutros cálidos, madera clara, funcionalidad zen y una calidez discreta que invita a la calma.",
+    "origen": "Japón + Escandinavia",
+    "era": "2010s–hoy",
     "caracteristicas": [
-      "Colores neutros c\u00e1lidos",
+      "Colores neutros cálidos",
       "Madera clara",
-      "L\u00edneas limpias",
+      "Líneas limpias",
       "Texturas naturales",
       "Sin ornamentos superfluos",
       "Tatami / alfombras naturales",
-      "Cer\u00e1mica artesanal"
+      "Cerámica artesanal"
     ],
     "materiales": [
       {
@@ -127,12 +127,12 @@
     "score_organicismo": 88,
     "plantas_recomendadas": [
       "Bonsai",
-      "Bamb\u00fa de interior",
+      "Bambú de interior",
       "Kokedama",
       "Musgo en terrario"
     ],
     "iluminacion": "Luz difusa, papel de arroz, velas, luz natural tamizada",
-    "textiles": "Lino, algod\u00f3n org\u00e1nico, seda natural, lana merino",
+    "textiles": "Lino, algodón orgánico, seda natural, lana merino",
     "eco": true,
     "tags": [
       "zen",
@@ -149,15 +149,15 @@
     "nombre": "Wabi-Sabi",
     "categoria": "micro",
     "imagen": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80&fit=crop",
-    "descripcion": "Filosof\u00eda est\u00e9tica japonesa que encuentra belleza en lo imperfecto, lo incompleto y lo ef\u00edmero. Una grieta en la pared, una taza reparada con oro (kintsugi), la huella del tiempo en la madera \u2014 todo tiene valor.",
-    "origen": "Jap\u00f3n",
-    "era": "Antigua / revival contempor\u00e1neo",
+    "descripcion": "Filosofía estética japonesa que encuentra belleza en lo imperfecto, lo incompleto y lo efímero. Una grieta en la pared, una taza reparada con oro (kintsugi), la huella del tiempo en la madera — todo tiene valor.",
+    "origen": "Japón",
+    "era": "Antigua / revival contemporáneo",
     "caracteristicas": [
-      "Imperfecci\u00f3n como belleza",
+      "Imperfección como belleza",
       "Materiales sin pulir",
       "Marcas del tiempo valoradas",
-      "Asimetr\u00eda",
-      "Vac\u00edo intencional (ma)",
+      "Asimetría",
+      "Vacío intencional (ma)",
       "Kintsugi",
       "Texturas rugosas"
     ],
@@ -175,7 +175,7 @@
         "hex": "#9A8A7A"
       },
       {
-        "nombre": "Cer\u00e1mica irregular",
+        "nombre": "Cerámica irregular",
         "hex": "#C4906A"
       },
       {
@@ -199,12 +199,12 @@
     "score_organicismo": 92,
     "plantas_recomendadas": [
       "Kokedama",
-      "Musgo japon\u00e9s",
+      "Musgo japonés",
       "Ikebana seco",
       "Ramas de cerezo sin flor"
     ],
     "iluminacion": "Papel washi, velas, luz rasante en texturas",
-    "textiles": "Lino sin te\u00f1ir, algod\u00f3n org\u00e1nico, yute",
+    "textiles": "Lino sin teñir, algodón orgánico, yute",
     "eco": true,
     "tags": [
       "imperfeccion",
@@ -220,14 +220,14 @@
     "nombre": "Dark Academia",
     "categoria": "micro",
     "imagen": "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?w=700&q=80&fit=crop",
-    "descripcion": "Est\u00e9tica que romantiza el conocimiento, las bibliotecas, las universidades europeas y el oto\u00f1o eterno. Madera oscura, libros por todas partes, luz de vela, globos terr\u00e1queos y una melancol\u00eda intelectual que invita al pensamiento.",
+    "descripcion": "Estética que romantiza el conocimiento, las bibliotecas, las universidades europeas y el otoño eterno. Madera oscura, libros por todas partes, luz de vela, globos terráqueos y una melancolía intelectual que invita al pensamiento.",
     "origen": "Internet / Literatura / Universidades Ivy League",
-    "era": "2010s\u2013hoy (viral 2020)",
+    "era": "2010s–hoy (viral 2020)",
     "caracteristicas": [
       "Madera oscura",
-      "Libros como decoraci\u00f3n",
-      "Luz de vela y l\u00e1mparas de escritorio",
-      "Globos terr\u00e1queos",
+      "Libros como decoración",
+      "Luz de vela y lámparas de escritorio",
+      "Globos terráqueos",
       "Cuadros y mapas",
       "Paleta terrosa oscura",
       "Alfombras orientales"
@@ -242,7 +242,7 @@
         "hex": "#1A3A2A"
       },
       {
-        "nombre": "Marr\u00f3n cuero",
+        "nombre": "Marrón cuero",
         "hex": "#6B3A2A"
       },
       {
@@ -250,7 +250,7 @@
         "hex": "#F0E8D0"
       },
       {
-        "nombre": "Negro pizarr\u00f3n",
+        "nombre": "Negro pizarrón",
         "hex": "#1A1A14"
       }
     ],
@@ -275,7 +275,7 @@
       "Peperomia caperata",
       "Suculentas oscuras"
     ],
-    "iluminacion": "Velas, candelabros, l\u00e1mparas de escritorio verdes, luz c\u00e1lida baja",
+    "iluminacion": "Velas, candelabros, lámparas de escritorio verdes, luz cálida baja",
     "textiles": "Tweed, lana, terciopelo verde, cuero envejecido",
     "eco": false,
     "tags": [
@@ -293,17 +293,17 @@
     "nombre": "Cottagecore",
     "categoria": "micro",
     "imagen": "https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=700&q=80&fit=crop",
-    "descripcion": "Romanticizaci\u00f3n de la vida rural simple: caba\u00f1a en el bosque, flores silvestres, mermeladas caseras, vestidos de lino y el tiempo que pasa lento. Una reacci\u00f3n est\u00e9tica a la hipercomunicaci\u00f3n digital.",
+    "descripcion": "Romanticización de la vida rural simple: cabaña en el bosque, flores silvestres, mermeladas caseras, vestidos de lino y el tiempo que pasa lento. Una reacción estética a la hipercomunicación digital.",
     "origen": "Internet / Cultura digital",
-    "era": "2017\u2013hoy",
+    "era": "2017–hoy",
     "caracteristicas": [
       "Flores y plantas por todos lados",
       "Encajes y bordados",
       "Madera clara envejecida",
-      "Cer\u00e1mica artesanal",
+      "Cerámica artesanal",
       "Colores florales suaves",
-      "Lino y algod\u00f3n",
-      "Cocina como coraz\u00f3n del hogar"
+      "Lino y algodón",
+      "Cocina como corazón del hogar"
     ],
     "materiales": [
       {
@@ -347,8 +347,8 @@
       "Flores silvestres secas",
       "Suculentas en maceta de barro"
     ],
-    "iluminacion": "Luz natural, velas, guirnaldas de luces c\u00e1lidas",
-    "textiles": "Lino lavado, encaje, algod\u00f3n floral, crochet",
+    "iluminacion": "Luz natural, velas, guirnaldas de luces cálidas",
+    "textiles": "Lino lavado, encaje, algodón floral, crochet",
     "eco": true,
     "tags": [
       "rural",
@@ -365,13 +365,13 @@
     "nombre": "Solarpunk",
     "categoria": "micro",
     "imagen": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80&fit=crop",
-    "descripcion": "El solarpunk de interiores es la fusi\u00f3n de tecnolog\u00eda limpia, materiales reciclados y naturaleza exuberante. Paneles solares, plantas trepadoras, muebles de materiales recuperados y una est\u00e9tica vibrante y optimista sobre el futuro.",
-    "origen": "Ficci\u00f3n especulativa / Movimiento global",
-    "era": "2010s\u2013hoy",
+    "descripcion": "El solarpunk de interiores es la fusión de tecnología limpia, materiales reciclados y naturaleza exuberante. Paneles solares, plantas trepadoras, muebles de materiales recuperados y una estética vibrante y optimista sobre el futuro.",
+    "origen": "Ficción especulativa / Movimiento global",
+    "era": "2010s–hoy",
     "caracteristicas": [
       "Plantas en todo lugar",
       "Materiales reciclados y recuperados",
-      "Tecnolog\u00eda solar integrada",
+      "Tecnología solar integrada",
       "Colores vibrantes naturales",
       "Arte comunitario",
       "Funcional y bello",
@@ -379,7 +379,7 @@
     ],
     "materiales": [
       {
-        "nombre": "Bamb\u00fa",
+        "nombre": "Bambú",
         "hex": "#8B9A5A"
       },
       {
@@ -391,7 +391,7 @@
         "hex": "#5A7A6A"
       },
       {
-        "nombre": "Algod\u00f3n org\u00e1nico te\u00f1ido con plantas",
+        "nombre": "Algodón orgánico teñido con plantas",
         "hex": "#8A9A6A"
       },
       {
@@ -421,7 +421,7 @@
       "Tomates en interior"
     ],
     "iluminacion": "LED solar, lucernarios, luz natural maximizada",
-    "textiles": "Algod\u00f3n org\u00e1nico, c\u00e1\u00f1amo, fibras recicladas",
+    "textiles": "Algodón orgánico, cáñamo, fibras recicladas",
     "eco": true,
     "tags": [
       "verde",
@@ -438,12 +438,12 @@
     "nombre": "Minimalismo",
     "categoria": "principal",
     "imagen": "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=700&q=80&fit=crop",
-    "descripcion": "El minimalismo es una forma de vida m\u00e1s que un estilo decorativo: cada objeto debe justificar su presencia. El espacio vac\u00edo es tan importante como el ocupado. Menos es literalmente m\u00e1s.",
-    "origen": "Arte minimalista / Jap\u00f3n / Bauhaus",
-    "era": "1960s\u2013hoy",
+    "descripcion": "El minimalismo es una forma de vida más que un estilo decorativo: cada objeto debe justificar su presencia. El espacio vacío es tan importante como el ocupado. Menos es literalmente más.",
+    "origen": "Arte minimalista / Japón / Bauhaus",
+    "era": "1960s–hoy",
     "caracteristicas": [
-      "Cada objeto tiene prop\u00f3sito",
-      "Paleta monocrom\u00e1tica o neutra",
+      "Cada objeto tiene propósito",
+      "Paleta monocromática o neutra",
       "Sin ornamentos",
       "Almacenamiento oculto",
       "Superficies limpias",
@@ -455,7 +455,7 @@
         "hex": "#FAFAFA"
       },
       {
-        "nombre": "Gris p\u00e1lido",
+        "nombre": "Gris pálido",
         "hex": "#E8E8E8"
       },
       {
@@ -490,10 +490,10 @@
       "1 planta grande como punto focal",
       "Sansevieria",
       "Cactus solitario",
-      "Rama seca escult\u00f3rica"
+      "Rama seca escultórica"
     ],
     "iluminacion": "Luz natural maximizada, spot empotrado, sin pantallas decorativas",
-    "textiles": "Lino, algod\u00f3n blanco, lana gris, sin estampados",
+    "textiles": "Lino, algodón blanco, lana gris, sin estampados",
     "eco": false,
     "tags": [
       "limpio",
@@ -509,15 +509,15 @@
     "nombre": "Mid-Century Modern",
     "categoria": "principal",
     "imagen": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=700&q=80&fit=crop",
-    "descripcion": "El dise\u00f1o de los 50s y 60s nunca muri\u00f3 porque nunca envejeci\u00f3. Muebles org\u00e1nicos con patas de palillo, madera de nogal, colores mostaza y aguamarina, y una confianza optimista en el progreso y el buen gusto democr\u00e1tico.",
+    "descripcion": "El diseño de los 50s y 60s nunca murió porque nunca envejeció. Muebles orgánicos con patas de palillo, madera de nogal, colores mostaza y aguamarina, y una confianza optimista en el progreso y el buen gusto democrático.",
     "origen": "Estados Unidos / Escandinavia",
-    "era": "1945\u20131969 (revival hoy)",
+    "era": "1945–1969 (revival hoy)",
     "caracteristicas": [
       "Muebles con patas esbeltas",
-      "Formas org\u00e1nicas",
+      "Formas orgánicas",
       "Madera de nogal",
-      "Colores de \u00e9poca (mostaza, aguamarina, naranja)",
-      "Integraci\u00f3n interior-exterior",
+      "Colores de época (mostaza, aguamarina, naranja)",
+      "Integración interior-exterior",
       "Arte abstracto en paredes"
     ],
     "materiales": [
@@ -563,8 +563,8 @@
       "Dracaena",
       "Cactus candelabro"
     ],
-    "iluminacion": "Sputnik chandelier, l\u00e1mpara arco, Noguchi lamp",
-    "textiles": "Lana geom\u00e9trica, algod\u00f3n estampado, pelo de vaca B&W",
+    "iluminacion": "Sputnik chandelier, lámpara arco, Noguchi lamp",
+    "textiles": "Lana geométrica, algodón estampado, pelo de vaca B&W",
     "eco": false,
     "tags": [
       "retro",
@@ -578,12 +578,12 @@
   },
   {
     "id": "biofilico",
-    "nombre": "Dise\u00f1o Biof\u00edlico",
+    "nombre": "Diseño Biofílico",
     "categoria": "principal",
     "imagen": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80&fit=crop",
-    "descripcion": "El dise\u00f1o biof\u00edlico parte de una premisa cient\u00edfica: los humanos tienen una necesidad innata de conexi\u00f3n con la naturaleza. Plantas, agua, luz natural, materiales org\u00e1nicos y vistas al exterior no son lujos sino requisitos para el bienestar.",
-    "origen": "E.O. Wilson / Arquitectura contempor\u00e1nea",
-    "era": "1990s\u2013hoy",
+    "descripcion": "El diseño biofílico parte de una premisa científica: los humanos tienen una necesidad innata de conexión con la naturaleza. Plantas, agua, luz natural, materiales orgánicos y vistas al exterior no son lujos sino requisitos para el bienestar.",
+    "origen": "E.O. Wilson / Arquitectura contemporánea",
+    "era": "1990s–hoy",
     "caracteristicas": [
       "Plantas en todos los niveles",
       "Muros verdes",
@@ -591,7 +591,7 @@
       "Luz natural maximizada",
       "Materiales naturales sin procesar",
       "Vistas a la naturaleza",
-      "Ventilaci\u00f3n cruzada"
+      "Ventilación cruzada"
     ],
     "materiales": [
       {
@@ -607,7 +607,7 @@
         "hex": "#4A7A3A"
       },
       {
-        "nombre": "Bamb\u00fa",
+        "nombre": "Bambú",
         "hex": "#8A9A5A"
       },
       {
@@ -633,13 +633,13 @@
     "score_brutalismo": 78,
     "plantas_recomendadas": [
       "Pared vegetal completa",
-      "Ficus de gran tama\u00f1o",
+      "Ficus de gran tamaño",
       "Palmeras de interior",
       "Trepadoras guiadas",
-      "Jard\u00edn de hierbas en cocina"
+      "Jardín de hierbas en cocina"
     ],
     "iluminacion": "Lucernarios, luz natural full, LED grow lights para plantas",
-    "textiles": "Lino, algod\u00f3n org\u00e1nico, fibras naturales",
+    "textiles": "Lino, algodón orgánico, fibras naturales",
     "eco": true,
     "tags": [
       "plantas",
@@ -656,16 +656,16 @@
     "nombre": "Escandinavo",
     "categoria": "principal",
     "imagen": "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=700&q=80&fit=crop",
-    "descripcion": "El dise\u00f1o escandinavo naci\u00f3 de la necesidad: inviernos largos, poco sol, recursos limitados. Su respuesta fue la m\u00e1s elegante: blancos luminosos, madera clara, funcionalidad impecable y un concepto de confort (hygge) que el mundo entero adopt\u00f3.",
+    "descripcion": "El diseño escandinavo nació de la necesidad: inviernos largos, poco sol, recursos limitados. Su respuesta fue la más elegante: blancos luminosos, madera clara, funcionalidad impecable y un concepto de confort (hygge) que el mundo entero adoptó.",
     "origen": "Suecia, Noruega, Dinamarca, Finlandia",
-    "era": "1950s\u2013hoy",
+    "era": "1950s–hoy",
     "caracteristicas": [
       "Blancos y neutros luminosos",
       "Madera de pino o abedul",
       "Hygge (confort acogedor)",
       "Funcional y bello",
-      "Artesan\u00eda de calidad",
-      "Sin ostentaci\u00f3n"
+      "Artesanía de calidad",
+      "Sin ostentación"
     ],
     "materiales": [
       {
@@ -673,7 +673,7 @@
         "hex": "#E0D0B0"
       },
       {
-        "nombre": "Blanco n\u00f3rdico",
+        "nombre": "Blanco nórdico",
         "hex": "#F8F6F2"
       },
       {
@@ -704,14 +704,14 @@
     "score_modernismo": 88,
     "score_bauhaus": 82,
     "plantas_recomendadas": [
-      "Cactus n\u00f3rdico",
-      "Planta ara\u00f1a",
+      "Cactus nórdico",
+      "Planta araña",
       "Pothos",
       "Suculentas",
       "Ramas de abedul con musgo"
     ],
-    "iluminacion": "Muchas fuentes de luz c\u00e1lida peque\u00f1as, velas, luz de invierno compensada",
-    "textiles": "Lana, piel sint\u00e9tica, algod\u00f3n, Marimekko prints",
+    "iluminacion": "Muchas fuentes de luz cálida pequeñas, velas, luz de invierno compensada",
+    "textiles": "Lana, piel sintética, algodón, Marimekko prints",
     "eco": false,
     "tags": [
       "nordico",
@@ -727,17 +727,17 @@
     "nombre": "Maximalismo",
     "categoria": "principal",
     "imagen": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=700&q=80&fit=crop",
-    "descripcion": "El maximalismo es la respuesta gozosa al minimalismo: m\u00e1s es m\u00e1s. Patrones sobre patrones, colores saturados, colecciones exhibidas con orgullo, mezcla de \u00e9pocas y culturas. Un interior maximalista es autobiogr\u00e1fico y nunca se termina.",
-    "origen": "Global / Reacci\u00f3n al minimalismo",
-    "era": "2010s\u2013hoy",
+    "descripcion": "El maximalismo es la respuesta gozosa al minimalismo: más es más. Patrones sobre patrones, colores saturados, colecciones exhibidas con orgullo, mezcla de épocas y culturas. Un interior maximalista es autobiográfico y nunca se termina.",
+    "origen": "Global / Reacción al minimalismo",
+    "era": "2010s–hoy",
     "caracteristicas": [
       "Patrones mezclados (pattern mixing)",
       "Colores saturados",
       "Colecciones exhibidas",
-      "Mezcla de \u00e9pocas",
+      "Mezcla de épocas",
       "Arte en todas las paredes",
       "Plantas de todo tipo",
-      "Acumulaci\u00f3n curada"
+      "Acumulación curada"
     ],
     "materiales": [
       {
@@ -777,11 +777,11 @@
     "score_gotico": 75,
     "plantas_recomendadas": [
       "Muchas y variadas",
-      "Colecci\u00f3n de suculentas",
+      "Colección de suculentas",
       "Palmeras grandes",
       "Plantas colgantes en macetas decorativas"
     ],
-    "iluminacion": "Chandelier, l\u00e1mparas de dise\u00f1o, m\u00faltiples fuentes",
+    "iluminacion": "Chandelier, lámparas de diseño, múltiples fuentes",
     "textiles": "Todo: terciopelo, seda, estampados, flecos, bordados",
     "eco": false,
     "tags": [
@@ -795,17 +795,17 @@
   },
   {
     "id": "organic-modern",
-    "nombre": "Org\u00e1nico Moderno",
+    "nombre": "Orgánico Moderno",
     "categoria": "micro",
     "imagen": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80&fit=crop",
-    "descripcion": "El org\u00e1nico moderno toma la limpieza del minimalismo y la calienta con formas curvas, materiales naturales sin procesar y una paleta de tierra. El resultado es un espacio que se siente tanto contempor\u00e1neo como atemporal.",
-    "origen": "Tendencia contempor\u00e1nea global",
-    "era": "2018\u2013hoy",
+    "descripcion": "El orgánico moderno toma la limpieza del minimalismo y la calienta con formas curvas, materiales naturales sin procesar y una paleta de tierra. El resultado es un espacio que se siente tanto contemporáneo como atemporal.",
+    "origen": "Tendencia contemporánea global",
+    "era": "2018–hoy",
     "caracteristicas": [
-      "Formas curvas y org\u00e1nicas",
+      "Formas curvas y orgánicas",
       "Paleta de tierras (terracota, beige, camel)",
       "Materiales naturales sin procesar",
-      "Texturas t\u00e1ctiles",
+      "Texturas táctiles",
       "Pocas piezas de gran impacto",
       "Luz natural valorizada"
     ],
@@ -851,8 +851,8 @@
       "Pilea peperomioides",
       "Cactus decorativo"
     ],
-    "iluminacion": "Luz natural suave, l\u00e1mpara de arco, aplique circular",
-    "textiles": "Boucle, lana boucl\u00e9, lino, c\u00e1\u00f1amo",
+    "iluminacion": "Luz natural suave, lámpara de arco, aplique circular",
+    "textiles": "Boucle, lana bouclé, lino, cáñamo",
     "eco": true,
     "tags": [
       "curvas",
@@ -868,16 +868,16 @@
     "nombre": "Earthy / Terroso",
     "categoria": "micro",
     "imagen": "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=700&q=80&fit=crop",
-    "descripcion": "Una paleta de tierra, arcilla, barro y piedra que evoca las arquitecturas vern\u00e1culas del mundo: adobe marroqu\u00ed, casas de barro de Mali, pueblos de tierra de Ir\u00e1n. Honesto, t\u00e1ctil y enraizado.",
-    "origen": "Arquitectura vern\u00e1cula global",
-    "era": "Atemporal / revival contempor\u00e1neo",
+    "descripcion": "Una paleta de tierra, arcilla, barro y piedra que evoca las arquitecturas vernáculas del mundo: adobe marroquí, casas de barro de Mali, pueblos de tierra de Irán. Honesto, táctil y enraizado.",
+    "origen": "Arquitectura vernácula global",
+    "era": "Atemporal / revival contemporáneo",
     "caracteristicas": [
       "Adobe y barro",
       "Arcilla y pigmentos naturales",
-      "Texturas t\u00e1ctiles rugosas",
+      "Texturas táctiles rugosas",
       "Fibras naturales",
       "Sin industriales",
-      "Conexi\u00f3n con la tierra"
+      "Conexión con la tierra"
     ],
     "materiales": [
       {
@@ -897,7 +897,7 @@
         "hex": "#F5F0E0"
       },
       {
-        "nombre": "Negro carb\u00f3n",
+        "nombre": "Negro carbón",
         "hex": "#1A1A0A"
       }
     ],
@@ -918,11 +918,11 @@
       "Agave",
       "Cactus nopales",
       "Lavanda",
-      "Hierbas arom\u00e1ticas",
+      "Hierbas aromáticas",
       "Higuera de interior"
     ],
-    "iluminacion": "Velas, luz c\u00e1lida incandescente, luz de fuego",
-    "textiles": "Lana de oveja, algod\u00f3n sin blanquear, yute, esparto",
+    "iluminacion": "Velas, luz cálida incandescente, luz de fuego",
+    "textiles": "Lana de oveja, algodón sin blanquear, yute, esparto",
     "eco": true,
     "tags": [
       "barro",
@@ -939,13 +939,13 @@
     "nombre": "Hollywood Regency",
     "categoria": "micro",
     "imagen": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=700&q=80&fit=crop",
-    "descripcion": "El glamour del Hollywood dorado de los a\u00f1os 30\u201340: lacas brillantes, terciopelos ricos, espejos dorados, pieles (sint\u00e9ticas hoy) y una sensaci\u00f3n de que una estrella de cine podr\u00eda aparecer en cualquier momento.",
+    "descripcion": "El glamour del Hollywood dorado de los años 30–40: lacas brillantes, terciopelos ricos, espejos dorados, pieles (sintéticas hoy) y una sensación de que una estrella de cine podría aparecer en cualquier momento.",
     "origen": "Hollywood, California",
-    "era": "1930s\u20131950s (revival 2000s)",
+    "era": "1930s–1950s (revival 2000s)",
     "caracteristicas": [
       "Lacas y brillos",
       "Terciopelos saturados",
-      "Espejos dorados de gran tama\u00f1o",
+      "Espejos dorados de gran tamaño",
       "Zebra prints y animales",
       "Negro y dorado como eje",
       "Muebles curvos tapizados"
@@ -987,12 +987,12 @@
     "score_neoclasico": 70,
     "plantas_recomendadas": [
       "Palma tropical grande",
-      "Orqu\u00eddea",
+      "Orquídea",
       "Bromelia",
       "Flores de corte frescas"
     ],
     "iluminacion": "Chandelier de cristal, apliques dorados, luces indirectas",
-    "textiles": "Terciopelo, sat\u00e9n, seda, pelo sint\u00e9tico, zebra print",
+    "textiles": "Terciopelo, satén, seda, pelo sintético, zebra print",
     "eco": false,
     "tags": [
       "glamour",
@@ -1009,21 +1009,21 @@
     "nombre": "Bohemio / Boho",
     "categoria": "principal",
     "imagen": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80&fit=crop",
-    "descripcion": "Un interior bohemio es un diario de viaje hecho espacio. Textiles del mundo, plantas en todo lugar, macram\u00e9, velas, cristales, libros y una libertad total de mezclar sin miedo. Anti-perfecto por definici\u00f3n.",
-    "origen": "Cultura bohemia art\u00edstica / Mundo",
-    "era": "1960s\u2013hoy",
+    "descripcion": "Un interior bohemio es un diario de viaje hecho espacio. Textiles del mundo, plantas en todo lugar, macramé, velas, cristales, libros y una libertad total de mezclar sin miedo. Anti-perfecto por definición.",
+    "origen": "Cultura bohemia artística / Mundo",
+    "era": "1960s–hoy",
     "caracteristicas": [
       "Capas de textiles del mundo",
       "Plantas en abundancia",
-      "Macram\u00e9 y tejidos",
+      "Macramé y tejidos",
       "Velas y aromas",
-      "Sin reglas ni simetr\u00eda",
-      "Colecci\u00f3n de viajes expuesta",
+      "Sin reglas ni simetría",
+      "Colección de viajes expuesta",
       "Pisos con alfombras superpuestas"
     ],
     "materiales": [
       {
-        "nombre": "\u00cdndigo",
+        "nombre": "Índigo",
         "hex": "#2A3A6A"
       },
       {
@@ -1060,10 +1060,10 @@
       "Cactus variados",
       "Pothos trepador",
       "Kokedama",
-      "Plantas en macetas \u00e9tnicas"
+      "Plantas en macetas étnicas"
     ],
-    "iluminacion": "Guirnaldas, velas, linternas, luz c\u00e1lida en todas partes",
-    "textiles": "Todo el mundo: kilim, batik, macram\u00e9, tapices, flecos, bordados",
+    "iluminacion": "Guirnaldas, velas, linternas, luz cálida en todas partes",
+    "textiles": "Todo el mundo: kilim, batik, macramé, tapices, flecos, bordados",
     "eco": true,
     "tags": [
       "viajes",
@@ -1077,18 +1077,18 @@
   },
   {
     "id": "mediterranean",
-    "nombre": "Mediterr\u00e1neo",
+    "nombre": "Mediterráneo",
     "categoria": "principal",
     "imagen": "https://images.unsplash.com/photo-1555993539-1732b0258235?w=700&q=80&fit=crop",
-    "descripcion": "La arquitectura mediterr\u00e1nea es la respuesta perfecta al clima: muros gruesos de cal, patios con fuente, azulejos de colores, arcos y una luz que rebota en todo. Espa\u00f1a, Italia, Grecia, Marruecos \u2014 distintos pero hermanos.",
-    "origen": "Cuenca mediterr\u00e1nea",
+    "descripcion": "La arquitectura mediterránea es la respuesta perfecta al clima: muros gruesos de cal, patios con fuente, azulejos de colores, arcos y una luz que rebota en todo. España, Italia, Grecia, Marruecos — distintos pero hermanos.",
+    "origen": "Cuenca mediterránea",
     "era": "Antigua / Atemporal",
     "caracteristicas": [
       "Muros de cal blancos",
       "Azulejos pintados a mano",
-      "Arcos y b\u00f3vedas",
+      "Arcos y bóvedas",
       "Patio central con fuente",
-      "Plantas arom\u00e1ticas",
+      "Plantas aromáticas",
       "Madera oscura en techos",
       "Hierro forjado"
     ],
@@ -1134,8 +1134,8 @@
       "Romero",
       "Limonero en maceta"
     ],
-    "iluminacion": "Linternas de hierro, luz natural maximizada, velas en cer\u00e1mica",
-    "textiles": "Lino blanco, algod\u00f3n rayado, azulejos como tapiz",
+    "iluminacion": "Linternas de hierro, luz natural maximizada, velas en cerámica",
+    "textiles": "Lino blanco, algodón rayado, azulejos como tapiz",
     "eco": true,
     "tags": [
       "blanco",
@@ -1153,16 +1153,16 @@
     "nombre": "French Country",
     "categoria": "micro",
     "imagen": "https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=700&q=80&fit=crop",
-    "descripcion": "La Provenza hecha interior: muebles patinados en blanco sucio, telas de cuadros y flores, lavanda, madera envejecida y una sensaci\u00f3n de que el tiempo pasa m\u00e1s despacio y huele mejor.",
+    "descripcion": "La Provenza hecha interior: muebles patinados en blanco sucio, telas de cuadros y flores, lavanda, madera envejecida y una sensación de que el tiempo pasa más despacio y huele mejor.",
     "origen": "Provenza, Francia",
     "era": "Atemporal / Popular desde 1980s",
     "caracteristicas": [
       "Muebles patinados y envejecidos",
-      "Cuadros y flores peque\u00f1as",
+      "Cuadros y flores pequeñas",
       "Lavanda como motivo",
       "Madera pintada en tonos suaves",
       "Cocina de campo como centro",
-      "Vajilla de cer\u00e1mica pintada"
+      "Vajilla de cerámica pintada"
     ],
     "materiales": [
       {
@@ -1205,7 +1205,7 @@
       "Rosas climbing",
       "Hierbas en ventana"
     ],
-    "iluminacion": "Ara\u00f1a de hierro forjado, velas, luz natural de campo",
+    "iluminacion": "Araña de hierro forjado, velas, luz natural de campo",
     "textiles": "Toile de Jouy, cuadros vichy, lino bordado, encaje",
     "eco": false,
     "tags": [
@@ -1220,19 +1220,19 @@
   },
   {
     "id": "high-tech",
-    "nombre": "High-Tech / Tect\u00f3nico",
+    "nombre": "High-Tech / Tectónico",
     "categoria": "principal",
     "imagen": "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=700&q=80&fit=crop",
-    "descripcion": "El High-Tech lleva el esp\u00edritu industrial hasta sus \u00faltimas consecuencias: la tecnolog\u00eda estructural no se esconde sino que se exhibe con orgullo. Renzo Piano, Richard Rogers y Norman Foster hicieron de las instalaciones arte.",
+    "descripcion": "El High-Tech lleva el espíritu industrial hasta sus últimas consecuencias: la tecnología estructural no se esconde sino que se exhibe con orgullo. Renzo Piano, Richard Rogers y Norman Foster hicieron de las instalaciones arte.",
     "origen": "Reino Unido / Europa",
-    "era": "1970s\u20131990s",
+    "era": "1970s–1990s",
     "caracteristicas": [
       "Estructura como ornamento",
       "Instalaciones visibles codificadas por color",
       "Acero y vidrio de alta performance",
       "Transparencia radical",
       "Flexibilidad de planta",
-      "Escaleras mec\u00e1nicas expuestas"
+      "Escaleras mecánicas expuestas"
     ],
     "materiales": [
       {
@@ -1252,7 +1252,7 @@
         "hex": "#6A6A6A"
       },
       {
-        "nombre": "Rojo se\u00f1alizaci\u00f3n",
+        "nombre": "Rojo señalización",
         "hex": "#C42020"
       }
     ],
@@ -1272,11 +1272,11 @@
     "score_bauhaus": 80,
     "plantas_recomendadas": [
       "Cactus columnares",
-      "Ficus de tronco \u00fanico",
+      "Ficus de tronco único",
       "Bambu en macetero minimalista"
     ],
-    "iluminacion": "LED t\u00e9cnico, rieles industriales, luz natural maximizada",
-    "textiles": "Cuero t\u00e9cnico, mallas met\u00e1licas, sint\u00e9ticos de alta performance",
+    "iluminacion": "LED técnico, rieles industriales, luz natural maximizada",
+    "textiles": "Cuero técnico, mallas metálicas, sintéticos de alta performance",
     "eco": false,
     "tags": [
       "acero",
@@ -1293,16 +1293,16 @@
     "nombre": "Grandmillennial",
     "categoria": "micro",
     "imagen": "https://images.unsplash.com/photo-1555993539-1732b0258235?w=700&q=80&fit=crop",
-    "descripcion": "La generaci\u00f3n millennial que abraza lo que sus abuelas ten\u00edan: chintz, agujas de punto, colecciones de porcelana, sillones con flecos y una ternura anti-ir\u00f3nica por el pasado dom\u00e9stico.",
-    "origen": "Internet / Tendencia 2019\u2013hoy",
-    "era": "2019\u2013hoy",
+    "descripcion": "La generación millennial que abraza lo que sus abuelas tenían: chintz, agujas de punto, colecciones de porcelana, sillones con flecos y una ternura anti-irónica por el pasado doméstico.",
+    "origen": "Internet / Tendencia 2019–hoy",
+    "era": "2019–hoy",
     "caracteristicas": [
       "Estampados florales grandes (chintz)",
-      "Porcelana y antig\u00fcedades",
+      "Porcelana y antigüedades",
       "Sillones tapizados con flecos",
       "Punto y crochet visibles",
       "Mezcla de generaciones",
-      "Comfort m\u00e1ximo",
+      "Comfort máximo",
       "Humor y afecto"
     ],
     "materiales": [
@@ -1323,7 +1323,7 @@
         "hex": "#6A8A9A"
       },
       {
-        "nombre": "Verde jard\u00edn",
+        "nombre": "Verde jardín",
         "hex": "#6A8A5A"
       }
     ],
@@ -1343,10 +1343,10 @@
       "Violeta africana",
       "Begonia de flor",
       "Helechos en maceta de porcelana",
-      "Rosas en jarr\u00f3n de cristal"
+      "Rosas en jarrón de cristal"
     ],
-    "iluminacion": "L\u00e1mparas con pantalla de tela, velas en candelabros, luz c\u00e1lida",
-    "textiles": "Chintz, tapicer\u00eda floral, flecos, encaje, crochet hecho a mano",
+    "iluminacion": "Lámparas con pantalla de tela, velas en candelabros, luz cálida",
+    "textiles": "Chintz, tapicería floral, flecos, encaje, crochet hecho a mano",
     "eco": false,
     "tags": [
       "abuela",
@@ -1363,16 +1363,16 @@
     "nombre": "Coastal Grandmother",
     "categoria": "micro",
     "imagen": "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=700&q=80&fit=crop",
-    "descripcion": "La vida de playa sofisticada y relajada de alguien que ley\u00f3 a Diane Keaton y cocin\u00f3 con Julia Child. Lino blanco, madera blanqueada por el sol, colores de arena y oc\u00e9ano, y una calma contagiosa.",
+    "descripcion": "La vida de playa sofisticada y relajada de alguien que leyó a Diane Keaton y cocinó con Julia Child. Lino blanco, madera blanqueada por el sol, colores de arena y océano, y una calma contagiosa.",
     "origen": "TikTok / Cultura americana costera",
-    "era": "2022\u2013hoy",
+    "era": "2022–hoy",
     "caracteristicas": [
       "Lino blanco y crema",
       "Madera blanqueada (bleached wood)",
       "Rafia y junco",
-      "Azul oc\u00e9ano y arena",
-      "Colecci\u00f3n de cer\u00e1mica costera",
-      "Luz de verano todo el a\u00f1o",
+      "Azul océano y arena",
+      "Colección de cerámica costera",
+      "Luz de verano todo el año",
       "Frescura y calma"
     ],
     "materiales": [
@@ -1385,7 +1385,7 @@
         "hex": "#D4C8A8"
       },
       {
-        "nombre": "Azul oc\u00e9ano",
+        "nombre": "Azul océano",
         "hex": "#4A7A9A"
       },
       {
@@ -1417,8 +1417,8 @@
       "Palmeras enanas",
       "Helechos costeros"
     ],
-    "iluminacion": "Luz natural full, paneles corridos blancos, velas arom\u00e1ticas",
-    "textiles": "Lino lavado, rafia, algod\u00f3n rizo, yute",
+    "iluminacion": "Luz natural full, paneles corridos blancos, velas aromáticas",
+    "textiles": "Lino lavado, rafia, algodón rizo, yute",
     "eco": true,
     "tags": [
       "playa",
@@ -1435,7 +1435,7 @@
     "nombre": "Quiet Luxury",
     "categoria": "micro",
     "imagen": "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=700&q=80&fit=crop",
-    "descripcion": "El Quiet Luxury es el ant\u00eddoto al logocentrismo: materiales que hablan por si solos, paleta absolutamente neutra. Interiorismo que comunica riqueza sin gritar. Inspirado en The Row, Loro Piana y Brunello Cucinelli.",
+    "descripcion": "El Quiet Luxury es el antídoto al logocentrismo: materiales que hablan por si solos, paleta absolutamente neutra. Interiorismo que comunica riqueza sin gritar. Inspirado en The Row, Loro Piana y Brunello Cucinelli.",
     "origen": "Moda / Cultura aspiracional global",
     "era": "2022-hoy",
     "caracteristicas": [
@@ -1779,6 +1779,289 @@
       "instagram",
       "selva",
       "naturaleza"
+    ]
+  },
+  {
+    "id": "quiet-nature",
+    "nombre": "Quiet Nature",
+    "categoria": "micro",
+    "imagen": "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=700&q=80&fit=crop",
+    "descripcion": "La naturaleza en su versión más silenciosa y contemplativa. Sin exuberancia tropical ni cactus dramáticos: solo materiales terrosos sin procesar, plantas de hojas pequeñas y discretas, luz natural filtrada y un silencio que invita a respirar.",
+    "origen": "Tendencia global bienestar",
+    "era": "2021–hoy",
+    "caracteristicas": [
+      "Materiales sin procesar ni pulir",
+      "Luz natural tamizada y suave",
+      "Plantas discretas y de follaje fino",
+      "Sonido del agua como elemento",
+      "Texturas táctiles en neutrales",
+      "Sin colores llamativos"
+    ],
+    "materiales": [
+      {
+        "nombre": "Piedra sin pulir",
+        "hex": "#A09A8A"
+      },
+      {
+        "nombre": "Madera sin barnizar",
+        "hex": "#B09070"
+      },
+      {
+        "nombre": "Lino sin blanquear",
+        "hex": "#D4C4A0"
+      },
+      {
+        "nombre": "Arcilla cruda",
+        "hex": "#C4A882"
+      },
+      {
+        "nombre": "Musgo natural",
+        "hex": "#4A6A3A"
+      }
+    ],
+    "paleta": [
+      "#A09A8A",
+      "#B09070",
+      "#D4C4A0",
+      "#C4A882",
+      "#4A6A3A"
+    ],
+    "estilos_arq_compatibles": [
+      "organicismo",
+      "biofilo-solarpunk",
+      "modernismo"
+    ],
+    "score_organicismo": 95,
+    "score_biofilo-solarpunk": 88,
+    "plantas_recomendadas": [
+      "Musgo en cuenco de barro",
+      "Kokedama",
+      "Fern delicado",
+      "Ramitas de hierba seca"
+    ],
+    "iluminacion": "Luz natural exclusivamente + velas de soja sin fragancia",
+    "textiles": "Lino sin teñir, algodón orgánico, lana de oveja sin teñir, yute",
+    "eco": true,
+    "tags": [
+      "silencioso",
+      "natural",
+      "tierra",
+      "calma",
+      "organico",
+      "minimalismo natural",
+      "bienestar"
+    ]
+  },
+  {
+    "id": "urbancore",
+    "nombre": "Urbancore",
+    "categoria": "micro",
+    "imagen": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=700&q=80&fit=crop",
+    "descripcion": "La ciudad como fuente de inspiración estética: colores de pavimento, señalética, grafiti contenido, materiales de infraestructura urbana. Cemento, acero negro, vidrio esmerilado y una paleta extraída de las calles de Nueva York, Berlín o Tokio.",
+    "origen": "Cultura urbana / Streetwear",
+    "era": "2020–hoy",
+    "caracteristicas": [
+      "Cemento y hormigón pulido",
+      "Acero negro como detalle",
+      "Grafiti como arte curado",
+      "Señalética como ornamento",
+      "Paleta urbana: gris, negro, blanco",
+      "Luces de neón controladas"
+    ],
+    "materiales": [
+      {
+        "nombre": "Cemento polished",
+        "hex": "#808080"
+      },
+      {
+        "nombre": "Acero negro mate",
+        "hex": "#1A1A1A"
+      },
+      {
+        "nombre": "Vidrio esmerilado",
+        "hex": "#C8C8C8"
+      },
+      {
+        "nombre": "Ladrillo expuesto oscuro",
+        "hex": "#4A2A1A"
+      },
+      {
+        "nombre": "Blanco industrial",
+        "hex": "#F5F5F5"
+      }
+    ],
+    "paleta": [
+      "#808080",
+      "#1A1A1A",
+      "#C8C8C8",
+      "#4A2A1A",
+      "#F5F5F5"
+    ],
+    "estilos_arq_compatibles": [
+      "brutalismo",
+      "bauhaus",
+      "deconstructivismo"
+    ],
+    "score_brutalismo": 88,
+    "score_bauhaus": 78,
+    "plantas_recomendadas": [
+      "Cactus urbano solitario",
+      "Sansevieria negra",
+      "Moss wall pequeño",
+      "Pothos en maceta de hormigón"
+    ],
+    "iluminacion": "Neón personalizado, riel industrial, spot LED frío",
+    "textiles": "Cuero negro, denim, canvas técnico, malla metálica",
+    "eco": false,
+    "tags": [
+      "ciudad",
+      "cemento",
+      "negro",
+      "urbano",
+      "grunge",
+      "streetwear",
+      "neon"
+    ]
+  },
+  {
+    "id": "dopamine-decor",
+    "nombre": "Dopamine Decor",
+    "categoria": "micro",
+    "imagen": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=700&q=80&fit=crop",
+    "descripcion": "El antídoto al minimalismo gris. El Dopamine Decor usa colores saturados y alegres científicamente para mejorar el estado de ánimo: amarillo sol, naranja terracota, verde lima, azul cielo. Sin reglas, solo placer visual.",
+    "origen": "Psicología del color / Tendencia post-pandemia",
+    "era": "2021–hoy",
+    "caracteristicas": [
+      "Colores saturados y alegres",
+      "Mezcla atrevida de colores",
+      "Sin paleta neutral como base",
+      "Objetos que hacen sonreír",
+      "Arte colorido en todas paredes",
+      "Plantas coloridas"
+    ],
+    "materiales": [
+      {
+        "nombre": "Amarillo solar",
+        "hex": "#F5C800"
+      },
+      {
+        "nombre": "Naranja terracota vivo",
+        "hex": "#E8603A"
+      },
+      {
+        "nombre": "Verde lima",
+        "hex": "#8AD040"
+      },
+      {
+        "nombre": "Azul cielo",
+        "hex": "#4AB0E8"
+      },
+      {
+        "nombre": "Fucsia",
+        "hex": "#E8207A"
+      }
+    ],
+    "paleta": [
+      "#F5C800",
+      "#E8603A",
+      "#8AD040",
+      "#4AB0E8",
+      "#E8207A"
+    ],
+    "estilos_arq_compatibles": [
+      "modernismo",
+      "bauhaus"
+    ],
+    "score_modernismo": 65,
+    "score_bauhaus": 70,
+    "plantas_recomendadas": [
+      "Bromelia naranja",
+      "Anthurium rojo",
+      "Cactus colorido",
+      "Orquídea amarilla"
+    ],
+    "iluminacion": "Múltiples fuentes de luz cálida, LED de color, guirnaldas",
+    "textiles": "Algodón de colores, acrílico, fibras sintéticas coloridas",
+    "eco": false,
+    "tags": [
+      "color",
+      "alegre",
+      "saturado",
+      "felicidad",
+      "anti-minimalismo",
+      "pop",
+      "positivo"
+    ]
+  },
+  {
+    "id": "japanesque",
+    "nombre": "Japanesque / Kinfolk",
+    "categoria": "micro",
+    "imagen": "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=700&q=80&fit=crop",
+    "descripcion": "La estética editorial del mundo slow: mesa de madera clara, taza de cerámica irregular, libro abierto, luz de ventana. Inspirado en la revista Kinfolk y la cultura japonesa del ichi-go ichi-e (este momento, esta vez). La vida cotidiana como obra de arte.",
+    "origen": "Revista Kinfolk / Japón / Portland",
+    "era": "2012–hoy",
+    "caracteristicas": [
+      "Objetos cotidianos elevados a arte",
+      "Cerámica artesanal irregular",
+      "Madera sin pulir clara",
+      "Libros como elementos decorativos",
+      "Flores silvestres en vasos simples",
+      "Luz de ventana como protagonista"
+    ],
+    "materiales": [
+      {
+        "nombre": "Pino escandinavo",
+        "hex": "#E0D0B0"
+      },
+      {
+        "nombre": "Cerámica blanca mate irregular",
+        "hex": "#F5F2EA"
+      },
+      {
+        "nombre": "Lino natural claro",
+        "hex": "#D4C8A8"
+      },
+      {
+        "nombre": "Negro carbón suave",
+        "hex": "#2A2A2A"
+      },
+      {
+        "nombre": "Verde botella",
+        "hex": "#2A4A2A"
+      }
+    ],
+    "paleta": [
+      "#E0D0B0",
+      "#F5F2EA",
+      "#D4C8A8",
+      "#2A2A2A",
+      "#2A4A2A"
+    ],
+    "estilos_arq_compatibles": [
+      "modernismo",
+      "organicismo",
+      "bauhaus"
+    ],
+    "score_modernismo": 85,
+    "score_organicismo": 88,
+    "plantas_recomendadas": [
+      "Flores silvestres en vaso simple",
+      "Ramitas de eucalipto",
+      "Un solo tallo de gypsophila",
+      "Hierba de avena seca"
+    ],
+    "iluminacion": "Solo luz natural de ventana + vela en cerámica",
+    "textiles": "Lino, algodón orgánico, lana sin teñir",
+    "eco": true,
+    "tags": [
+      "slow life",
+      "ceramica",
+      "kinfolk",
+      "editorial",
+      "cotidiano",
+      "simple",
+      "japones"
     ]
   }
 ]

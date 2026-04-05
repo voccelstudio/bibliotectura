@@ -6,7 +6,13 @@
     "imagen": "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=700&q=80&fit=crop",
     "descripcion": "El hormigón armado sin revestir. Su textura revela el negativo del encofrado —madera, metal, plástico— haciendo del proceso constructivo parte del acabado final. Icono del Brutalismo.",
     "hex_principal": "#6B6B6B",
-    "paleta": ["#6B6B6B", "#4A4A4A", "#8A8A8A", "#1A1A18", "#D4CFC6"],
+    "paleta": [
+      "#6B6B6B",
+      "#4A4A4A",
+      "#8A8A8A",
+      "#1A1A18",
+      "#D4CFC6"
+    ],
     "resistencia": "Alta (30–40 MPa compresión)",
     "aislacion_termica": "Baja (requiere complemento)",
     "huella_carbono": "Alta (410 kg CO₂/m³)",
@@ -14,12 +20,32 @@
     "costo_relativo": "Bajo-Medio",
     "mantenimiento": "Alto — requiere sellado cada 5–10 años",
     "vida_util": "50–100 años",
-    "aplicaciones": ["Estructura", "Fachada", "Suelos", "Mobiliario"],
-    "estilos_arq": ["brutalismo", "modernismo", "bauhaus", "deconstructivismo"],
-    "proveedores_latam": ["Holcim", "Cemex", "Votorantim"],
+    "aplicaciones": [
+      "Estructura",
+      "Fachada",
+      "Suelos",
+      "Mobiliario"
+    ],
+    "estilos_arq": [
+      "brutalismo",
+      "modernismo",
+      "bauhaus",
+      "deconstructivismo"
+    ],
+    "proveedores_latam": [
+      "Holcim",
+      "Cemex",
+      "Votorantim"
+    ],
     "norma": "EN 206 / ACI 318",
     "eco": false,
-    "tags": ["estructura", "gris", "bruto", "resistente", "brutalismo"]
+    "tags": [
+      "estructura",
+      "gris",
+      "bruto",
+      "resistente",
+      "brutalismo"
+    ]
   },
   {
     "id": "clt-madera-contralaminada",
@@ -28,7 +54,13 @@
     "imagen": "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=700&q=80&fit=crop",
     "descripcion": "Tableros estructurales de madera maciza encolada en capas perpendiculares. Resistencia comparable al hormigón, pero renovable, liviano y carbono-negativo durante su vida útil. El futuro de la construcción sostenible.",
     "hex_principal": "#A08060",
-    "paleta": ["#A08060", "#8B6914", "#C4B49A", "#5D4037", "#D4C4A0"],
+    "paleta": [
+      "#A08060",
+      "#8B6914",
+      "#C4B49A",
+      "#5D4037",
+      "#D4C4A0"
+    ],
     "resistencia": "Alta (comparable a hormigón en flexión)",
     "aislacion_termica": "Media (λ = 0.12 W/mK)",
     "huella_carbono": "Negativa durante vida útil (captura CO₂)",
@@ -36,12 +68,33 @@
     "costo_relativo": "Medio-Alto",
     "mantenimiento": "Bajo — proteger de humedad prolongada",
     "vida_util": "50–100 años con mantenimiento",
-    "aplicaciones": ["Estructura", "Forjados", "Fachada", "Mobiliario integrado"],
-    "estilos_arq": ["organicismo", "biofilo-solarpunk", "modernismo", "bauhaus"],
-    "proveedores_latam": ["Arauco (Chile/Argentina)", "CMPC (Chile)", "Duratex (Brasil)"],
+    "aplicaciones": [
+      "Estructura",
+      "Forjados",
+      "Fachada",
+      "Mobiliario integrado"
+    ],
+    "estilos_arq": [
+      "organicismo",
+      "biofilo-solarpunk",
+      "modernismo",
+      "bauhaus"
+    ],
+    "proveedores_latam": [
+      "Arauco (Chile/Argentina)",
+      "CMPC (Chile)",
+      "Duratex (Brasil)"
+    ],
     "norma": "EN 16351 / NDS",
     "eco": true,
-    "tags": ["madera", "sostenible", "estructura", "carbono negativo", "moderno", "ecologico"]
+    "tags": [
+      "madera",
+      "sostenible",
+      "estructura",
+      "carbono negativo",
+      "moderno",
+      "ecologico"
+    ]
   },
   {
     "id": "bambu-estructural",
@@ -50,7 +103,13 @@
     "imagen": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80&fit=crop",
     "descripcion": "El bambú es la planta de crecimiento más rápido del mundo (hasta 90 cm/día). Tratado correctamente, su resistencia a tracción supera al acero. Es el material de construcción más sostenible disponible en zonas tropicales.",
     "hex_principal": "#8A9A5A",
-    "paleta": ["#8A9A5A", "#6A8A3A", "#A0A060", "#4A6A2A", "#C4B47A"],
+    "paleta": [
+      "#8A9A5A",
+      "#6A8A3A",
+      "#A0A060",
+      "#4A6A2A",
+      "#C4B47A"
+    ],
     "resistencia": "Media-Alta (tensión: 200 MPa)",
     "aislacion_termica": "Media",
     "huella_carbono": "Muy baja / negativa",
@@ -58,12 +117,34 @@
     "costo_relativo": "Bajo (en zonas productoras)",
     "mantenimiento": "Medio — requiere tratamiento contra humedad e insectos",
     "vida_util": "30–50 años tratado correctamente",
-    "aplicaciones": ["Estructura", "Fachada", "Pisos", "Mobiliario", "Cerramientos"],
-    "estilos_arq": ["biofilo-solarpunk", "organicismo", "art-nouveau"],
-    "proveedores_latam": ["Colombia (mayor productor de Guadua)", "Ecuador", "Brasil", "México"],
+    "aplicaciones": [
+      "Estructura",
+      "Fachada",
+      "Pisos",
+      "Mobiliario",
+      "Cerramientos"
+    ],
+    "estilos_arq": [
+      "biofilo-solarpunk",
+      "organicismo",
+      "art-nouveau"
+    ],
+    "proveedores_latam": [
+      "Colombia (mayor productor de Guadua)",
+      "Ecuador",
+      "Brasil",
+      "México"
+    ],
     "norma": "ISO 22156 (Bamboo — Structural Design)",
     "eco": true,
-    "tags": ["tropical", "rapido crecimiento", "sostenible", "ligero", "natural", "ecologico"]
+    "tags": [
+      "tropical",
+      "rapido crecimiento",
+      "sostenible",
+      "ligero",
+      "natural",
+      "ecologico"
+    ]
   },
   {
     "id": "acero-corten",
@@ -72,7 +153,13 @@
     "imagen": "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=700&q=80&fit=crop",
     "descripcion": "Acero de alta resistencia que forma una capa de óxido protectora estable (pátina) que detiene la corrosión sin necesidad de pintura. Su color cálido rojizo-anaranjado evoluciona con el tiempo. Favorito en arquitectura contemporánea y paisajismo.",
     "hex_principal": "#8B4513",
-    "paleta": ["#8B4513", "#A0522D", "#6B3A1A", "#C47A3A", "#4A2010"],
+    "paleta": [
+      "#8B4513",
+      "#A0522D",
+      "#6B3A1A",
+      "#C47A3A",
+      "#4A2010"
+    ],
     "resistencia": "Muy Alta",
     "aislacion_termica": "Nula (metal)",
     "huella_carbono": "Alta en producción, baja en mantenimiento",
@@ -80,12 +167,34 @@
     "costo_relativo": "Medio-Alto",
     "mantenimiento": "Muy bajo — la pátina es el acabado",
     "vida_util": "50–100 años sin pintura",
-    "aplicaciones": ["Fachada", "Revestimiento", "Mobiliario exterior", "Paisajismo", "Escultura"],
-    "estilos_arq": ["brutalismo", "deconstructivismo", "modernismo", "organicismo"],
-    "proveedores_latam": ["Ternium (Argentina/México)", "Gerdau (Brasil)", "Siderca"],
+    "aplicaciones": [
+      "Fachada",
+      "Revestimiento",
+      "Mobiliario exterior",
+      "Paisajismo",
+      "Escultura"
+    ],
+    "estilos_arq": [
+      "brutalismo",
+      "deconstructivismo",
+      "modernismo",
+      "organicismo"
+    ],
+    "proveedores_latam": [
+      "Ternium (Argentina/México)",
+      "Gerdau (Brasil)",
+      "Siderca"
+    ],
     "norma": "ASTM A588 / EN 10025-5",
     "eco": false,
-    "tags": ["oxido", "rojizo", "exterior", "sin mantenimiento", "contemporaneo", "industrial"]
+    "tags": [
+      "oxido",
+      "rojizo",
+      "exterior",
+      "sin mantenimiento",
+      "contemporaneo",
+      "industrial"
+    ]
   },
   {
     "id": "adobe-tierra",
@@ -94,7 +203,13 @@
     "imagen": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80&fit=crop",
     "descripcion": "El material de construcción más antiguo del mundo. La tierra cruda —arcilla, arena y fibra— mezclada y secada al sol. Excelente inercia térmica (mantiene temperatura interior estable), carbono prácticamente nulo y completamente biodegradable.",
     "hex_principal": "#C4906A",
-    "paleta": ["#C4906A", "#A07040", "#D4A882", "#8B5A2A", "#F0DCC0"],
+    "paleta": [
+      "#C4906A",
+      "#A07040",
+      "#D4A882",
+      "#8B5A2A",
+      "#F0DCC0"
+    ],
     "resistencia": "Media (compresión: 2–5 MPa)",
     "aislacion_termica": "Alta (inercia térmica excelente)",
     "huella_carbono": "Prácticamente nula",
@@ -102,12 +217,31 @@
     "costo_relativo": "Muy bajo (material local)",
     "mantenimiento": "Medio — proteger de lluvia directa con alero",
     "vida_util": "Siglos con mantenimiento (pirámides de adobe tienen 4000 años)",
-    "aplicaciones": ["Muros portantes", "Muros de cerramiento", "Acabados interiores", "Pisos"],
-    "estilos_arq": ["organicismo", "biofilo-solarpunk"],
-    "proveedores_latam": ["Material local en toda Latinoamérica", "Tradición vernácula precolombina"],
+    "aplicaciones": [
+      "Muros portantes",
+      "Muros de cerramiento",
+      "Acabados interiores",
+      "Pisos"
+    ],
+    "estilos_arq": [
+      "organicismo",
+      "biofilo-solarpunk"
+    ],
+    "proveedores_latam": [
+      "Material local en toda Latinoamérica",
+      "Tradición vernácula precolombina"
+    ],
     "norma": "NZS 4298 / Normas locales por país",
     "eco": true,
-    "tags": ["tierra", "ancestral", "bajo costo", "inercia termica", "vernacular", "ecologico", "biodegradable"]
+    "tags": [
+      "tierra",
+      "ancestral",
+      "bajo costo",
+      "inercia termica",
+      "vernacular",
+      "ecologico",
+      "biodegradable"
+    ]
   },
   {
     "id": "corcho",
@@ -116,7 +250,13 @@
     "imagen": "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=700&q=80&fit=crop",
     "descripcion": "Corteza del alcornoque (Quercus suber), cosechada cada 9 años sin talar el árbol. Aislante térmico y acústico excepcional, impermeable, antifúngico y completamente renovable. Su extracción mejora la salud del bosque mediterráneo.",
     "hex_principal": "#C4A882",
-    "paleta": ["#C4A882", "#A08860", "#D4C4A0", "#8A6840", "#F0E8D0"],
+    "paleta": [
+      "#C4A882",
+      "#A08860",
+      "#D4C4A0",
+      "#8A6840",
+      "#F0E8D0"
+    ],
     "resistencia": "Baja (no estructural)",
     "aislacion_termica": "Muy alta (λ = 0.036–0.045 W/mK)",
     "huella_carbono": "Negativa (captura CO₂ durante extracción)",
@@ -124,12 +264,31 @@
     "costo_relativo": "Medio",
     "mantenimiento": "Mínimo",
     "vida_util": "50+ años",
-    "aplicaciones": ["Aislación térmica", "Aislación acústica", "Revestimiento interior", "Pisos", "Productos de diseño"],
-    "estilos_arq": ["biofilo-solarpunk", "organicismo"],
-    "proveedores_latam": ["Importado de Portugal/España (mayor producción mundial)"],
+    "aplicaciones": [
+      "Aislación térmica",
+      "Aislación acústica",
+      "Revestimiento interior",
+      "Pisos",
+      "Productos de diseño"
+    ],
+    "estilos_arq": [
+      "biofilo-solarpunk",
+      "organicismo"
+    ],
+    "proveedores_latam": [
+      "Importado de Portugal/España (mayor producción mundial)"
+    ],
     "norma": "EN 12087 / EN 13170",
     "eco": true,
-    "tags": ["aislacion", "natural", "sostenible", "acustico", "renovable", "portugal", "ecologico"]
+    "tags": [
+      "aislacion",
+      "natural",
+      "sostenible",
+      "acustico",
+      "renovable",
+      "portugal",
+      "ecologico"
+    ]
   },
   {
     "id": "titanio",
@@ -138,7 +297,13 @@
     "imagen": "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=700&q=80&fit=crop",
     "descripcion": "Metal ligero, extremadamente resistente a la corrosión y con propiedades ópticas únicas: su superficie cambia de tonalidad según el ángulo de la luz. Frank Gehry lo usó en el Guggenheim de Bilbao creando una piel que parece viva.",
     "hex_principal": "#B0B8C8",
-    "paleta": ["#B0B8C8", "#9098A8", "#C8D0D8", "#707880", "#E0E8F0"],
+    "paleta": [
+      "#B0B8C8",
+      "#9098A8",
+      "#C8D0D8",
+      "#707880",
+      "#E0E8F0"
+    ],
     "resistencia": "Muy alta (relación resistencia/peso superior al acero)",
     "aislacion_termica": "Nula (metal)",
     "huella_carbono": "Muy alta (proceso de extracción intensivo)",
@@ -146,12 +311,29 @@
     "costo_relativo": "Muy alto",
     "mantenimiento": "Mínimo — no corroe ni mancha",
     "vida_util": "100+ años",
-    "aplicaciones": ["Fachada de edificios icónicos", "Cubiertas", "Detalles escultóricos"],
-    "estilos_arq": ["deconstructivismo", "high-tech-arq"],
-    "proveedores_latam": ["Importado (Rusia, China, Japón son principales productores)"],
+    "aplicaciones": [
+      "Fachada de edificios icónicos",
+      "Cubiertas",
+      "Detalles escultóricos"
+    ],
+    "estilos_arq": [
+      "deconstructivismo",
+      "high-tech-arq"
+    ],
+    "proveedores_latam": [
+      "Importado (Rusia, China, Japón son principales productores)"
+    ],
     "norma": "ASTM B265 / EN 10049",
     "eco": false,
-    "tags": ["lujo", "reflectante", "gehry", "icono", "fachada", "guggenheim", "espectacular"]
+    "tags": [
+      "lujo",
+      "reflectante",
+      "gehry",
+      "icono",
+      "fachada",
+      "guggenheim",
+      "espectacular"
+    ]
   },
   {
     "id": "marmol-carrara",
@@ -160,7 +342,13 @@
     "imagen": "https://images.unsplash.com/photo-1555993539-1732b0258235?w=700&q=80&fit=crop",
     "descripcion": "La piedra de Miguel Ángel. Extraído en los Alpes Apuanos de la Toscana desde la Antigüedad, su blancura traslúcida y sus venas grises lo convierten en el símbolo universal del lujo atemporal. Presente en el Panteón de Roma y en los más exclusivos interiores contemporáneos.",
     "hex_principal": "#F0EDE4",
-    "paleta": ["#F0EDE4", "#E8E4DC", "#D4D0C8", "#A8A4A0", "#FAFAF8"],
+    "paleta": [
+      "#F0EDE4",
+      "#E8E4DC",
+      "#D4D0C8",
+      "#A8A4A0",
+      "#FAFAF8"
+    ],
     "resistencia": "Media (susceptible a ácidos y golpes)",
     "aislacion_termica": "Baja",
     "huella_carbono": "Media-Alta (extracción y transporte)",
@@ -168,12 +356,35 @@
     "costo_relativo": "Alto-Muy alto",
     "mantenimiento": "Alto — sellado anual, sensible a ácidos",
     "vida_util": "Milenios (el Panteón tiene 2000 años)",
-    "aplicaciones": ["Suelos", "Revestimiento de paredes", "Encimeras", "Esculturas", "Baños"],
-    "estilos_arq": ["neoclasico", "renacimiento", "barroco", "modernismo", "quiet-luxury"],
-    "proveedores_latam": ["Importado de Italia", "Mármoles locales: Córdoba (Argentina), Minas Gerais (Brasil)"],
+    "aplicaciones": [
+      "Suelos",
+      "Revestimiento de paredes",
+      "Encimeras",
+      "Esculturas",
+      "Baños"
+    ],
+    "estilos_arq": [
+      "neoclasico",
+      "renacimiento",
+      "barroco",
+      "modernismo",
+      "quiet-luxury"
+    ],
+    "proveedores_latam": [
+      "Importado de Italia",
+      "Mármoles locales: Córdoba (Argentina), Minas Gerais (Brasil)"
+    ],
     "norma": "EN 12059 / ASTM C503",
     "eco": false,
-    "tags": ["lujo", "blanco", "clasico", "italia", "miguel angel", "atemporal", "exclusivo"]
+    "tags": [
+      "lujo",
+      "blanco",
+      "clasico",
+      "italia",
+      "miguel angel",
+      "atemporal",
+      "exclusivo"
+    ]
   },
   {
     "id": "vidrio-fotovoltaico",
@@ -182,7 +393,13 @@
     "imagen": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80&fit=crop",
     "descripcion": "Building Integrated Photovoltaics: paneles solares integrados en la fachada o cubierta del edificio que generan electricidad manteniendo la función de cerramiento. Ya no es tecnología experimental: edificios en todo el mundo la usan como piel generadora de energía.",
     "hex_principal": "#2D4A6A",
-    "paleta": ["#2D4A6A", "#1A3A5A", "#4A7A9A", "#8AB0C8", "#1A2A3A"],
+    "paleta": [
+      "#2D4A6A",
+      "#1A3A5A",
+      "#4A7A9A",
+      "#8AB0C8",
+      "#1A2A3A"
+    ],
     "resistencia": "Alta (vidrio templado laminado)",
     "aislacion_termica": "Media (depende del tipo)",
     "huella_carbono": "Negativa en ~3–5 años de uso",
@@ -190,12 +407,33 @@
     "costo_relativo": "Alto (amortizable en 7–12 años)",
     "mantenimiento": "Bajo — limpieza periódica",
     "vida_util": "25–30 años (garantía estándar de paneles)",
-    "aplicaciones": ["Fachadas generadoras", "Cubiertas solares", "Lucernarios", "Balustradas"],
-    "estilos_arq": ["biofilo-solarpunk", "modernismo", "high-tech-arq"],
-    "proveedores_latam": ["SunStyle (distribución LATAM)", "Onyx Solar", "Tesla Solar Glass"],
+    "aplicaciones": [
+      "Fachadas generadoras",
+      "Cubiertas solares",
+      "Lucernarios",
+      "Balustradas"
+    ],
+    "estilos_arq": [
+      "biofilo-solarpunk",
+      "modernismo",
+      "high-tech-arq"
+    ],
+    "proveedores_latam": [
+      "SunStyle (distribución LATAM)",
+      "Onyx Solar",
+      "Tesla Solar Glass"
+    ],
     "norma": "IEC 61730 / IEC 61215",
     "eco": true,
-    "tags": ["solar", "tecnologia", "energia", "fachada activa", "sostenible", "innovacion", "futuro"]
+    "tags": [
+      "solar",
+      "tecnologia",
+      "energia",
+      "fachada activa",
+      "sostenible",
+      "innovacion",
+      "futuro"
+    ]
   },
   {
     "id": "hempcrete",
@@ -204,7 +442,13 @@
     "imagen": "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=700&q=80&fit=crop",
     "descripcion": "Mezcla de agramiza de cáñamo (interior del tallo) con cal hidráulica y agua. Material de construcción con huella de carbono negativa: captura más CO₂ del que emite. Excelente aislante térmico y acústico, resistente al fuego, antihumedad y biodegradable.",
     "hex_principal": "#D4C4A0",
-    "paleta": ["#D4C4A0", "#C4B480", "#E0D4B8", "#A09060", "#F0E8D0"],
+    "paleta": [
+      "#D4C4A0",
+      "#C4B480",
+      "#E0D4B8",
+      "#A09060",
+      "#F0E8D0"
+    ],
     "resistencia": "Baja (no estructural — requiere estructura separada)",
     "aislacion_termica": "Muy alta (λ = 0.06–0.08 W/mK)",
     "huella_carbono": "Negativa (−108 kg CO₂/m³ neto)",
@@ -212,11 +456,440 @@
     "costo_relativo": "Medio (creciendo con demanda)",
     "mantenimiento": "Muy bajo — mejora con el tiempo (la cal carbonata)",
     "vida_util": "100+ años",
-    "aplicaciones": ["Muros de cerramiento", "Aislación térmica y acústica", "Relleno entre estructura"],
-    "estilos_arq": ["biofilo-solarpunk", "organicismo"],
-    "proveedores_latam": ["Producción local posible con cáñamo industrial", "IsoHemp (importado)", "Canex (México)"],
+    "aplicaciones": [
+      "Muros de cerramiento",
+      "Aislación térmica y acústica",
+      "Relleno entre estructura"
+    ],
+    "estilos_arq": [
+      "biofilo-solarpunk",
+      "organicismo"
+    ],
+    "proveedores_latam": [
+      "Producción local posible con cáñamo industrial",
+      "IsoHemp (importado)",
+      "Canex (México)"
+    ],
     "norma": "En desarrollo — ASTM WK71272",
     "eco": true,
-    "tags": ["canhamo", "cal", "carbono negativo", "aislacion", "sostenible", "innovador", "bioconstruccion"]
+    "tags": [
+      "canhamo",
+      "cal",
+      "carbono negativo",
+      "aislacion",
+      "sostenible",
+      "innovador",
+      "bioconstruccion"
+    ]
+  },
+  {
+    "id": "ladrillo-visto",
+    "nombre": "Ladrillo Visto",
+    "categoria": "revestimiento",
+    "imagen": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=700&q=80&fit=crop",
+    "descripcion": "La arcilla cocida en horno da forma al ladrillo, material de construcción con 10.000 años de historia. El ladrillo visto —sin revocar— aporta textura, calidez y una escala humana que el hormigón raramente logra. Cada pieza es levemente diferente, dando a la pared una vida que los materiales industriales no pueden imitar.",
+    "hex_principal": "#8B4513",
+    "paleta": [
+      "#8B4513",
+      "#A05025",
+      "#C4603A",
+      "#6B3A1A",
+      "#D4A882"
+    ],
+    "resistencia": "Media-Alta (compresión: 10–30 MPa según tipo)",
+    "aislacion_termica": "Media (mejora con cámara de aire)",
+    "huella_carbono": "Media (200–400 kg CO₂/t según proceso)",
+    "alternativa_eco": "Ladrillo de tierra cruda (adobe), ladrillo de residuos industriales",
+    "costo_relativo": "Bajo-Medio",
+    "mantenimiento": "Muy bajo — limpieza periódica y sellado si es exterior",
+    "vida_util": "100+ años",
+    "aplicaciones": [
+      "Muros portantes",
+      "Revestimiento de fachada",
+      "Tabiques interiores",
+      "Chimeneas",
+      "Suelos"
+    ],
+    "estilos_arq": [
+      "brutalismo",
+      "art-nouveau",
+      "modernismo"
+    ],
+    "proveedores_latam": [
+      "Losa (Argentina)",
+      "Cerámicas Quilpué (Chile)",
+      "Portobello (Brasil)",
+      "San Lorenzo (Colombia)"
+    ],
+    "norma": "EN 771-1 / ASTM C62",
+    "eco": false,
+    "tags": [
+      "arcilla",
+      "textura",
+      "calido",
+      "industrial",
+      "historico",
+      "artesanal"
+    ]
+  },
+  {
+    "id": "vidrio-templado",
+    "nombre": "Vidrio Templado / Estructural",
+    "categoria": "revestimiento",
+    "imagen": "https://images.unsplash.com/photo-1545670723-196ed0954986?w=700&q=80&fit=crop",
+    "descripcion": "El vidrio templado (tratado térmicamente para multiplicar su resistencia) y el vidrio laminado (capas unidas por PVB) son los materiales del modernismo y el high-tech. Permiten fachadas completamente transparentes, lucernarios y suelos vidriados. Al romperse, el templado se fragmenta en piezas pequeñas no cortantes.",
+    "hex_principal": "#B8D4E8",
+    "paleta": [
+      "#B8D4E8",
+      "#8AB0C8",
+      "#D8ECF8",
+      "#4A7A9A",
+      "#E8F4FC"
+    ],
+    "resistencia": "Alta (templado: 4–5x el vidrio normal)",
+    "aislacion_termica": "Baja solo / Alta con doble o triple acristalamiento",
+    "huella_carbono": "Media (producción energointensiva pero reciclable al 100%)",
+    "alternativa_eco": "Vidrio reciclado, aerogel translúcido para aislación",
+    "costo_relativo": "Medio-Alto (según tipo y tratamiento)",
+    "mantenimiento": "Bajo — limpieza y revisión de sellados",
+    "vida_util": "25–50 años (sellados), el vidrio mismo: indefinido",
+    "aplicaciones": [
+      "Fachadas curtain wall",
+      "Lucernarios",
+      "Barandas",
+      "Particiones interiores",
+      "Suelos",
+      "Cubiertas"
+    ],
+    "estilos_arq": [
+      "modernismo",
+      "bauhaus",
+      "high-tech-arq",
+      "deconstructivismo"
+    ],
+    "proveedores_latam": [
+      "Guardian Glass (regional)",
+      "AGC Vidrios (regional)",
+      "Cristalex (Argentina)",
+      "Cebrace (Brasil)"
+    ],
+    "norma": "EN 12150 (templado) / EN 14449 (laminado)",
+    "eco": false,
+    "tags": [
+      "transparencia",
+      "moderno",
+      "luz",
+      "curtain wall",
+      "tecnologia",
+      "reflejo"
+    ]
+  },
+  {
+    "id": "piedra-natural",
+    "nombre": "Piedra Natural",
+    "categoria": "revestimiento",
+    "imagen": "https://images.unsplash.com/photo-1555993539-1732b0258235?w=700&q=80&fit=crop",
+    "descripcion": "La piedra local es el material más sustentable cuando se extrae cerca de la obra: nula huella de transporte, cero procesos industriales, reciclable indefinidamente. Cada tipo —travertino, granito, arenisca, pizarra, cuarcita— tiene propiedades únicas de color, textura y resistencia que definen el carácter del edificio.",
+    "hex_principal": "#9E8B7A",
+    "paleta": [
+      "#9E8B7A",
+      "#C8B89A",
+      "#7A6A5A",
+      "#D4C5A9",
+      "#5A4A3A"
+    ],
+    "resistencia": "Alta (granito: 150–250 MPa; arenisca: 20–170 MPa)",
+    "aislacion_termica": "Media (depende del espesor y tipo)",
+    "huella_carbono": "Baja si es local / Alta si es importada",
+    "alternativa_eco": "Piedra local siempre preferible. Técnicas de lajas delgadas reducen el peso",
+    "costo_relativo": "Medio a Muy alto (según tipo y origen)",
+    "mantenimiento": "Bajo — sellado periódico en exteriores",
+    "vida_util": "Milenios (el Coliseo tiene 2000 años)",
+    "aplicaciones": [
+      "Fachadas",
+      "Revestimientos interiores",
+      "Suelos",
+      "Cubiertas (pizarra)",
+      "Paisajismo",
+      "Escultura"
+    ],
+    "estilos_arq": [
+      "neoclasico",
+      "renacimiento",
+      "barroco",
+      "gotico",
+      "organicismo"
+    ],
+    "proveedores_latam": [
+      "Mármoles Córdoba (Argentina)",
+      "Canteras del Norte (Chile)",
+      "Minas Gerais (Brasil)",
+      "Canteras de Boyacá (Colombia)"
+    ],
+    "norma": "EN 12057 / EN 1341",
+    "eco": true,
+    "tags": [
+      "natural",
+      "local",
+      "atemporal",
+      "lujo",
+      "textura",
+      "clasico",
+      "sostenible"
+    ]
+  },
+  {
+    "id": "ceramica-porcelanico",
+    "nombre": "Cerámica / Porcelánico",
+    "categoria": "revestimiento",
+    "imagen": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=700&q=80&fit=crop",
+    "descripcion": "La cerámica y el gres porcelánico son omnipresentes en la arquitectura contemporánea. El porcelánico técnico (cocido a 1200°C) es prácticamente impermeable, resistente al rayado y disponible en formatos gigantes (3000×1500 mm) que imitan piedra, madera y hormigón con una fidelidad fotográfica.",
+    "hex_principal": "#C4906A",
+    "paleta": [
+      "#C4906A",
+      "#E0C8A8",
+      "#8A6040",
+      "#F0E8D8",
+      "#6A4A2A"
+    ],
+    "resistencia": "Alta a la abrasión y al rayado (Mohs 7–8)",
+    "aislacion_termica": "Baja (conductor térmico)",
+    "huella_carbono": "Media (proceso de cocción energointensivo)",
+    "alternativa_eco": "Azulejo de barro cocido local, terracota artesanal",
+    "costo_relativo": "Bajo a Alto (enorme rango de calidad)",
+    "mantenimiento": "Muy bajo — rejuntas periódicas",
+    "vida_util": "50–100 años",
+    "aplicaciones": [
+      "Suelos",
+      "Revestimientos de baños y cocinas",
+      "Fachadas ventiladas",
+      "Piscinas",
+      "Encimeras"
+    ],
+    "estilos_arq": [
+      "modernismo",
+      "art-nouveau",
+      "mediterranean",
+      "bauhaus"
+    ],
+    "proveedores_latam": [
+      "Porcelanosa (distribución)",
+      "Portobello (Brasil)",
+      "Corona (Colombia)",
+      "Cerámica San Lorenzo (Argentina)"
+    ],
+    "norma": "EN 14411 / ISO 13006",
+    "eco": false,
+    "tags": [
+      "pisos",
+      "banos",
+      "lavable",
+      "duradero",
+      "versatil",
+      "contemporaneo"
+    ]
+  },
+  {
+    "id": "pintura-natural-cal",
+    "nombre": "Pintura Natural / Cal y Tierras",
+    "categoria": "acabados",
+    "imagen": "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=700&q=80&fit=crop",
+    "descripcion": "Las pinturas de cal, tierra y pigmentos naturales son el acabado más antiguo y más sano del mundo. Permiten que el muro 'respire' (transpira vapor de agua), son antibacterianas, sin VOCs (compuestos orgánicos volátiles) y completamente biodegradables. El resultado visual —irregular, mate, profundo— es imposible de imitar con pinturas sintéticas.",
+    "hex_principal": "#D4C4A0",
+    "paleta": [
+      "#D4C4A0",
+      "#C4906A",
+      "#8B5A2A",
+      "#E8DCC8",
+      "#A09070"
+    ],
+    "resistencia": "Media (requiere mantenimiento cada 5–10 años)",
+    "aislacion_termica": "Contribuye positivamente (transpirable)",
+    "huella_carbono": "Muy baja / negativa (la cal reabsorbe CO₂ al carbonatar)",
+    "alternativa_eco": "Son la alternativa eco a las pinturas sintéticas",
+    "costo_relativo": "Bajo-Medio (material) + Alto (mano de obra especializada)",
+    "mantenimiento": "Medio — retoque periódico de zonas desgastadas",
+    "vida_util": "10–30 años según exposición",
+    "aplicaciones": [
+      "Paredes interiores",
+      "Fachadas exteriores (cal)",
+      "Techos",
+      "Superficies de hormigón"
+    ],
+    "estilos_arq": [
+      "organicismo",
+      "biofilo-solarpunk",
+      "art-nouveau",
+      "mediterranean"
+    ],
+    "proveedores_latam": [
+      "Colorin (Argentina — línea natural)",
+      "Loxon Natural (regional)",
+      "Artesanías locales de cal apagada"
+    ],
+    "norma": "Sin norma específica — tradición vernácula",
+    "eco": true,
+    "tags": [
+      "natural",
+      "cal",
+      "transpirable",
+      "sin VOC",
+      "artesanal",
+      "historico",
+      "sano"
+    ]
+  },
+  {
+    "id": "acero-galvanizado",
+    "nombre": "Acero Galvanizado / Inoxidable",
+    "categoria": "estructura",
+    "imagen": "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=700&q=80&fit=crop",
+    "descripcion": "El galvanizado (recubrimiento de zinc) protege al acero de la corrosión sin necesidad de pintura. El acero inoxidable (aleación con cromo) ofrece resistencia aún mayor. Ambos son reciclables al 100% y el acero es el material más reciclado del planeta (>90% de contenido reciclado en producción nueva).",
+    "hex_principal": "#9A9A9A",
+    "paleta": [
+      "#9A9A9A",
+      "#C0C0C0",
+      "#6A6A6A",
+      "#E0E0E0",
+      "#3A3A3A"
+    ],
+    "resistencia": "Muy Alta",
+    "aislacion_termica": "Nula (conductor térmico perfecto)",
+    "huella_carbono": "Alta en producción / Baja en ciclo de vida (100% reciclable)",
+    "alternativa_eco": "Acero con alto contenido reciclado (Electric Arc Furnace)",
+    "costo_relativo": "Medio (galvanizado) / Alto (inoxidable)",
+    "mantenimiento": "Muy bajo — resistente a la corrosión por décadas",
+    "vida_util": "50–100 años",
+    "aplicaciones": [
+      "Estructura",
+      "Fachadas industriales",
+      "Cubiertas",
+      "Cerramientos",
+      "Mobiliario exterior",
+      "Detalles"
+    ],
+    "estilos_arq": [
+      "brutalismo",
+      "high-tech-arq",
+      "bauhaus",
+      "deconstructivismo",
+      "industrial"
+    ],
+    "proveedores_latam": [
+      "Ternium (Argentina / México)",
+      "Gerdau (Brasil)",
+      "Novacero (Ecuador/Colombia)",
+      "CMPC Acero (Chile)"
+    ],
+    "norma": "EN 10346 (galvanizado) / EN 10088 (inoxidable)",
+    "eco": false,
+    "tags": [
+      "metal",
+      "industrial",
+      "duradero",
+      "reciclable",
+      "resistente",
+      "moderno"
+    ]
+  },
+  {
+    "id": "madera-recuperada",
+    "nombre": "Madera Recuperada / Reciclada",
+    "categoria": "revestimiento",
+    "imagen": "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=700&q=80&fit=crop",
+    "descripcion": "La madera de estructuras demolidas, vagones ferroviarios, barricas de vino o andamios industriales llega a la arquitectura con décadas de patina, color y carácter imposibles de fabricar. Es además carbono capturado que se mantiene fuera de la atmósfera. Cada tabla tiene una historia.",
+    "hex_principal": "#6B4C3B",
+    "paleta": [
+      "#6B4C3B",
+      "#8B6914",
+      "#A08060",
+      "#4A2A10",
+      "#C4A882"
+    ],
+    "resistencia": "Alta (madera madura, más densa que madera nueva)",
+    "aislacion_termica": "Buena",
+    "huella_carbono": "Negativa (carbono capturado + evita nueva extracción)",
+    "alternativa_eco": "Es la mejor alternativa eco para revestimientos de madera",
+    "costo_relativo": "Medio (material) — variable según origen",
+    "mantenimiento": "Bajo-Medio — aceite o cera periódica en interiores",
+    "vida_util": "100+ años (ya tiene décadas de uso)",
+    "aplicaciones": [
+      "Revestimientos de pared",
+      "Suelos",
+      "Vigas vistas",
+      "Mobiliario",
+      "Puertas"
+    ],
+    "estilos_arq": [
+      "brutalismo",
+      "organicismo",
+      "industrial",
+      "wabi-sabi",
+      "earthy"
+    ],
+    "proveedores_latam": [
+      "Maderas recicladas regionales",
+      "Demoliciones selectivas",
+      "Constructores de ranchos y cascos"
+    ],
+    "norma": "Sin norma específica — verificar origen y tratamiento",
+    "eco": true,
+    "tags": [
+      "reciclada",
+      "patina",
+      "historia",
+      "carbono negativo",
+      "unica",
+      "artesanal",
+      "sostenible"
+    ]
+  },
+  {
+    "id": "techo-membrana-tpu",
+    "nombre": "Membrana Tensada (ETFE / PVC)",
+    "categoria": "sistemas",
+    "imagen": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80&fit=crop",
+    "descripcion": "Las membranas tensadas de ETFE (etileno tetrafluoroetileno) y PVC de alta resistencia permiten cubrir grandes superficies con estructuras mínimas y máxima transparencia. El ETFE pesa 1% de lo que pesa el vidrio equivalente, transmite más luz UV y tiene un ciclo de vida de 25–50 años. Usado en el Estadio Olímpico de Pekín (Nido de Pájaro) y el Eden Project.",
+    "hex_principal": "#D8ECF8",
+    "paleta": [
+      "#D8ECF8",
+      "#B8D4E8",
+      "#F8FCFF",
+      "#8AB0C8",
+      "#4A7A9A"
+    ],
+    "resistencia": "Alta a la tensión (membrana) / Baja a la compresión",
+    "aislacion_termica": "Baja sola / Buena con cámara de aire (almohadas ETFE infladas)",
+    "huella_carbono": "Media (producción de fluoropolímeros)",
+    "alternativa_eco": "ETFE es reciclable; mejor que vidrio en peso y luz UV",
+    "costo_relativo": "Alto",
+    "mantenimiento": "Muy bajo — autolimpiante",
+    "vida_util": "25–50 años",
+    "aplicaciones": [
+      "Cubiertas de estadios",
+      "Invernaderos",
+      "Galerías comerciales",
+      "Jardines botánicos",
+      "Puentes cubiertos"
+    ],
+    "estilos_arq": [
+      "high-tech-arq",
+      "biofilo-solarpunk",
+      "deconstructivismo"
+    ],
+    "proveedores_latam": [
+      "Vector Foiltec (distribución)",
+      "Proyectos específicos bajo pedido"
+    ],
+    "norma": "EN 13782 / ASCE 17",
+    "eco": false,
+    "tags": [
+      "ligero",
+      "transparente",
+      "tensado",
+      "innovacion",
+      "grandes luces",
+      "high-tech"
+    ]
   }
 ]
