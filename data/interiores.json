@@ -3,7 +3,7 @@
     "id": "industrial",
     "nombre": "Industrial",
     "categoria": "principal",
-    "imagen": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=700&q=80&fit=crop",
+    "imagen": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/2018_Maastricht%2C_Lumi%C3%A8re_caf%C3%A9-restaurant_1.jpg/960px-2018_Maastricht%2C_Lumi%C3%A8re_caf%C3%A9-restaurant_1.jpg",
     "descripcion": "El estilo industrial celebra la arquitectura de las fábricas y almacenes del siglo XIX reconvertidos. Estructuras metálicas vistas, ladrillo expuesto, ductos y tuberías como ornamento.",
     "origen": "Nueva York / Manchester",
     "era": "1970s–hoy",
@@ -68,7 +68,9 @@
       "fabrica",
       "oscuro",
       "masculino"
-    ]
+    ],
+    "imagen_2": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Milwaukee_Art_Museum_April_2023_01_%2820th-_and_21st-Century_Design--Streamlining_and_American_Industrial_Design%29.jpg/960px-Milwaukee_Art_Museum_April_2023_01_%2820th-_and_21st-Century_Design--Streamlining_and_American_Industrial_Design%29.jpg",
+    "imagen_3": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Ras_Al_Khor_Industrial_Metro_Station_Interior_Design.png/960px-Ras_Al_Khor_Industrial_Metro_Station_Interior_Design.png"
   },
   {
     "id": "japandi",
@@ -219,7 +221,7 @@
     "id": "dark-academia",
     "nombre": "Dark Academia",
     "categoria": "micro",
-    "imagen": "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?w=700&q=80&fit=crop",
+    "imagen": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/The_Byzantine_church_of_Agios_Eleftherios_-_Panagia_Gorgoepikoos_%28Little_Metropolis%29_in_Athens%2C_Greece_%2810%29.jpg/960px-The_Byzantine_church_of_Agios_Eleftherios_-_Panagia_Gorgoepikoos_%28Little_Metropolis%29_in_Athens%2C_Greece_%2810%29.jpg",
     "descripcion": "Estética que romantiza el conocimiento, las bibliotecas, las universidades europeas y el otoño eterno. Madera oscura, libros por todas partes, luz de vela, globos terráqueos y una melancolía intelectual que invita al pensamiento.",
     "origen": "Internet / Literatura / Universidades Ivy League",
     "era": "2010s–hoy (viral 2020)",
@@ -286,7 +288,9 @@
       "academia",
       "otono",
       "vintage"
-    ]
+    ],
+    "imagen_2": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/The_Byzantine_church_of_Agios_Eleftherios_-_Panagia_Gorgoepikoos_%28Little_Metropolis%29_in_Athens%2C_Greece_%2835%29.jpg/960px-The_Byzantine_church_of_Agios_Eleftherios_-_Panagia_Gorgoepikoos_%28Little_Metropolis%29_in_Athens%2C_Greece_%2835%29.jpg",
+    "imagen_3": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/The_Byzantine_church_of_Agios_Eleftherios_-_Panagia_Gorgoepikoos_%28Little_Metropolis%29_in_Athens%2C_Greece_%285%29.jpg/960px-The_Byzantine_church_of_Agios_Eleftherios_-_Panagia_Gorgoepikoos_%28Little_Metropolis%29_in_Athens%2C_Greece_%285%29.jpg"
   },
   {
     "id": "cottagecore",
@@ -364,7 +368,7 @@
     "id": "solarpunk",
     "nombre": "Solarpunk",
     "categoria": "micro",
-    "imagen": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80&fit=crop",
+    "imagen": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Casa_Terracota_interior_Octavio_Mendoza_Morales.jpg/960px-Casa_Terracota_interior_Octavio_Mendoza_Morales.jpg",
     "descripcion": "El solarpunk de interiores es la fusión de tecnología limpia, materiales reciclados y naturaleza exuberante. Paneles solares, plantas trepadoras, muebles de materiales recuperados y una estética vibrante y optimista sobre el futuro.",
     "origen": "Ficción especulativa / Movimiento global",
     "era": "2010s–hoy",
@@ -437,7 +441,7 @@
     "id": "minimalismo",
     "nombre": "Minimalismo",
     "categoria": "principal",
-    "imagen": "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=700&q=80&fit=crop",
+    "imagen": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Entrance_lobby_design.jpg/960px-Entrance_lobby_design.jpg",
     "descripcion": "El minimalismo es una forma de vida más que un estilo decorativo: cada objeto debe justificar su presencia. El espacio vacío es tan importante como el ocupado. Menos es literalmente más.",
     "origen": "Arte minimalista / Japón / Bauhaus",
     "era": "1960s–hoy",
@@ -502,13 +506,15 @@
       "zen",
       "simple",
       "funcional"
-    ]
+    ],
+    "imagen_2": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Entrance_lobby_facade.jpg/960px-Entrance_lobby_facade.jpg",
+    "imagen_3": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Entrance_lobby_wall.jpg/960px-Entrance_lobby_wall.jpg"
   },
   {
     "id": "mid-century-modern",
     "nombre": "Mid-Century Modern",
     "categoria": "principal",
-    "imagen": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=700&q=80&fit=crop",
+    "imagen": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/California_Mid-Century_Modern_Home_with_open-beam_ceiling_1960.jpg/960px-California_Mid-Century_Modern_Home_with_open-beam_ceiling_1960.jpg",
     "descripcion": "El diseño de los 50s y 60s nunca murió porque nunca envejeció. Muebles orgánicos con patas de palillo, madera de nogal, colores mostaza y aguamarina, y una confianza optimista en el progreso y el buen gusto democrático.",
     "origen": "Estados Unidos / Escandinavia",
     "era": "1945–1969 (revival hoy)",
@@ -574,7 +580,9 @@
       "organico",
       "eames",
       "optimista"
-    ]
+    ],
+    "imagen_2": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Mid-Century_Modern_Doors.png/960px-Mid-Century_Modern_Doors.png",
+    "imagen_3": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Mid-Century_Modern_Tripod_Lamp_at_Intterno_Showroom_in_Warsaw.jpg/960px-Mid-Century_Modern_Tripod_Lamp_at_Intterno_Showroom_in_Warsaw.jpg"
   },
   {
     "id": "biofilico",
@@ -655,7 +663,7 @@
     "id": "escandinavo",
     "nombre": "Escandinavo",
     "categoria": "principal",
-    "imagen": "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=700&q=80&fit=crop",
+    "imagen": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/TV-009-0526_%2815817628308%29.jpg/960px-TV-009-0526_%2815817628308%29.jpg",
     "descripcion": "El diseño escandinavo nació de la necesidad: inviernos largos, poco sol, recursos limitados. Su respuesta fue la más elegante: blancos luminosos, madera clara, funcionalidad impecable y un concepto de confort (hygge) que el mundo entero adoptó.",
     "origen": "Suecia, Noruega, Dinamarca, Finlandia",
     "era": "1950s–hoy",
@@ -867,7 +875,7 @@
     "id": "earthy",
     "nombre": "Earthy / Terroso",
     "categoria": "micro",
-    "imagen": "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=700&q=80&fit=crop",
+    "imagen": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Urban_landscapes_of_Feira_de_Santana_01.jpg/960px-Urban_landscapes_of_Feira_de_Santana_01.jpg",
     "descripcion": "Una paleta de tierra, arcilla, barro y piedra que evoca las arquitecturas vernáculas del mundo: adobe marroquí, casas de barro de Mali, pueblos de tierra de Irán. Honesto, táctil y enraizado.",
     "origen": "Arquitectura vernácula global",
     "era": "Atemporal / revival contemporáneo",
@@ -932,7 +940,8 @@
       "rugoso",
       "primitivo",
       "calido"
-    ]
+    ],
+    "imagen_2": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Urban_landscapes_of_Feira_de_Santana_02.jpg/960px-Urban_landscapes_of_Feira_de_Santana_02.jpg"
   },
   {
     "id": "hollywood-regency",
@@ -1079,7 +1088,7 @@
     "id": "mediterranean",
     "nombre": "Mediterráneo",
     "categoria": "principal",
-    "imagen": "https://images.unsplash.com/photo-1555993539-1732b0258235?w=700&q=80&fit=crop",
+    "imagen": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Interior_of_Notre_Dame_d%27Afrique%2C_Algiers%2C_Algeria_WDL2456.png/960px-Interior_of_Notre_Dame_d%27Afrique%2C_Algiers%2C_Algeria_WDL2456.png",
     "descripcion": "La arquitectura mediterránea es la respuesta perfecta al clima: muros gruesos de cal, patios con fuente, azulejos de colores, arcos y una luz que rebota en todo. España, Italia, Grecia, Marruecos — distintos pero hermanos.",
     "origen": "Cuenca mediterránea",
     "era": "Antigua / Atemporal",
@@ -1146,13 +1155,15 @@
       "calido",
       "espana",
       "grecia"
-    ]
+    ],
+    "imagen_2": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/A_sunset_on_the_Mediterranean_sea%2C_Pigeon_Rocks%2C_Beirut%2C_Lebanon.jpg/960px-A_sunset_on_the_Mediterranean_sea%2C_Pigeon_Rocks%2C_Beirut%2C_Lebanon.jpg",
+    "imagen_3": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Les_Aresquiers%2C_Frontignan.jpg/960px-Les_Aresquiers%2C_Frontignan.jpg"
   },
   {
     "id": "french-country",
     "nombre": "French Country",
     "categoria": "micro",
-    "imagen": "https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=700&q=80&fit=crop",
+    "imagen": "https://upload.wikimedia.org/wikipedia/commons/b/b8/A_Norse_Interior%2C_Shewing_French_Influence.jpg",
     "descripcion": "La Provenza hecha interior: muebles patinados en blanco sucio, telas de cuadros y flores, lavanda, madera envejecida y una sensación de que el tiempo pasa más despacio y huele mejor.",
     "origen": "Provenza, Francia",
     "era": "Atemporal / Popular desde 1980s",
@@ -1216,7 +1227,9 @@
       "romantico",
       "patinado",
       "dulce"
-    ]
+    ],
+    "imagen_2": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Drawing%2C_Design_for_a_Painted_Porcelain_Plate%2C_Interior_of_Wine_Distillery%2C_1831%E2%80%9344_%28CH_18504623%29.jpg/960px-Drawing%2C_Design_for_a_Painted_Porcelain_Plate%2C_Interior_of_Wine_Distillery%2C_1831%E2%80%9344_%28CH_18504623%29.jpg",
+    "imagen_3": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Interior_of_the_library_at_Amantaka_luxury_Resort_%26_Hotel_in_Luang_Prabang_Laos.jpg/960px-Interior_of_the_library_at_Amantaka_luxury_Resort_%26_Hotel_in_Luang_Prabang_Laos.jpg"
   },
   {
     "id": "high-tech",
@@ -1434,7 +1447,7 @@
     "id": "quiet-luxury",
     "nombre": "Quiet Luxury",
     "categoria": "micro",
-    "imagen": "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=700&q=80&fit=crop",
+    "imagen": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Grandeur_on_the_Avenida_Hotel_Avenida_Palace%2C_Lisbon_%2854866542023%29.jpg/960px-Grandeur_on_the_Avenida_Hotel_Avenida_Palace%2C_Lisbon_%2854866542023%29.jpg",
     "descripcion": "El Quiet Luxury es el antídoto al logocentrismo: materiales que hablan por si solos, paleta absolutamente neutra. Interiorismo que comunica riqueza sin gritar. Inspirado en The Row, Loro Piana y Brunello Cucinelli.",
     "origen": "Moda / Cultura aspiracional global",
     "era": "2022-hoy",
@@ -1498,7 +1511,9 @@
       "minimalismo",
       "sofisticado",
       "atemporal"
-    ]
+    ],
+    "imagen_2": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Hicks-Amigone_House%2C_Buffalo%2C_New_York_-_20211211.jpg/960px-Hicks-Amigone_House%2C_Buffalo%2C_New_York_-_20211211.jpg",
+    "imagen_3": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/PACKARD_120_CONVERTIBLE_COUPE_%281939%29_%2850072477626%29.jpg/960px-PACKARD_120_CONVERTIBLE_COUPE_%281939%29_%2850072477626%29.jpg"
   },
   {
     "id": "moody-maximalism",
@@ -1711,7 +1726,7 @@
     "id": "urban-jungle",
     "nombre": "Urban Jungle",
     "categoria": "micro",
-    "imagen": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80&fit=crop",
+    "imagen": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Kir%C3%A1lystrasse_26%2C_Inneres%2C_2025_Ter%C3%A9zv%C3%A1ros.jpg/960px-Kir%C3%A1lystrasse_26%2C_Inneres%2C_2025_Ter%C3%A9zv%C3%A1ros.jpg",
     "descripcion": "Cuando el amor por las plantas supera cualquier criterio decorativo. El Urban Jungle lleva la biofilia al extremo domestico: cada rincon tiene una planta, el techo cuelga de maceteros, las estanterias son una selva. Caos verde organizado.",
     "origen": "Instagram / Tendencia global",
     "era": "2015-hoy",
@@ -1785,7 +1800,7 @@
     "id": "quiet-nature",
     "nombre": "Quiet Nature",
     "categoria": "micro",
-    "imagen": "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=700&q=80&fit=crop",
+    "imagen": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Emerald_Reverie_A_Masterpiece_of_Decorative_Craft_at_Pal%C3%A1cio_da_Pena_%2854853483471%29.jpg/960px-Emerald_Reverie_A_Masterpiece_of_Decorative_Craft_at_Pal%C3%A1cio_da_Pena_%2854853483471%29.jpg",
     "descripcion": "La naturaleza en su versión más silenciosa y contemplativa. Sin exuberancia tropical ni cactus dramáticos: solo materiales terrosos sin procesar, plantas de hojas pequeñas y discretas, luz natural filtrada y un silencio que invita a respirar.",
     "origen": "Tendencia global bienestar",
     "era": "2021–hoy",
@@ -1850,7 +1865,9 @@
       "organico",
       "minimalismo natural",
       "bienestar"
-    ]
+    ],
+    "imagen_2": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Hobbs%27s_architecture-_containing_designs_and_ground_plans_for_villas%2C_cottages_and_other_edifices%2C_both_suburban_and_rural%2C_adapted_to_the_United_States._With_rules_for_criticism%2C_and_introduction_%2814796250353%29.jpg/960px-thumbnail.jpg",
+    "imagen_3": "https://upload.wikimedia.org/wikipedia/commons/8/81/JapanHomes098_PLAN_OF_DWELLING-HOUSE_IN_TOKIO.jpg"
   },
   {
     "id": "urbancore",
