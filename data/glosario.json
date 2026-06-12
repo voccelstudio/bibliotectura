@@ -1,0 +1,534 @@
+[
+  {
+    "termino": "Abside",
+    "definicion": "Espacio semicircular o poligonal que cierra el extremo de una nave, típicamente en el altar de las iglesias medievales. Su forma concentra la atención hacia el punto focal litúrgico.",
+    "categoria": "elementos",
+    "origen": "Latín absida",
+    "estilos_relacionados": ["gotico", "renacimiento", "barroco"]
+  },
+  {
+    "termino": "Acanto",
+    "definicion": "Planta mediterránea cuyas hojas estilizadas sirvieron de modelo para el capitel corintio. El ornamento de acanto es uno de los más reproducidos en la arquitectura clásica y neoclásica.",
+    "categoria": "ornamentacion",
+    "origen": "Griego akanthos",
+    "estilos_relacionados": ["neoclasico", "barroco", "renacimiento"]
+  },
+  {
+    "termino": "Arbotante",
+    "definicion": "Arco exterior que transfiere los empujes laterales de las bóvedas hacia los contrafuertes. Invención estructural clave del gótico que permitió elevar muros y abrirlos con vitrales.",
+    "categoria": "estructura",
+    "origen": "Francés arc-boutant",
+    "estilos_relacionados": ["gotico"]
+  },
+  {
+    "termino": "Arquitrabe",
+    "definicion": "Elemento horizontal inferior del entablamento clásico que descansa directamente sobre los capiteles de las columnas. Transmite las cargas de la cubierta a los soportes.",
+    "categoria": "estructura",
+    "origen": "Italiano architrave",
+    "estilos_relacionados": ["neoclasico", "renacimiento", "barroco"]
+  },
+  {
+    "termino": "Atrio",
+    "definicion": "Espacio abierto o cubierto en la entrada de un edificio, especialmente en la arquitectura romana, paleocristiana y contemporánea. En oficinas modernas: gran vacío central de varios pisos.",
+    "categoria": "espacios",
+    "origen": "Latín atrium",
+    "estilos_relacionados": ["neoclasico", "modernismo", "high-tech-arq"]
+  },
+  {
+    "termino": "Axonometría",
+    "definicion": "Sistema de representación tridimensional donde las tres dimensiones del objeto se proyectan sin convergencia de líneas paralelas. A diferencia de la perspectiva, no hay punto de fuga.",
+    "categoria": "representacion",
+    "origen": "Griego axon (eje) + metron (medida)",
+    "estilos_relacionados": []
+  },
+  {
+    "termino": "Bauhaus",
+    "definicion": "Escuela alemana de diseño fundada por Walter Gropius en Weimar en 1919. Unificó arte, artesanía y tecnología bajo el principio de que la forma debe seguir a la función. Cerrada por los nazis en 1933.",
+    "categoria": "movimientos",
+    "origen": "Alemán: 'casa de la construcción'",
+    "estilos_relacionados": ["bauhaus", "modernismo"]
+  },
+  {
+    "termino": "Béton brut",
+    "definicion": "Hormigón en bruto, sin revestir. El término, acuñado por Le Corbusier, hace referencia al hormigón que muestra la textura del encofrado. Da nombre al movimiento Brutalista.",
+    "categoria": "materiales",
+    "origen": "Francés: 'hormigón crudo'",
+    "estilos_relacionados": ["brutalismo", "modernismo"]
+  },
+  {
+    "termino": "Biofilia",
+    "definicion": "Hipótesis de E.O. Wilson (1984) que propone una atracción innata e instintiva de los humanos hacia otras formas de vida. Fundamento teórico del diseño biofílico en arquitectura e interiores.",
+    "categoria": "conceptos",
+    "origen": "Griego bios (vida) + philia (amor)",
+    "estilos_relacionados": ["biofilo-solarpunk", "organicismo"]
+  },
+  {
+    "termino": "BIPV",
+    "definicion": "Building Integrated Photovoltaics. Integración de paneles solares directamente en los elementos constructivos del edificio (fachada, cubierta, vidrios) en lugar de añadirlos como elementos externos.",
+    "categoria": "tecnologia",
+    "origen": "Inglés: acrónimo",
+    "estilos_relacionados": ["biofilo-solarpunk", "high-tech-arq"]
+  },
+  {
+    "termino": "Bóveda de crucería",
+    "definicion": "Sistema de cubrición formado por arcos diagonales (ojivos) que se cruzan en la clave y transmiten los empujes a puntos concretos, liberando los muros de carga estructural y permitiendo los grandes vitrales góticos.",
+    "categoria": "estructura",
+    "origen": "Medieval europeo",
+    "estilos_relacionados": ["gotico"]
+  },
+  {
+    "termino": "Cantilever",
+    "definicion": "Elemento estructural que vuela horizontalmente sin apoyo en su extremo libre. Requiere un contrapeso o empotramiento en el extremo fijo. Sinónimo: voladizo. Ejemplo icónico: Casa de la Cascada de Wright.",
+    "categoria": "estructura",
+    "origen": "Inglés, origen incierto",
+    "estilos_relacionados": ["modernismo", "organicismo", "deconstructivismo"]
+  },
+  {
+    "termino": "Capitel",
+    "definicion": "Elemento que corona el fuste de una columna y recibe el entablamento. Los órdenes clásicos se distinguen principalmente por el capitel: dórico (simple), jónico (volutas), corintio (acanto).",
+    "categoria": "elementos",
+    "origen": "Latín capitellum",
+    "estilos_relacionados": ["neoclasico", "renacimiento", "barroco"]
+  },
+  {
+    "termino": "Celosía",
+    "definicion": "Enrejado de listones entrelazados que permite la ventilación y el paso de luz filtrada sin exposición directa al sol. Muy usada en arquitectura árabe, mediterránea y contemporánea sustentable.",
+    "categoria": "elementos",
+    "origen": "Árabe shamsiyya",
+    "estilos_relacionados": ["art-nouveau", "biofilo-solarpunk"]
+  },
+  {
+    "termino": "CLT",
+    "definicion": "Cross Laminated Timber. Tableros de madera maciza con capas encoladas en direcciones perpendiculares. Alta resistencia estructural, carbono negativo durante su vida útil. Material clave de la construcción sustentable contemporánea.",
+    "categoria": "materiales",
+    "origen": "Austria, 1990s",
+    "estilos_relacionados": ["biofilo-solarpunk", "organicismo"]
+  },
+  {
+    "termino": "Contrahuella",
+    "definicion": "Superficie vertical de cada peldaño de una escalera. En conjunto con la huella (superficie horizontal), determina la proporción y comodidad del tramo. Fórmula clásica: 2 contrahuellas + 1 huella = 63–65 cm.",
+    "categoria": "elementos",
+    "origen": "Español técnico",
+    "estilos_relacionados": []
+  },
+  {
+    "termino": "Contrafuerte",
+    "definicion": "Masa de mampostería adosada perpendicularmente a un muro para reforzarlo contra empujes laterales. En el gótico, los contrafuertes reciben los empujes de los arbotantes.",
+    "categoria": "estructura",
+    "origen": "Francés contre-fort",
+    "estilos_relacionados": ["gotico", "renacimiento"]
+  },
+  {
+    "termino": "Cornisa",
+    "definicion": "Moldura horizontal saliente que corona la parte superior de un muro, entablamento o edificio. Protege de la lluvia y marca visualmente la coronación de cada nivel.",
+    "categoria": "elementos",
+    "origen": "Latín corona",
+    "estilos_relacionados": ["neoclasico", "renacimiento", "barroco", "art-deco"]
+  },
+  {
+    "termino": "Curtain wall",
+    "definicion": "Sistema de fachada no estructural de vidrio y aluminio suspendido de la estructura principal. El edificio se sostiene sin necesidad de la fachada. Característica del modernismo y el high-tech.",
+    "categoria": "sistemas",
+    "origen": "Inglés: 'muro cortina'",
+    "estilos_relacionados": ["modernismo", "bauhaus", "high-tech-arq"]
+  },
+  {
+    "termino": "Deambulatorio",
+    "definicion": "Pasillo de circulación que rodea el altar de una iglesia, permitiendo el paso de procesiones sin interrumpir el culto. Típico de catedrales románicas y góticas.",
+    "categoria": "espacios",
+    "origen": "Latín deambulatorium",
+    "estilos_relacionados": ["gotico"]
+  },
+  {
+    "termino": "Domus",
+    "definicion": "Casa romana unifamiliar organizada alrededor de un atrio y un peristilo (jardín porticado). Prototipo de la arquitectura de patio mediterránea que llega hasta la arquitectura contemporánea.",
+    "categoria": "tipologias",
+    "origen": "Latín: 'casa'",
+    "estilos_relacionados": ["neoclasico", "renacimiento"]
+  },
+  {
+    "termino": "Encofrado",
+    "definicion": "Molde temporal, generalmente de madera o metálico, que contiene el hormigón mientras fragua. Su textura queda impresa en el béton brut. El diseño del encofrado es parte del diseño en arquitectura brutalista.",
+    "categoria": "construccion",
+    "origen": "Español técnico",
+    "estilos_relacionados": ["brutalismo", "modernismo"]
+  },
+  {
+    "termino": "Entablamento",
+    "definicion": "Conjunto de elementos horizontales (arquitrabe, friso y cornisa) que descansan sobre las columnas en la arquitectura clásica. Cada orden arquitectónico tiene un entablamento característico.",
+    "categoria": "elementos",
+    "origen": "Italiano intavolamento",
+    "estilos_relacionados": ["neoclasico", "renacimiento", "barroco"]
+  },
+  {
+    "termino": "Existenzminimum",
+    "definicion": "Investigación bauhaus sobre el espacio mínimo habitable digno. Desarrollada en el Congreso Internacional de Arquitectura Moderna (CIAM) de 1929. Influyó decisivamente en el diseño de vivienda social del siglo XX.",
+    "categoria": "conceptos",
+    "origen": "Alemán: 'mínimo existencial'",
+    "estilos_relacionados": ["bauhaus", "modernismo"]
+  },
+  {
+    "termino": "Fachada activa",
+    "definicion": "Fachada que integra sistemas de generación energética (paneles solares, celdas fotovoltaicas) o de regulación térmica (doble piel ventilada, celosías móviles) como parte de su diseño.",
+    "categoria": "sistemas",
+    "origen": "Arquitectura sustentable contemporánea",
+    "estilos_relacionados": ["biofilo-solarpunk", "high-tech-arq"]
+  },
+  {
+    "termino": "Fenestración",
+    "definicion": "Disposición, tamaño y tipo de ventanas y aberturas en una fachada. La fenestración determina la entrada de luz, ventilación y la relación visual entre interior y exterior.",
+    "categoria": "elementos",
+    "origen": "Latín fenestra (ventana)",
+    "estilos_relacionados": ["modernismo", "bauhaus", "gotico"]
+  },
+  {
+    "termino": "Friso",
+    "definicion": "Banda horizontal media del entablamento clásico, entre el arquitrabe y la cornisa. En el orden dórico aparece con triglifos y metopas; en los demás puede ser liso o decorado con relieves.",
+    "categoria": "elementos",
+    "origen": "Latín frisium",
+    "estilos_relacionados": ["neoclasico", "renacimiento", "barroco"]
+  },
+  {
+    "termino": "FSC",
+    "definicion": "Forest Stewardship Council. Organización internacional que certifica que la madera proviene de bosques gestionados de forma responsable, social y ambientalmente. Sello de referencia para madera sustentable.",
+    "categoria": "sustentabilidad",
+    "origen": "Fundado en México, 1993",
+    "estilos_relacionados": ["biofilo-solarpunk", "organicismo"]
+  },
+  {
+    "termino": "Geodésica",
+    "definicion": "Estructura esférica formada por una red de triángulos equiláteros que distribuyen uniformemente las tensiones. Desarrollada por Buckminster Fuller. Máxima resistencia con mínimo material.",
+    "categoria": "estructura",
+    "origen": "Griego geodaisia",
+    "estilos_relacionados": ["organicismo", "high-tech-arq"]
+  },
+  {
+    "termino": "Hempcrete",
+    "definicion": "Material de construcción compuesto de agramiza de cáñamo (interior del tallo) mezclada con cal. Huella de carbono negativa, excelente aislante térmico y acústico, biodegradable. Resistente al fuego y a la humedad.",
+    "categoria": "materiales",
+    "origen": "Francia, 1990s",
+    "estilos_relacionados": ["biofilo-solarpunk", "organicismo"]
+  },
+  {
+    "termino": "Higroscópico",
+    "definicion": "Material que absorbe o cede humedad del ambiente regulando la humedad relativa interior. La madera, el adobe y el corcho son higroscópicos, lo que los hace más confortables que el hormigón o el acero.",
+    "categoria": "materiales",
+    "origen": "Griego hygros (húmedo) + skopeo (observar)",
+    "estilos_relacionados": ["organicismo", "biofilo-solarpunk"]
+  },
+  {
+    "termino": "Hito urbano",
+    "definicion": "Elemento arquitectónico o urbano de referencia que sirve para la orientación en la ciudad. Los hitos pueden ser naturales (cerros) o construidos (torres, monumentos). Concepto de Kevin Lynch en 'La imagen de la ciudad' (1960).",
+    "categoria": "urbanismo",
+    "origen": "Kevin Lynch, 1960",
+    "estilos_relacionados": []
+  },
+  {
+    "termino": "Hygge",
+    "definicion": "Concepto danés-noruego que describe una cualidad de comodidad, calidez y convivialidad que evoca bienestar. Fundamento filosófico del diseño escandinavo e influencia central en el estilo Japandi.",
+    "categoria": "conceptos",
+    "origen": "Danés/Noruego",
+    "estilos_relacionados": ["escandinavo", "japandi", "cottagecore"]
+  },
+  {
+    "termino": "Ichi-go ichi-e",
+    "definicion": "Concepto japonés que significa 'este encuentro, esta única vez'. Filosofía que valora la irrepetibilidad de cada momento. Influye en la estética wabi-sabi y en el diseño japonés en general.",
+    "categoria": "conceptos",
+    "origen": "Japonés: 一期一会",
+    "estilos_relacionados": ["wabi-sabi", "japandi"]
+  },
+  {
+    "termino": "Ikebana",
+    "definicion": "Arte japonés del arreglo floral que busca la armonía entre línea, forma, color y vacío. No imita la naturaleza sino que crea una interpretación de ella. Elemento clave del estilo Japandi y wabi-sabi.",
+    "categoria": "arte",
+    "origen": "Japonés: 生け花 ('flores vivas')",
+    "estilos_relacionados": ["wabi-sabi", "japandi"]
+  },
+  {
+    "termino": "Impluvium",
+    "definicion": "Estanque rectangular hundido en el centro del atrio de la domus romana, destinado a recoger el agua de lluvia que entraba por la abertura cenital (compluvium). Precursor del patio con fuente mediterráneo.",
+    "categoria": "elementos",
+    "origen": "Latín impluvium",
+    "estilos_relacionados": ["neoclasico", "renacimiento"]
+  },
+  {
+    "termino": "Intercolumnio",
+    "definicion": "Espacio entre dos columnas consecutivas. Los órdenes clásicos regulan el intercolumnio en función del diámetro de la columna, garantizando proporciones armónicas.",
+    "categoria": "elementos",
+    "origen": "Latín intercolumnium",
+    "estilos_relacionados": ["neoclasico", "renacimiento"]
+  },
+  {
+    "termino": "Isóptero",
+    "definicion": "Curva que une los puntos desde los que un objeto (escenario, pantalla, obra de arte) tiene la misma visibilidad. Herramienta de diseño para teatros, anfiteatros y museos.",
+    "categoria": "representacion",
+    "origen": "Griego isos (igual) + pteron (vista)",
+    "estilos_relacionados": []
+  },
+  {
+    "termino": "Jamba",
+    "definicion": "Cada uno de los elementos verticales que forman los lados de una puerta, ventana o arco. En la arquitectura gótica, las jambas se multiplican en arquivoltas con figuras escultóricas.",
+    "categoria": "elementos",
+    "origen": "Francés jambe (pierna)",
+    "estilos_relacionados": ["gotico", "renacimiento"]
+  },
+  {
+    "termino": "Japandi",
+    "definicion": "Fusión de los conceptos estéticos japoneses (wabi-sabi, ma, ichi-go ichi-e) con el diseño escandinavo (hygge, funcionalidad, madera clara). Paleta de tierra cálida, materiales naturales y máxima economía de medios.",
+    "categoria": "estilos",
+    "origen": "Tendencia global, 2010s",
+    "estilos_relacionados": ["modernismo", "organicismo"]
+  },
+  {
+    "termino": "Kintsugi",
+    "definicion": "Arte japonés de reparar objetos de cerámica rotos con laca mezclada con oro, plata o platino. La reparación se exhibe orgullosamente. Metáfora del wabi-sabi: la cicatriz y la historia embellecen el objeto.",
+    "categoria": "arte",
+    "origen": "Japonés: 金継ぎ ('unir con oro')",
+    "estilos_relacionados": ["wabi-sabi", "japandi"]
+  },
+  {
+    "termino": "LEED",
+    "definicion": "Leadership in Energy and Environmental Design. Sistema de certificación de edificios sustentables más usado a nivel mundial. Evalúa energía, agua, materiales, calidad del aire interior y localización. Niveles: Certified, Silver, Gold, Platinum.",
+    "categoria": "sustentabilidad",
+    "origen": "US Green Building Council, 1998",
+    "estilos_relacionados": ["biofilo-solarpunk"]
+  },
+  {
+    "termino": "Linterna",
+    "definicion": "Pequeña torreta con ventanas ubicada en la cúspide de una cúpula o bóveda para iluminar el interior. La cúpula del Panteón de Roma tiene un óculo (abertura circular) en lugar de linterna.",
+    "categoria": "elementos",
+    "origen": "Latín lanterna",
+    "estilos_relacionados": ["renacimiento", "barroco", "neoclasico"]
+  },
+  {
+    "termino": "Ma",
+    "definicion": "Concepto japonés de pausa, intervalo o vacío significativo. No es ausencia sino presencia del espacio vacío como elemento compositivo esencial. Influye en la arquitectura japonesa, el jardín zen y el diseño minimalista.",
+    "categoria": "conceptos",
+    "origen": "Japonés: 間",
+    "estilos_relacionados": ["japandi", "wabi-sabi", "minimalismo", "metabolismo"]
+  },
+  {
+    "termino": "Ménsola",
+    "definicion": "Elemento estructural en voladizo que sobresale de un muro para soportar una carga (cornisa, balcón, estantería). Puede ser de piedra, madera, metal o concreto.",
+    "categoria": "estructura",
+    "origen": "Italiano mensola",
+    "estilos_relacionados": ["barroco", "renacimiento"]
+  },
+  {
+    "termino": "Metabolismo",
+    "definicion": "Movimiento arquitectónico japonés de los años 60 que concibió las ciudades y edificios como organismos vivos con células intercambiables. Precursor del pensamiento de la arquitectura flexible y prefabricada.",
+    "categoria": "movimientos",
+    "origen": "Japón, 1960",
+    "estilos_relacionados": ["metabolismo"]
+  },
+  {
+    "termino": "Módulo",
+    "definicion": "Unidad de medida básica a partir de la cual se derivan todas las demás proporciones de un diseño. En la arquitectura clásica, el módulo es el radio de la columna. En arquitectura moderna, puede ser cualquier medida base repetible.",
+    "categoria": "conceptos",
+    "origen": "Latín modulus",
+    "estilos_relacionados": ["neoclasico", "renacimiento", "bauhaus", "metabolismo"]
+  },
+  {
+    "termino": "Muqarnas",
+    "definicion": "Sistema ornamental tridimensional de la arquitectura islámica compuesto por nichos en forma de estalactitas apiladas que cubren cúpulas, trompas y capiteles. Efecto visual de superficie disuelta.",
+    "categoria": "ornamentacion",
+    "origen": "Árabe muqarnas",
+    "estilos_relacionados": []
+  },
+  {
+    "termino": "Nártex",
+    "definicion": "Vestíbulo de entrada de una iglesia paleocristiana o bizantina, antepuesto a la nave principal. Espacio de transición entre el exterior profano y el interior sagrado.",
+    "categoria": "espacios",
+    "origen": "Griego narthex",
+    "estilos_relacionados": ["gotico", "renacimiento"]
+  },
+  {
+    "termino": "Negative space",
+    "definicion": "Espacio vacío o no ocupado que rodea, define y da forma a los elementos principales de una composición. En arquitectura: patios, plazas, vacíos interiores. El espacio negativo es tan importante como el construido.",
+    "categoria": "conceptos",
+    "origen": "Teoría del arte",
+    "estilos_relacionados": ["modernismo", "minimalismo", "japandi"]
+  },
+  {
+    "termino": "Óculo",
+    "definicion": "Abertura circular en el vértice de una cúpula o en un muro, que introduce luz cenital. El más famoso: el óculo del Panteón de Roma (27 m de diámetro), único punto de iluminación del edificio.",
+    "categoria": "elementos",
+    "origen": "Latín oculus (ojo)",
+    "estilos_relacionados": ["renacimiento", "neoclasico", "barroco"]
+  },
+  {
+    "termino": "Ojiva / Arco ojival",
+    "definicion": "Arco formado por dos curvas iguales que se cortan en un vértice superior. Permite cubrir vanos más amplios con menor empuje lateral que el arco de medio punto. Elemento estructural y visual definitorio del Gótico.",
+    "categoria": "estructura",
+    "origen": "Francés ogive",
+    "estilos_relacionados": ["gotico"]
+  },
+  {
+    "termino": "Orden arquitectónico",
+    "definicion": "Sistema de proporciones y elementos que rige el diseño de columnas y entablamentos en la arquitectura clásica. Los cinco órdenes canónicos: dórico, jónico, corintio (griegos) y toscano y compuesto (romanos).",
+    "categoria": "sistemas",
+    "origen": "Grecia antigua",
+    "estilos_relacionados": ["neoclasico", "renacimiento", "barroco"]
+  },
+  {
+    "termino": "Parametricismo",
+    "definicion": "Estilo arquitectónico surgido a fines del siglo XX que utiliza software de modelado paramétrico para generar formas complejas no euclidianas. Las geometrías emergen de algoritmos, no de intuición manual.",
+    "categoria": "movimientos",
+    "origen": "Patrik Schumacher, 2008",
+    "estilos_relacionados": ["deconstructivismo"]
+  },
+  {
+    "termino": "Passive House (Passivhaus)",
+    "definicion": "Estándar de construcción ultra-eficiente que casi elimina el consumo de calefacción y refrigeración mediante aislación extrema, hermeticidad al aire, ventilación con recuperación de calor y orientación solar óptima.",
+    "categoria": "sustentabilidad",
+    "origen": "Alemania, Wolfgang Feist, 1991",
+    "estilos_relacionados": ["biofilo-solarpunk"]
+  },
+  {
+    "termino": "Peristilo",
+    "definicion": "Columnata que rodea un patio interior (domus romana) o el exterior de un templo griego. Crea un espacio de transición porticado entre el exterior y el interior.",
+    "categoria": "espacios",
+    "origen": "Griego peristylos",
+    "estilos_relacionados": ["neoclasico", "renacimiento"]
+  },
+  {
+    "termino": "Pilotes",
+    "definicion": "Pilares que elevan el cuerpo del edificio del suelo, dejando la planta baja libre. Uno de los Cinco Puntos de la Nueva Arquitectura de Le Corbusier. Permite continuidad del espacio público bajo el edificio.",
+    "categoria": "estructura",
+    "origen": "Francés pilotis",
+    "estilos_relacionados": ["modernismo", "bauhaus"]
+  },
+  {
+    "termino": "Planta libre",
+    "definicion": "Sistema estructural en el que los pilares soportan la carga, liberando los tabiques de función portante. El espacio interior puede organizarse libremente. Segundo de los Cinco Puntos de Le Corbusier.",
+    "categoria": "sistemas",
+    "origen": "Le Corbusier, 1927",
+    "estilos_relacionados": ["modernismo", "bauhaus", "brutalismo"]
+  },
+  {
+    "termino": "Porticado / Pórtico",
+    "definicion": "Espacio cubierto con columnas en su frente exterior que sirve de transición entre el exterior y el edificio. El Partenón y la Lincoln Memorial tienen pórticos. Hoy usados en arquitectura pública y viviendas de clima cálido.",
+    "categoria": "espacios",
+    "origen": "Latín porticus",
+    "estilos_relacionados": ["neoclasico", "renacimiento", "barroco"]
+  },
+  {
+    "termino": "Programa arquitectónico",
+    "definicion": "Lista detallada de todos los espacios necesarios en un proyecto, con sus superficies, relaciones funcionales y requerimientos específicos. El programa es el punto de partida del diseño antes de cualquier forma.",
+    "categoria": "proceso",
+    "origen": "Arquitectura moderna",
+    "estilos_relacionados": []
+  },
+  {
+    "termino": "Sección áurea",
+    "definicion": "Proporción matemática (≈ 1:1.618) que aparece recurrentemente en la naturaleza y fue usada conscientemente en el arte y la arquitectura desde la antigüedad. También llamada número φ (phi) o divina proporción.",
+    "categoria": "conceptos",
+    "origen": "Euclides, ~300 a.C.",
+    "estilos_relacionados": ["renacimiento", "neoclasico"]
+  },
+  {
+    "termino": "Sillería",
+    "definicion": "Obra de mampostería construida con piedras labradas (sillares) colocadas en hiladas horizontales. La sillería almohadillada, con los sillares en resalte, es característica del Renacimiento italiano.",
+    "categoria": "materiales",
+    "origen": "Español técnico",
+    "estilos_relacionados": ["renacimiento", "neoclasico"]
+  },
+  {
+    "termino": "Solarpunk",
+    "definicion": "Movimiento estético y político que imagina un futuro donde la tecnología limpia, la naturaleza exuberante y la justicia social coexisten en armonía. Surgido de la ficción especulativa, influyó decisivamente en la arquitectura biofílica contemporánea.",
+    "categoria": "movimientos",
+    "origen": "Ficción especulativa, 2008",
+    "estilos_relacionados": ["biofilo-solarpunk"]
+  },
+  {
+    "termino": "Tabique",
+    "definicion": "Pared delgada no estructural que divide espacios interiores sin soportar cargas. A diferencia de los muros portantes, los tabiques pueden removerse o reubicarse. La planta libre modernista los hace prescindibles.",
+    "categoria": "elementos",
+    "origen": "Árabe tabique",
+    "estilos_relacionados": ["modernismo", "bauhaus"]
+  },
+  {
+    "termino": "Tapia / Tapial",
+    "definicion": "Técnica constructiva de tierra apisonada entre dos tableros (encofrado) que se rellenan y compactan por capas. Las paredes resultantes tienen alta inercia térmica y son completamente naturales. En uso desde hace 9000 años.",
+    "categoria": "materiales",
+    "origen": "Español, del árabe tabiyya",
+    "estilos_relacionados": ["organicismo", "biofilo-solarpunk"]
+  },
+  {
+    "termino": "Tensegrity",
+    "definicion": "Sistema estructural en el que barras rígidas comprimidas flotan en una red de cables a tensión, sin tocarse entre sí. Desarrollado por Buckminster Fuller. Máxima ligereza estructural.",
+    "categoria": "estructura",
+    "origen": "Buckminster Fuller: tensional integrity",
+    "estilos_relacionados": ["deconstructivismo", "high-tech-arq"]
+  },
+  {
+    "termino": "Terrazzo",
+    "definicion": "Pavimento compuesto de fragmentos de mármol, cuarzo, granito o vidrio embebidos en cemento o resina y pulidos hasta obtener una superficie lisa y brillante. Origen veneciano, muy popular en el modernismo y hoy en revival.",
+    "categoria": "materiales",
+    "origen": "Italiano, Venecia",
+    "estilos_relacionados": ["art-deco", "modernismo", "bauhaus"]
+  },
+  {
+    "termino": "Tímpano",
+    "definicion": "Superficie triangular delimitada por el frontón y la cornisa horizontal en la arquitectura clásica. En el románico y el gótico: espacio semicircular sobre el dintel de un portal, frecuentemente decorado con relieves.",
+    "categoria": "elementos",
+    "origen": "Griego tympanon (tambor)",
+    "estilos_relacionados": ["gotico", "neoclasico", "renacimiento"]
+  },
+  {
+    "termino": "Tokonoma",
+    "definicion": "Nicho o alcoba ornamental en la habitación tradicional japonesa destinado a exhibir objetos seleccionados (kakemono, ikebana, cerámica). Espacio de contemplación que marca el punto focal del cuarto.",
+    "categoria": "espacios",
+    "origen": "Japonés: 床の間",
+    "estilos_relacionados": ["japandi", "wabi-sabi"]
+  },
+  {
+    "termino": "Trompe l'oeil",
+    "definicion": "Técnica pictórica que crea la ilusión óptica de tridimensionalidad en superficies planas. Muy usada en el Barroco para ampliar visualmente espacios reducidos o continuar arquitecturas reales con elementos pintados.",
+    "categoria": "ornamentacion",
+    "origen": "Francés: 'engaña al ojo'",
+    "estilos_relacionados": ["barroco", "renacimiento"]
+  },
+  {
+    "termino": "Vernacular",
+    "definicion": "Arquitectura producida localmente sin participación de arquitectos profesionales, usando materiales del entorno y técnicas transmitidas por tradición. Responde perfectamente al clima, la cultura y los recursos locales.",
+    "categoria": "conceptos",
+    "origen": "Latín vernaculus (doméstico, nativo)",
+    "estilos_relacionados": ["organicismo", "biofilo-solarpunk"]
+  },
+  {
+    "termino": "Vitral / Vidriera",
+    "definicion": "Composición decorativa y estructural de vidrios de colores unidos por perfiles de plomo. En la arquitectura gótica, los vitrales son la piel del edificio: el muro desaparece y se convierte en luz coloreada.",
+    "categoria": "elementos",
+    "origen": "Medieval europeo",
+    "estilos_relacionados": ["gotico", "art-nouveau"]
+  },
+  {
+    "termino": "Voladizo",
+    "definicion": "Elemento estructural que se proyecta horizontalmente más allá de su punto de apoyo, sin soporte en su extremo libre. Sinónimo: cantilever. Requiere cálculo preciso de momentos flectores y contrapesos.",
+    "categoria": "estructura",
+    "origen": "Español técnico",
+    "estilos_relacionados": ["modernismo", "organicismo", "brutalismo", "deconstructivismo"]
+  },
+  {
+    "termino": "Wabi-Sabi",
+    "definicion": "Concepto estético japonés que percibe belleza en lo imperfecto (wabi), lo incompleto y lo efímero (sabi). Opuesto a la perfección clásica occidental. Base filosófica del diseño japonés contemporáneo y del estilo Japandi.",
+    "categoria": "conceptos",
+    "origen": "Japonés: 侘寂",
+    "estilos_relacionados": ["wabi-sabi", "japandi"]
+  },
+  {
+    "termino": "Xeriscape",
+    "definicion": "Técnica de paisajismo sustentable diseñada para minimizar o eliminar el riego artificial mediante el uso de plantas adaptadas al clima local, cobertura del suelo y diseño inteligente del agua.",
+    "categoria": "paisajismo",
+    "origen": "Inglés, Denver Water, 1981. Del griego xero (seco)",
+    "estilos_relacionados": ["brutalismo", "biofilo-solarpunk"]
+  },
+  {
+    "termino": "Zenith / Luz cenital",
+    "definicion": "Iluminación natural que ingresa desde la parte superior (techo, cúpula, lucernario). La luz cenital es más pareja, libre de reflejos y sombras duras que la lateral. Preferida para museos y espacios contemplativos.",
+    "categoria": "iluminacion",
+    "origen": "Árabe samt ar-ras (camino sobre la cabeza)",
+    "estilos_relacionados": ["barroco", "renacimiento", "modernismo"]
+  }
+]
