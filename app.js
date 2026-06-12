@@ -122,7 +122,7 @@ function drawLote(id, frente, Z, tipo) {
   ctx.fillStyle = '#fbfbfa'; ctx.fillRect(0, 0, W, H);
 
   const A = Math.PI / 6, S = 10.5;
-  const cx = W / 2 + 45, cy = 130; // Centered vertically and horizontally for the isometric lot
+  const cx = W / 2, cy = 145;
   function ix(x, y)   { return cx + (x - y) * Math.cos(A) * S; }
   function iy(x, y, z){ return cy + (x + y) * Math.sin(A) * S - z * S; }
   function ip(x, y, z){ return { x: ix(x, y), y: iy(x, y, z) }; }
@@ -158,7 +158,7 @@ function drawLote(id, frente, Z, tipo) {
   ctx.save();
   ctx.strokeStyle = 'rgba(44, 62, 80, 0.04)';
   ctx.lineWidth = 0.5;
-  for (let i = -40; i < 70; i += 4) {
+  for (let i = -18; i < 55; i += 4) {
     const a = ip(i, -10, 0), b = ip(i, lotD + 10, 0);
     ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
     const c = ip(-10, i, 0), d = ip(lotW + 10, i, 0);
@@ -1308,7 +1308,7 @@ function renderDesignPrinciples() {
   const vbx=800,vby=440;
   const gx=260,gx2=540,gy=340,py=90,px=400;
   const eveX=180,wwY=265,wH=55;
-  let S = `<svg viewBox="0 0 ${vbx} ${vby}" style="width:100%;max-width:800px;height:auto;display:block;margin:0 auto 20px;border:1px solid var(--outline-variant,#c5c6ca);background:linear-gradient(to bottom, #f9fbfd, #ffffff)">
+  let S = `<svg viewBox="0 0 ${vbx} ${vby}" style="width:100%;height:auto;display:block;margin:0 auto 28px;border:1px solid var(--outline-variant,#c5c6ca);background:linear-gradient(to bottom, #f9fbfd, #ffffff)">
   <defs>
     <marker id="arrS" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#EF9F27"/></marker>
     <marker id="arrW" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#3B8BD4"/></marker>
@@ -1334,97 +1334,62 @@ function renderDesignPrinciples() {
       .g-interactive:hover { filter: saturate(1.4) drop-shadow(0 0 5px rgba(239,159,39,0.5)); opacity: 1 !important; }
     </style>
   </defs>
-
-  <!-- Sky gradient -->
   <rect x="0" y="0" width="800" height="${gy}" fill="url(#skyGrad)"/>
-
-  <!-- Ground -->
   <rect x="0" y="${gy}" width="800" height="100" fill="#e2dacc" stroke="#cbbca6" stroke-width="0.5"/>
   <rect x="0" y="${gy+4}" width="800" height="96" fill="#d0c4b2"/>
   <path d="M0 ${gy} Q200 ${gy-4} 400 ${gy} Q600 ${gy+4} 800 ${gy}" fill="none" stroke="#b2a490" stroke-width="1.5"/>
-
-  <!-- Foundations (underground structural concrete detail) -->
   <g class="g-el" opacity="0.85">
     <rect x="${gx-10}" y="${gy}" width="20" height="22" fill="#bdc3c7" stroke="#7f8c8d" stroke-width="0.8"/>
     <rect x="${gx2-10}" y="${gy}" width="20" height="22" fill="#bdc3c7" stroke="#7f8c8d" stroke-width="0.8"/>
     <line x1="${gx-10}" y1="${gy+8}" x2="${gx+10}" y2="${gy+8}" stroke="#7f8c8d" stroke-width="0.5"/>
     <line x1="${gx2-10}" y1="${gy+8}" x2="${gx2+10}" y2="${gy+8}" stroke="#7f8c8d" stroke-width="0.5"/>
   </g>
-
-  <!-- House Wall & Slab Fill -->
   <polygon class="g-el" points="${gx},${gy} ${gx},${py} ${gx2},${py} ${gx2},${gy}" fill="url(#wallGrad)" stroke="#2c3e50" stroke-width="1.2"/>
-
-  <!-- Roof structure with tile pattern -->
   <polygon class="g-el" points="${gx-10},${py} ${px},${py-50} ${gx2+10},${py}" fill="#d35400" stroke="#a03020" stroke-width="1.2"/>
   <polygon class="g-el" points="${gx-8},${py} ${px},${py-47} ${gx2+8},${py}" fill="url(#roofTiles)" opacity="0.35"/>
-
-  <!-- Roof Beam/Truss structure -->
   <line x1="${gx}" y1="${py}" x2="${gx2}" y2="${py}" stroke="#2c3e50" stroke-width="1.5"/>
   <line x1="${px}" y1="${py-50}" x2="${px}" y2="${py}" stroke="#2c3e50" stroke-width="0.8" stroke-dasharray="2,2"/>
-
-  <!-- Eave (Alero) -->
   <g class="g-interactive" opacity="0.95">
     <polygon points="${gx},${py} ${eveX},${py+10} ${eveX},${py+18} ${gx},${py+8}" fill="#d35400" stroke="#a03020" stroke-width="1"/>
     <line x1="${eveX}" y1="${py+10}" x2="${eveX}" y2="${py+18}" stroke="#a03020" stroke-width="1"/>
     <text x="${eveX+6}" y="${py+32}" style="font-size:10px;font-family:'JetBrains Mono';fill:#a03020;font-weight:700">Alero</text>
   </g>
-
-  <!-- Floor slab (Concrete base) -->
   <rect x="${gx}" y="${gy-8}" width="${gx2-gx}" height="8" fill="#bdc3c7" stroke="#2c3e50" stroke-width="1"/>
-
-  <!-- Insulation indicators (Yellow/orange layered texture in the North wall) -->
   <g class="g-interactive" opacity="0.9">
     <rect x="${gx+8}" y="${py+10}" width="6" height="235" rx="3" fill="#f39c12" stroke="#d35400" stroke-width="0.5"/>
     <text x="${gx+18}" y="${py+60}" style="font-size:8px;font-family:'JetBrains Mono';fill:#d35400;font-weight:700">Aislación Térmica</text>
   </g>
-
-  <!-- Thermal Mass Indicator (floor text/icon) -->
   <g class="g-interactive" opacity="0.85">
     <text x="${px}" y="${gy-14}" style="font-size:10px;font-family:'Hanken Grotesk';fill:#2c3e50;font-weight:700;text-anchor:middle">🧱 Masa Térmica (Suelo y Cimientos)</text>
   </g>
-
-  <!-- North window detail -->
   <g class="g-interactive" opacity="0.95">
     <rect x="${gx-4}" y="${wwY}" width="8" height="${wH}" rx="1" fill="#ebf5fb" stroke="#2980b9" stroke-width="1"/>
     <line x1="${gx}" y1="${wwY}" x2="${gx}" y2="${wwY+wH}" stroke="#2980b9" stroke-width="0.8"/>
     <line x1="${gx-4}" y1="${wwY+wH/2}" x2="${gx+4}" y2="${wwY+wH/2}" stroke="#2980b9" stroke-width="0.8"/>
     <text x="${gx+14}" y="${wwY+wH/2}" style="font-size:9px;font-family:'JetBrains Mono';fill:#2980b9;font-weight:700;text-anchor:start">Ventana Norte (Captación)</text>
   </g>
-
-  <!-- South window detail -->
   <g class="g-interactive" opacity="0.9">
     <rect x="${gx2-4}" y="${wwY+10}" width="8" height="34" rx="1" fill="#ebf5fb" stroke="#2980b9" stroke-width="1"/>
     <line x1="${gx2}" y1="${wwY+10}" x2="${gx2}" y2="${wwY+44}" stroke="#2980b9" stroke-width="0.8"/>
     <text x="${gx2-14}" y="${wwY+27}" style="font-size:9px;font-family:'JetBrains Mono';fill:#2980b9;font-weight:700;text-anchor:end">Ventana Sur</text>
   </g>
-
-  <!-- Summer sun radiation -->
   <g class="g-interactive" opacity="0.9">
     <line x1="${eveX-60}" y1="30" x2="${eveX}" y2="${py+10}" stroke="#EF9F27" stroke-width="2.5" stroke-dasharray="6,4" marker-end="url(#arrS)"/>
     <line x1="${eveX-50}" y1="20" x2="${eveX+10}" y2="${py+5}" stroke="#EF9F27" stroke-width="1" stroke-dasharray="4,4" opacity=".5"/>
     <line x1="${eveX-70}" y1="40" x2="${eveX-10}" y2="${py+15}" stroke="#EF9F27" stroke-width="1" stroke-dasharray="4,4" opacity=".4"/>
     <text x="${eveX-75}" y="18" style="font-size:11px;font-family:'JetBrains Mono';fill:#EF9F27;font-weight:700">Verano 88° (Bloqueado)</text>
   </g>
-
-  <!-- Winter sun radiation -->
   <g class="g-interactive" opacity="0.9">
     <line x1="10" y1="${py+100}" x2="${gx}" y2="${wwY+25}" stroke="#3B8BD4" stroke-width="2.5" stroke-dasharray="6,4" marker-end="url(#arrW)"/>
     <line x1="22" y1="${py+88}" x2="${gx}" y2="${wwY+15}" stroke="#3B8BD4" stroke-width="1" stroke-dasharray="4,4" opacity=".5"/>
     <line x1="-2" y1="${py+112}" x2="${gx-8}" y2="${wwY+35}" stroke="#3B8BD4" stroke-width="1" stroke-dasharray="4,4" opacity=".4"/>
     <text x="14" y="${py+120}" style="font-size:11px;font-family:'JetBrains Mono';fill:#3B8BD4;font-weight:700">Invierno 41° (Ingresa)</text>
   </g>
-
-  <!-- Ventilation arrows (ANIMATED SVG LINES) -->
   <g class="g-interactive" opacity="0.9">
-    <!-- Main flow -->
     <path d="M ${gx-30} ${wwY+25} Q ${gx+40} ${wwY-15} ${px} ${wwY+15} T ${gx2+30} ${wwY+25}" stroke="#2ecc71" stroke-width="2.2" fill="none" class="wind-line" marker-end="url(#arrV)"/>
-    <!-- Secondary flow -->
     <path d="M ${gx-35} ${wwY+35} Q ${gx+30} ${gy-20} ${px} ${gy-30} T ${gx2+35} ${wwY+30}" stroke="#2ecc71" stroke-width="1.5" fill="none" class="wind-line-slow" opacity="0.6" marker-end="url(#arrV)"/>
-    
     <text x="${px}" y="${wwY-3}" style="font-size:10px;font-family:'Hanken Grotesk';fill:#27ae60;font-weight:700;text-anchor:middle">🌬️ Ventilación Cruzada Natural</text>
   </g>
-
-  <!-- Tree (deciduous north side) -->
   <g class="g-interactive" opacity="0.95">
     <rect x="140" y="${gy-20}" width="8" height="20" fill="#78341a"/>
     <circle cx="144" cy="${gy-42}" r="22" fill="#27ae60" opacity=".8"/>
@@ -1433,18 +1398,19 @@ function renderDesignPrinciples() {
     <text x="144" y="${gy-70}" style="font-size:9px;font-family:'JetBrains Mono';fill:#27ae60;font-weight:700;text-anchor:middle">Caducifolio</text>
     <text x="144" y="${gy-60}" style="font-size:7.5px;font-family:'Hanken Grotesk';fill:#7f8c8d;text-anchor:middle">Sombra en verano / Sol en invierno</text>
   </g>
-
-  <!-- North indicator -->
   <text x="20" y="32" style="font-size:11px;font-family:'JetBrains Mono';fill:#2c3e50;font-weight:700">Norte ←</text>
 </svg>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;padding:0 2px">`;
+<div class="principles-grid-inner">`;
+  const catColors = { orientacion:'#3B8BD4', cubierta:'#d35400', ventilacion:'#27ae60', masa:'#8e44ad', sombreado:'#EF9F27', forma:'#2c3e50' };
   DESIGN_PRINCIPLES.forEach(p => {
-    S += `<div style="display:flex;gap:6px;padding:8px;background:var(--surface-container-low,#f3f4f5);border:1px solid var(--outline-variant,#c5c6ca);align-items:flex-start">
-      <span style="font-size:16px;flex-shrink:0;margin-top:1px">${p.icon}</span>
-      <div style="flex:1;min-width:0">
-        <div style="font-size:10px;font-weight:600;margin-bottom:2px;color:var(--on-surface,#191c1d)">${p.title}</div>
-        <div style="font-size:9px;color:var(--on-surface-variant,#44474a);line-height:1.5">${p.desc}</div>
-        <div style="font-size:8px;color:var(--outline,#75777a);margin-top:3px;padding-top:3px;border-top:1px solid var(--outline-variant,#c5c6ca);font-style:italic;line-height:1.4">💡 ${p.why}</div>
+    const cc = catColors[p.cat] || '#555';
+    S += `<div class="principle-card" style="border-top-color:${cc}">
+      <div class="principle-icon">${p.icon}</div>
+      <div class="principle-body">
+        <span class="principle-badge" style="background:${cc}15;color:${cc}">${p.cat}</span>
+        <div class="principle-title">${p.title}</div>
+        <div class="principle-desc">${p.desc}</div>
+        <div class="principle-why">💡 ${p.why}</div>
       </div>
     </div>`;
   });
