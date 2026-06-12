@@ -27,6 +27,9 @@
     <button class="theme-toggle" onclick="toggleThemePanel()" title="Temas visuales">
       <span>🎨</span> Temas
     </button>
+    <button class="theme-toggle" onclick="toggleGlossary()" title="Glosario de términos" style="margin-left:4px">
+      <span>📖</span> Glosario
+    </button>
   </header>
 
   <!-- THEME PANEL -->
@@ -114,6 +117,12 @@
           </div>
 
           <button class="btn-go" onclick="generar()">Generar recomendaciones →</button>
+
+          <!-- PRINCIPIOS DE DISEÑO -->
+          <div style="margin-top:16px">
+            <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">📐 Principios de diseño rápido</div>
+            <div class="principles-grid" id="principles-grid"></div>
+          </div>
         </div>
 
         <!-- COLUMNA DERECHA: resultado -->
@@ -226,6 +235,27 @@
           </div>
         </div>
 
+        <!-- CALCULADORA DE ALERO -->
+        <div class="ht-card">
+          <h3 class="ht-card-title">☀️ Calculadora de alero / voladizo</h3>
+          <p class="ht-card-sub">Dimensioná el alero óptimo para fachada norte según altura de ventana y antepecho.</p>
+          <div class="eave-body">
+            <div class="eave-row">
+              <label>Altura de ventana (cm)</label>
+              <input type="number" id="eave-wh" value="200" min="50" max="400" oninput="calcEave()">
+            </div>
+            <div class="eave-row">
+              <label>Antepecho (altura alféizar, cm)</label>
+              <input type="number" id="eave-sh" value="20" min="0" max="200" oninput="calcEave()">
+            </div>
+            <div class="eave-row">
+              <label>Ancho de ventana (cm)</label>
+              <input type="number" id="eave-wd" value="150" min="30" max="600" oninput="calcEave()">
+            </div>
+            <div class="eave-result" id="eave-result"></div>
+          </div>
+        </div>
+
         <!-- COMPARADOR DE ZONAS -->
         <div class="ht-card ht-card-wide">
           <h3 class="ht-card-title">📊 Comparador de zonas climáticas</h3>
@@ -233,10 +263,27 @@
           <div class="zc-body" id="zc-body"></div>
         </div>
 
+        <!-- MATRIZ ESTRATEGIAS × ZONAS -->
+        <div class="ht-card ht-card-wide">
+          <h3 class="ht-card-title">🔗 Matriz de estrategias × zonas</h3>
+          <p class="ht-card-sub">Vista rápida de qué estrategias pasivas aplicar en cada zona climática.</p>
+          <div id="strat-matrix"></div>
+        </div>
+
       </div>
     </div>
 
   </div>
+
+  <!-- GLOSARIO PANEL -->
+  <div class="glossary-panel" id="glossary-panel">
+    <div class="glossary-head">
+      <span class="glossary-title">📖 Glosario bioclimático</span>
+      <button class="glossary-close" onclick="closeGlossary()">✕</button>
+    </div>
+    <div class="glossary-list" id="glossary-list"></div>
+  </div>
+  <div class="glossary-overlay" id="glossary-overlay" onclick="closeGlossary()"></div>
 
   <!-- FOOTER -->
   <footer class="ftr">

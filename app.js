@@ -13,7 +13,8 @@ function go(id, btn) {
   document.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
   document.getElementById('p-' + id).classList.add('on');
   btn.classList.add('on');
-  if (id === 'guia') setTimeout(initMap, 100);
+  if (id === 'guia') { setTimeout(initMap, 100); initGuia(); }
+  if (id === 'herramientas') initHerramientas();
 }
 
 /* ── MAPA ── */
@@ -654,6 +655,7 @@ function selZone(i) {
         <div class="sbox"><div class="v" style="font-size:11px">${z.viento}</div><div class="l">Viento</div></div>
       </div>
       <div style="font-size:13px;margin-bottom:12px"><strong>Reto:</strong> ${z.reto}</div>
+      ${renderCities(z.id)}
       <div class="dgrid">
         <div class="dbox"><h4>Rosa de vientos</h4>${wrose(z)}</div>
         <div class="dbox"><h4>Trayectoria solar — Perfil E→O</h4>${sunpath()}</div>
@@ -1106,6 +1108,182 @@ function initHerramientas() {
   tcInit();
   calcRainwater();
   zcInit();
+  eaveInit();
+  renderStratMatrix();
+}
+function initGuia() {
+  renderDesignPrinciples();
+}
+
+/* ══════════════════════════════════════
+   CALCULADORA DE ALERO
+══════════════════════════════════════ */
+function calcEave() {
+  const lat = -25;
+  const wh = parseFloat(document.getElementById('eave-wh').value) || 200;
+  const sh = parseFloat(document.getElementById('eave-sh').value) || 20;
+  const wd = parseFloat(document.getElementById('eave-wd').value) || 15;
+  const latRad = lat * Math.PI / 180;
+
+  const decSummer = -23.5 * Math.PI / 180;
+  const decWinter = 23.5 * Math.PI / 180;
+
+  function noonAlt(dec) {
+    return Math.PI/2 - Math.abs(latRad - dec);
+  }
+
+  const altSummer = noonAlt(decSummer) * 180 / Math.PI;
+  const altWinter = noonAlt(decWinter) * 180 / Math.PI;
+
+  const tanS = Math.tan(altSummer * Math.PI / 180);
+  const tanW = Math.tan(altWinter * Math.PI / 180);
+
+  const eaveOpt = (wh - sh) / tanS;
+  const eaveMax = (wh - sh) / tanW;
+  const eaveMin = wh / tanS;
+
+  const eaveRec = Math.round(Math.max(eaveOpt, Math.min(eaveMin, 80)));
+
+  const el = document.getElementById('eave-result');
+  el.innerHTML = `
+    <div class="eave-numbers">
+      <div class="eave-num">
+        <span class="eave-val">${eaveRec} cm</span>
+        <span class="eave-lbl">Voladizo recomendado</span>
+      </div>
+      <div class="eave-num">
+        <span class="eave-val">${eaveOpt.toFixed(0)} cm</span>
+        <span class="eave-lbl">Mín. para sombra jul</span>
+      </div>
+      <div class="eave-num">
+        <span class="eave-val">${eaveMin.toFixed(0)} cm</span>
+        <span class="eave-lbl">Máx. para sol jun</span>
+      </div>
+    </div>
+    <div class="eave-chart">
+      <svg viewBox="0 0 280 140" width="100%">
+        <rect x="100" y="20" width="140" height="100" fill="var(--bg2)" stroke="var(--border2)" stroke-width="0.8" rx="4"/>
+        <rect x="100" y="20" width="140" height="10" fill="#D85A30" rx="2"/>
+        <line x1="100" y1="60" x2="240" y2="60" stroke="var(--text3)" stroke-width="0.5" stroke-dasharray="3,2"/>
+        <text x="155" y="58" style="font-size:7px;fill:var(--text3);text-anchor:middle">Ventana ${wh} cm</text>
+        <line x1="100" y1="30" x2="100" y2="120" stroke="var(--border2)" stroke-width="0.8"/>
+        <line x1="145" y1="50" x2="145" y2="120" stroke="var(--accent)" stroke-width="1.5"/>
+        <text x="122" y="130" style="font-size:8px;fill:var(--accent);text-anchor:middle;font-weight:600">Alero ${eaveRec} cm</text>
+        <text x="250" y="90" style="font-size:8px;fill:#EF9F27;text-anchor:start">Verano 88°</text>
+        <text x="250" y="105" style="font-size:8px;fill:#3B8BD4;text-anchor:start">Invierno 41°</text>
+        <line x1="100" y1="120" x2="100" y2="128" stroke="var(--border2)" stroke-width="0.8"/>
+        <line x1="145" y1="120" x2="145" y2="128" stroke="var(--accent)" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="eave-tip">
+      💡 Para ventana de ${wh} cm de alto con antepecho de ${sh} cm en latitud 25°S:
+      un voladizo de <strong>${eaveRec} cm</strong> bloquea el sol de verano (${altSummer.toFixed(0)}°)
+      y permite el de invierno (${altWinter.toFixed(0)}°).
+      ${eaveRec < 40 ? ' Considerá aumentar la altura de la ventana o usar protección vegetal adicional.' : ''}
+      ${eaveRec > 100 ? ' El voladizo es muy largo — usá pérgola o celosía horizontal como complemento.' : ''}
+    </div>`;
+}
+
+function eaveInit() {
+  calcEave();
+}
+
+/* ══════════════════════════════════════
+   GLOSARIO
+══════════════════════════════════════ */
+function toggleGlossary() {
+  const panel = document.getElementById('glossary-panel');
+  const overlay = document.getElementById('glossary-overlay');
+  if (!panel) return;
+  const open = panel.classList.toggle('open');
+  overlay.classList.toggle('visible', open);
+  if (open) renderGlossary();
+}
+function closeGlossary() {
+  const panel = document.getElementById('glossary-panel');
+  const overlay = document.getElementById('glossary-overlay');
+  if (panel) panel.classList.remove('open');
+  if (overlay) overlay.classList.remove('visible');
+}
+function renderGlossary() {
+  const el = document.getElementById('glossary-list');
+  if (!el) return;
+  el.innerHTML = GLOSSARY.map(g => `
+    <div class="gl-item">
+      <div class="gl-term">${g.term}</div>
+      <div class="gl-def">${g.def}</div>
+    </div>`).join('');
+}
+
+/* ══════════════════════════════════════
+   MATRIZ ESTRATEGIAS × ZONAS
+══════════════════════════════════════ */
+function renderStratMatrix() {
+  const el = document.getElementById('strat-matrix');
+  if (!el) return;
+  const zoneIds = ZONES.map(z => z.id);
+  const zoneNames = ZONES.map(z => z.name);
+  const strategies = STRATS;
+  const compat = {
+    subtropical: ['ventilacion','sombreado','masa','cubierta','forma'],
+    chaco: ['masa','ventilacion','cubierta','forma','sombreado'],
+    misionero: ['ventilacion','cubierta','sombreado','forma','masa'],
+    transicion: ['ventilacion','masa','sombreado','cubierta','forma'],
+  };
+
+  const catIcons = { ventilacion:'🌬️', sombreado:'☀️', masa:'🧱', cubierta:'🏠', forma:'📐' };
+
+  let html = `<table class="sm-table"><thead><tr><th>Estrategia</th>${zoneNames.map(n => `<th>${n}</th>`).join('')}</tr></thead><tbody>`;
+  strategies.forEach(s => {
+    const cat = s.cat;
+    html += `<tr><td><span class="sm-icon">${s.icon}</span> ${s.name}</td>`;
+    zoneIds.forEach((zid, zi) => {
+      const applicable = s.tags.some(t => t === 'Todas las zonas' || t === ZONES[zi].name || t === ZONES[zi].id || t.slice(0,3) === zid.slice(0,3));
+      html += applicable
+        ? `<td class="sm-yes" title="Aplicable en ${ZONES[zi].name}">✅</td>`
+        : `<td class="sm-no" title="No prioritario en ${ZONES[zi].name}">—</td>`;
+    });
+    html += `</tr>`;
+  });
+  html += '</tbody></table>';
+  html += `<div class="sm-legend">✅ Aplicable · — No prioritario · Evalúa según condiciones específicas del lote</div>`;
+  el.innerHTML = html;
+}
+
+/* ══════════════════════════════════════
+   PRINCIPIOS DE DISEÑO
+══════════════════════════════════════ */
+function renderDesignPrinciples() {
+  const el = document.getElementById('principles-grid');
+  if (!el) return;
+  el.innerHTML = DESIGN_PRINCIPLES.map(p => `
+    <div class="dp-card">
+      <div class="dp-icon">${p.icon}</div>
+      <div class="dp-body">
+        <h4 class="dp-title">${p.title}</h4>
+        <p class="dp-desc">${p.desc}</p>
+        <div class="dp-why">💡 ${p.why}</div>
+      </div>
+    </div>`).join('');
+}
+
+/* ══════════════════════════════════════
+   CIUDADES (in zona detail)
+══════════════════════════════════════ */
+function renderCities(zid) {
+  const cities = CITIES[zid];
+  if (!cities) return '';
+  return `<div class="zcities" style="margin-top:12px">
+    <h4 style="font-size:10px;font-weight:600;margin-bottom:6px;color:var(--text3);text-transform:uppercase;letter-spacing:0.3px">🌆 Datos por ciudad</h4>
+    <div class="zcities-grid">
+      ${cities.map(c => `
+        <div class="zcities-card">
+          <strong>${c.name}</strong>
+          <span style="display:block;font-size:10px;color:var(--text2);margin:4px 0">${c.temp} · ${c.hum}</span>
+          <span style="display:block;font-size:10px;color:var(--text3)">💧 ${c.lluvia} · 🏔️ ${c.alt} · 💨 ${c.viento}</span>
+        </div>`).join('')}
+    </div>
+  </div>`;
 }
 
 /* ── LOCALSTORAGE ── */

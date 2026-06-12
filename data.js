@@ -140,3 +140,70 @@ const PLANTAS = [
   { nombre:'Victoria regia',      ci:'Victoria cruziana',        uso:'exterior', cat:'acuatica',   il:()=>sC('#6AB84A'),              bg:'#eaf7ee', desc:'Planta acuática nativa del Paraguay. Hojas flotantes de hasta 1.5 m de diámetro. Ideal para espejos de agua ornamentales en jardines.', at:[{i:'📏',t:'Hojas 1–1.5 m'},{i:'☀️',t:'Pleno sol'},{i:'💧',t:'Permanente en agua'}], us:['Espejos de agua','Ornamental'], bdg:'exterior', bt:'Exterior' },
   { nombre:'Albahaca silvestre',  ci:'Ocimum campechianum',      uso:'ambos',    cat:'hierba',     il:()=>sB('#70B850',null),         bg:'#f2f8ec', desc:'Hierba aromática nativa. Repelente natural de mosquitos. Maceta interior luminosa o cantero. Hojas para té e infusiones medicinales.', at:[{i:'📏',t:'40–80 cm'},{i:'☀️',t:'Luz intensa'},{i:'💧',t:'Moderado'}], us:['Repelente natural','Aromática'], bdg:'ambos', bt:'Int. y Ext.' },
 ];
+
+/* ══════════════════════════════════════
+   CIUDADES — Climate data by city
+══════════════════════════════════════ */
+const CITIES = {
+  subtropical: [
+    { name:'Asunción', temp:'28–38°C', hum:'70–85%', lluvia:'1400 mm', alt:'65 m', viento:'NE 3–5 m/s' },
+    { name:'San Lorenzo', temp:'27–37°C', hum:'72–86%', lluvia:'1380 mm', alt:'125 m', viento:'NE 3 m/s' },
+    { name:'Caacupé', temp:'25–35°C', hum:'68–82%', lluvia:'1450 mm', alt:'180 m', viento:'NE 2–4 m/s' },
+  ],
+  chaco: [
+    { name:'Filadelfia', temp:'28–42°C', hum:'30–50%', lluvia:'800 mm', alt:'160 m', viento:'Variable 2–4 m/s' },
+    { name:'Mariscal Estigarribia', temp:'28–44°C', hum:'28–48%', lluvia:'750 mm', alt:'180 m', viento:'N 3–5 m/s' },
+    { name:'Pozo Colorado', temp:'27–40°C', hum:'35–55%', lluvia:'850 mm', alt:'120 m', viento:'NE 2–4 m/s' },
+  ],
+  misionero: [
+    { name:'Encarnación', temp:'24–34°C', hum:'65–80%', lluvia:'1850 mm', alt:'85 m', viento:'S 3–5 m/s' },
+    { name:'Hoenau', temp:'23–33°C', hum:'68–82%', lluvia:'1900 mm', alt:'120 m', viento:'S 2–4 m/s' },
+    { name:'San Pedro del Paraná', temp:'24–34°C', hum:'65–80%', lluvia:'1800 mm', alt:'90 m', viento:'SE 3 m/s' },
+  ],
+  transicion: [
+    { name:'San Estanislao', temp:'26–36°C', hum:'60–75%', lluvia:'1300 mm', alt:'140 m', viento:'Variable 2–4 m/s' },
+    { name:'Coronel Oviedo', temp:'25–35°C', hum:'62–76%', lluvia:'1350 mm', alt:'150 m', viento:'NE 2–3 m/s' },
+    { name:'Caaguazú', temp:'25–35°C', hum:'60–74%', lluvia:'1280 mm', alt:'200 m', viento:'Variable 2–3 m/s' },
+  ],
+};
+
+/* ══════════════════════════════════════
+   GLOSARIO
+══════════════════════════════════════ */
+const GLOSSARY = [
+  { term:'Alero / Voladizo', def:'Proyección horizontal del techo que bloquea el sol de verano (ángulo alto) y permite el sol de invierno (ángulo bajo). La profundidad óptima depende de la latitud y la altura de la ventana.' },
+  { term:'Albedo', def:'Porcentaje de radiación solar reflejada por una superficie. Un albedo alto (>0.65) reduce la absorción de calor en cubiertas y muros. Chapa blanca: ~0.70. Chapa oscura: ~0.15.' },
+  { term:'Brise-Soleil', def:'Sistema de protección solar compuesto por lamas o aletas verticales u horizontales. Las verticales son más efectivas en fachadas E y O (sol bajo), las horizontales en fachada N (sol alto).' },
+  { term:'Carga térmica', def:'Cantidad de energía calorífica que debe agregarse o extraerse de un espacio para mantener el confort. Se expresa en W/m² o BTU/h.' },
+  { term:'Confort adaptativo', def:'Modelo que relaciona la temperatura interior aceptable con la temperatura exterior media. En climas cálidos, las personas toleran temperaturas más altas si hay ventilación natural.' },
+  { term:'Conductividad térmica (λ)', def:'Capacidad de un material de conducir el calor. Se mide en W/mK. A menor λ, mejor aislante térmico.' },
+  { term:'Efecto chimenea', def:'Movimiento natural del aire por diferencia de densidad: el aire caliente asciende y escapa por aberturas altas, mientras el aire fresco ingresa por aberturas bajas.' },
+  { term:'Estrategia pasiva', def:'Técnica de acondicionamiento ambiental que no consume energía mecánica. Ej: orientación, masa térmica, ventilación cruzada, sombreado vegetal.' },
+  { term:'Factor solar (g)', def:'Fracción de la radiación solar que atraviesa un vidrio. DVH bajo emisivo: g=0.3–0.4. Vidrio simple: g=0.85. A menor g, menor ganancia solar.' },
+  { term:'Higroscópico', def:'Capacidad de un material de absorber y liberar humedad del aire, regulando pasivamente la humedad relativa interior. Ej: barro, madera, adobe.' },
+  { term:'Inercia térmica', def:'Capacidad de un material de almacenar calor y retardar su transmisión. Depende de la masa, el calor específico y la conductividad.' },
+  { term:'Masa térmica', def:'Material denso (ladrillo, hormigón, tierra) que absorbe calor durante el día y lo libera durante la noche. Reduce los picos de temperatura interior.' },
+  { term:'Puente térmico', def:'Zona de la envolvente donde la resistencia térmica es significativamente menor que en el resto. Causa pérdidas de calor y condensación.' },
+  { term:'Resistencia térmica (R)', def:'Medida de la oposición de un material al paso del calor. R = espesor / λ. m²K/W. A mayor R, mejor aislación.' },
+  { term:'Retardo térmico', def:'Tiempo que tarda el calor en atravesar un muro. Con masa adecuada (25–30 cm), se logran retardos de 6–10 horas.' },
+  { term:'Transmitancia térmica (U)', def:'Flujo de calor que pasa por un muro o ventana por cada grado de diferencia. U = 1 / R_total. W/m²K. A menor U, mejor aislación.' },
+  { term:'Ventilación cruzada', def:'Flujo de aire por aberturas en lados opuestos. Funciona por diferencia de presión del viento. 60% barlovento, 40% sotavento.' },
+  { term:'Zona de confort', def:'Rango de temperatura y humedad para confort sin climatización activa. Paraguay: 23–27°C y 40–70% HR con ventilación.' },
+  { term:'Cámara de aire ventilada', def:'Espacio de aire (mín. 10–15 cm) entre cubierta y cielorraso con ventilación. Extrae calor acumulado antes de que llegue al interior.' },
+  { term:'Enfriamiento evaporativo', def:'El agua al evaporarse absorbe calor del aire. Efectivo solo en climas secos (HR <50%). Enfría 5–8°C en el Chaco.' },
+  { term:'Vegetación caducifolia', def:'Plantas que pierden hojas en invierno. Clave en lat. 25°S: sombra en verano, sol en invierno.' },
+];
+
+/* ══════════════════════════════════════
+   PRINCIPIOS DE DISEÑO — Cheat Sheet
+══════════════════════════════════════ */
+const DESIGN_PRINCIPLES = [
+  { icon:'🧭', title:'Orientación', desc:'Eje longitudinal del edificio en dirección O-E. Fachadas principales al N y S.', why:'En lat. 25°S, la fachada norte recibe sol controlable con aleros. E y O reciben sol bajo todo el año.' },
+  { icon:'🪟', title:'Aberturas', desc:'Norte: 40–60% del área vidriada. Sur: 15–25%. Este: <15%. Oeste: <10% con protección obligatoria.', why:'Cada m² de vidrio al oeste sin proteger aporta 500–800 W de ganancia solar en hora pico.' },
+  { icon:'🏠', title:'Cubierta', desc:'Albedo >0.65 + cámara de aire 15 cm + aislación (EPS o lana de roca 5 cm).', why:'La cubierta recibe 1.200–1.400 W/m² en enero. Sin protección transmite 250–400 W/m².' },
+  { icon:'🧱', title:'Envolvente', desc:'Muros con masa: Chaco >25 cm ladrillo macizo, OR 20 cm hueco, MIS 20 cm + revoque hidrófugo.', why:'La masa retarda el pico de calor 6–10 h, desplazándolo a la noche.' },
+  { icon:'🌬️', title:'Ventilación', desc:'Mínimo 0.5 m/s. Aberturas en 2 niveles (40 cm y 2.5 m) para efecto chimenea.', why:'Con 1 m/s la sensación térmica mejora 3–4°C. Elimina el A/A en 60–70% del año en la OR.' },
+  { icon:'🌿', title:'Vegetación', desc:'Caducifolios al norte, enredaderas al oeste, perennes al sur para cortaviento.', why:'Un árbol adulto al norte reduce ganancia solar de la fachada hasta 80% en verano.' },
+  { icon:'💧', title:'Agua', desc:'Cisterna de 5.000–10.000 L para recolección pluvial.', why:'Techo de 80 m² con 1.400 mm/año recolecta ~84.000 L. Suficiente para 4 personas 5–6 meses.' },
+  { icon:'☀️', title:'Control solar', desc:'Alero de 60–80 cm al norte. Celosías verticales al E y O. Protección móvil o vegetal.', why:'Sol de verano (88°) vs invierno (41°): un alero bien diseñado deja pasar el que necesitamos.' },
+];

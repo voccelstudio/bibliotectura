@@ -1027,3 +1027,218 @@ table.mt tr:hover td { background: var(--bg2); }
 }
 .ftr-links a:hover { color: var(--accent); }
 .ftr-dot { opacity: .4; }
+
+/* ══════════════════════════════════════
+   GLOSARIO
+══════════════════════════════════════ */
+.glossary-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 320px;
+  height: 100vh;
+  background: var(--bg);
+  border-left: 0.5px solid var(--border2);
+  z-index: 200;
+  transform: translateX(100%);
+  transition: transform .28s cubic-bezier(.4,0,.2,1);
+  display: flex;
+  flex-direction: column;
+  box-shadow: -4px 0 32px rgba(0,0,0,0.12);
+}
+.glossary-panel.open { transform: translateX(0); }
+.glossary-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  border-bottom: 0.5px solid var(--border);
+  flex-shrink: 0;
+}
+.glossary-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+.glossary-close {
+  width: 28px; height: 28px;
+  border: 0.5px solid var(--border2);
+  border-radius: 50%;
+  background: var(--bg2);
+  cursor: pointer;
+  color: var(--text2);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.glossary-close:hover { background: var(--bg3); color: var(--text); }
+.glossary-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 14px;
+}
+.gl-item {
+  padding: 10px 0;
+  border-bottom: 0.5px solid var(--border);
+}
+.gl-item:last-child { border-bottom: none; }
+.gl-term {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 3px;
+}
+.gl-def {
+  font-size: 11px;
+  color: var(--text2);
+  line-height: 1.6;
+}
+.glossary-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.2);
+  z-index: 199;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .28s;
+}
+.glossary-overlay.visible { opacity: 1; pointer-events: all; }
+
+/* ══════════════════════════════════════
+   ALERO CALCULATOR
+══════════════════════════════════════ */
+.eave-body { display: flex; flex-direction: column; gap: 10px; }
+.eave-row { display: flex; flex-direction: column; gap: 3px; }
+.eave-row label { font-size: 11px; color: var(--text2); font-weight: 500; }
+.eave-row input { width: 100%; }
+.eave-result {
+  margin-top: 4px;
+  padding: 12px;
+  background: var(--info-bg);
+  border-radius: var(--radius-sm);
+  border: 0.5px solid var(--border);
+}
+.eave-numbers {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.eave-num {
+  flex: 1;
+  text-align: center;
+  padding: 8px 4px;
+  background: var(--bg2);
+  border-radius: 6px;
+  border: 0.5px solid var(--border);
+}
+.eave-val {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+}
+.eave-lbl {
+  display: block;
+  font-size: 9px;
+  color: var(--text3);
+  margin-top: 2px;
+}
+.eave-chart {
+  margin: 8px 0;
+  max-height: 140px;
+}
+.eave-tip {
+  font-size: 11px;
+  color: var(--text2);
+  line-height: 1.6;
+  padding: 8px;
+  background: var(--bg2);
+  border-radius: 6px;
+}
+
+/* ══════════════════════════════════════
+   MATRIZ ESTRATEGIAS × ZONAS
+══════════════════════════════════════ */
+.sm-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+.sm-table th {
+  text-align: left;
+  padding: 7px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  border-bottom: 0.5px solid var(--border);
+  background: var(--bg2);
+}
+.sm-table td {
+  padding: 6px 8px;
+  border-bottom: 0.5px solid var(--border);
+  vertical-align: middle;
+}
+.sm-table tr:hover td { background: var(--bg2); }
+.sm-yes { text-align: center; font-size: 14px; }
+.sm-no { text-align: center; color: var(--text3); font-size: 12px; }
+.sm-icon { font-size: 13px; margin-right: 4px; }
+.sm-legend {
+  font-size: 10px;
+  color: var(--text3);
+  margin-top: 8px;
+  font-style: italic;
+}
+@media (max-width: 600px) {
+  .sm-table { font-size: 9px; }
+  .sm-table th, .sm-table td { padding: 4px 5px; }
+}
+
+/* ══════════════════════════════════════
+   PRINCIPIOS DE DISEÑO
+══════════════════════════════════════ */
+.principles-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+@media (max-width: 600px) { .principles-grid { grid-template-columns: 1fr; } }
+.dp-card {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+}
+.dp-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.dp-body { flex: 1; min-width: 0; }
+.dp-title { font-size: 11px; font-weight: 600; margin-bottom: 3px; }
+.dp-desc { font-size: 10px; color: var(--text2); line-height: 1.55; }
+.dp-why {
+  font-size: 9px;
+  color: var(--text3);
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 0.5px solid var(--border);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* ══════════════════════════════════════
+   CIUDADES
+══════════════════════════════════════ */
+.zcities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px,1fr));
+  gap: 6px;
+}
+.zcities-card {
+  padding: 8px 10px;
+  background: var(--bg2);
+  border-radius: 6px;
+  border: 0.5px solid var(--border);
+  font-size: 10px;
+  line-height: 1.5;
+}
+.zcities-card strong { font-size: 11px; }
