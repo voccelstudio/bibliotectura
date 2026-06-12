@@ -696,46 +696,40 @@ function wrose(z) {
   const dirs=['N','NE','E','SE','S','SO','O','NO'], base=[30,55,20,15,25,20,18,22];
   const sh = Math.round(z.windDeg/45)%8;
   const vals = [...base.slice(sh),...base.slice(0,sh)];
-  const mx = Math.max(...vals), cx=85, cy=85, r=62;
+  const mx = Math.max(...vals), cx=95, cy=95, r=68;
   let p='', l='';
   dirs.forEach((d,i) => {
-    const an=(i*45-90)*Math.PI/180, len=(vals[i]/mx)*r, w=12;
+    const an=(i*45-90)*Math.PI/180, len=(vals[i]/mx)*r, w=14;
     const a1=((i*45-90-w/2))*Math.PI/180, a2=((i*45-90+w/2))*Math.PI/180;
-    p += `<path d="M${cx+8*Math.cos(a1)},${cy+8*Math.sin(a1)} L${cx+len*Math.cos(a1)},${cy+len*Math.sin(a1)} L${cx+len*Math.cos(a2)},${cy+len*Math.sin(a2)} L${cx+8*Math.cos(a2)},${cy+8*Math.sin(a2)}Z" fill="${vals[i]===mx?z.color:'#ccc'}" opacity="${vals[i]===mx?.85:.4}"/>`;
-    const lx=cx+(r+14)*Math.cos(an), ly=cy+(r+14)*Math.sin(an);
-    l += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="central" style="font-size:10px;fill:#888">${d}</text>`;
+    const isDom=vals[i]===mx;
+    p += `<path d="M${cx+10*Math.cos(a1)},${cy+10*Math.sin(a1)} L${cx+len*Math.cos(a1)},${cy+len*Math.sin(a1)} L${cx+len*Math.cos(a2)},${cy+len*Math.sin(a2)} L${cx+10*Math.cos(a2)},${cy+10*Math.sin(a2)}Z" fill="${isDom?z.color:'#999'}" opacity="${isDom?.9:.45}"/>`;
+    const lx=cx+(r+17)*Math.cos(an), ly=cy+(r+17)*Math.sin(an);
+    l += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="central" style="font-size:${d==='N'?'13':'10'}px;font-weight:${d==='N'?'700':'500'};fill:${d==='N'?'var(--on-surface,#191c1d)':'var(--on-surface-variant,#44474a)'}">${d}</text>`;
   });
-  return `<svg viewBox="0 0 170 170" width="100%"><circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#ddd" stroke-width="0.5"/><circle cx="${cx}" cy="${cy}" r="${r*.6}" fill="none" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3"/>${p}${l}</svg>`;
+  return `<svg viewBox="0 0 190 190" width="100%" style="display:block"><circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--outline-variant,#c5c6ca)" stroke-width="0.5"/><circle cx="${cx}" cy="${cy}" r="${r*.6}" fill="none" stroke="var(--outline-variant,#c5c6ca)" stroke-width="0.5" stroke-dasharray="3,3"/>${p}${l}</svg>`;
 }
 
 function sunpath() {
-  // Arc data: dec = solar declination for lat 25°S
-  // dic (summer SH): dec=-23.5 → noon alt ≈ 88°
-  // equinox: dec=0 → noon alt ≈ 65°
-  // jun (winter SH): dec=+23.5 → noon alt ≈ 41°
-  const W=220, H=140, padX=18, hz=110; // hz = horizon y
+  const W=240, H=150, padX=20, hz=118;
   const arcs = [
     {lbl:'Jun · 41°', col:'#3B8BD4', alt:41, r1:-110, r2:110, dash:'5,3'},
-    {lbl:'Sep · 65°', col:'#888888', alt:65, r1:-90,  r2:90,  dash:'3,2'},
+    {lbl:'Sep · 65°', col:'#5a5a5a', alt:65, r1:-90,  r2:90,  dash:'3,2'},
     {lbl:'Dic · 88°', col:'#EF9F27', alt:88, r1:-70,  r2:70,  dash:''},
   ];
   const xScale = (W-padX*2)/220;
   let svg = '';
 
-  // Altitude grid lines
   [30,60].forEach(a => {
     const yy = hz - (a/90)*(hz-10);
-    svg += `<line x1="${padX}" y1="${yy}" x2="${W-padX}" y2="${yy}" stroke="rgba(128,128,128,0.15)" stroke-width="0.5" stroke-dasharray="3,2"/>`;
-    svg += `<text x="${padX-2}" y="${yy}" text-anchor="end" dominant-baseline="middle" style="font-size:8px;fill:#aaa">${a}°</text>`;
+    svg += `<line x1="${padX}" y1="${yy}" x2="${W-padX}" y2="${yy}" stroke="var(--outline-variant,#c5c6ca)" stroke-width="0.5" stroke-dasharray="3,2"/>`;
+    svg += `<text x="${padX-2}" y="${yy}" text-anchor="end" dominant-baseline="middle" style="font-size:9px;fill:var(--on-surface-variant,#44474a)">${a}°</text>`;
   });
 
-  // Horizon
-  svg += `<line x1="${padX}" y1="${hz}" x2="${W-padX}" y2="${hz}" stroke="rgba(128,128,128,0.4)" stroke-width="1"/>`;
-  svg += `<text x="${padX}" y="${hz+10}" style="font-size:9px;fill:#888;font-weight:600">E</text>`;
-  svg += `<text x="${W-padX-8}" y="${hz+10}" style="font-size:9px;fill:#888;font-weight:600">O</text>`;
-  svg += `<text x="${W/2}" y="${hz+10}" text-anchor="middle" style="font-size:9px;fill:#aaa">N (cenit solar)</text>`;
+  svg += `<line x1="${padX}" y1="${hz}" x2="${W-padX}" y2="${hz}" stroke="var(--outline,#75777a)" stroke-width="0.8"/>`;
+  svg += `<text x="${padX}" y="${hz+12}" style="font-size:10px;fill:var(--on-surface,#191c1d);font-weight:600">E</text>`;
+  svg += `<text x="${W-padX-8}" y="${hz+12}" style="font-size:10px;fill:var(--on-surface,#191c1d);font-weight:600">O</text>`;
+  svg += `<text x="${W/2}" y="${hz+12}" text-anchor="middle" style="font-size:10px;fill:var(--on-surface-variant,#44474a)">N (cenit solar)</text>`;
 
-  // Sun arcs
   arcs.forEach(a => {
     const pts = [];
     for (let az=a.r1; az<=a.r2; az+=3) {
@@ -754,7 +748,7 @@ function sunpath() {
 
   // Noon line
   svg += `<line x1="${W/2}" y1="${hz}" x2="${W/2}" y2="8" stroke="rgba(128,128,128,0.15)" stroke-width="0.5" stroke-dasharray="3,2"/>`;
-  svg += `<text x="${W/2}" y="6" text-anchor="middle" style="font-size:8px;fill:#aaa">Mediodía</text>`;
+  svg += `<text x="${W/2}" y="6" text-anchor="middle" style="font-size:9px;fill:var(--on-surface-variant,#44474a);font-weight:500">Mediodía</text>`;
 
   return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block">${svg}</svg>`;
 }
@@ -786,35 +780,31 @@ function solarMap() {
 
   let svg = '';
 
-  // Alt circles
   [0,30,60,80].forEach(alt => {
     const r = R * (1 - alt/90);
     const op = alt===0 ? '0.5' : '0.2';
     svg += `<circle cx="${cx}" cy="${cy}" r="${r.toFixed(1)}" fill="none" stroke="rgba(128,128,128,${op})" stroke-width="${alt===0?1:'0.5'}"/>`;
-    if (alt > 0 && alt < 80) svg += `<text x="${(cx+4).toFixed(1)}" y="${(cy-r-3).toFixed(1)}" style="font-size:7.5px;fill:#aaa">${alt}°</text>`;
+    if (alt > 0 && alt < 80) svg += `<text x="${(cx+4).toFixed(1)}" y="${(cy-r-3).toFixed(1)}" style="font-size:8px;fill:var(--on-surface-variant,#44474a)">${alt}°</text>`;
   });
 
-  // Az lines every 30°
   for (let a=0; a<360; a+=30) {
     const ar = toRad(a);
-    svg += `<line x1="${cx}" y1="${cy}" x2="${(cx+R*Math.sin(ar)).toFixed(1)}" y2="${(cy-R*Math.cos(ar)).toFixed(1)}" stroke="rgba(128,128,128,0.1)" stroke-width="0.5"/>`;
+    svg += `<line x1="${cx}" y1="${cy}" x2="${(cx+R*Math.sin(ar)).toFixed(1)}" y2="${(cy-R*Math.cos(ar)).toFixed(1)}" stroke="var(--outline-variant,#c5c6ca)" stroke-width="0.5"/>`;
   }
 
-  // Compass N/S/E/O
   [{l:'N',a:0},{l:'S',a:180},{l:'E',a:90},{l:'O',a:270}].forEach(d => {
     const ar = toRad(d.a);
-    svg += `<text x="${(cx+(R+14)*Math.sin(ar)).toFixed(1)}" y="${(cy-(R+14)*Math.cos(ar)+3).toFixed(1)}" text-anchor="middle" style="font-size:10px;fill:#666;font-weight:700">${d.l}</text>`;
+    svg += `<text x="${(cx+(R+14)*Math.sin(ar)).toFixed(1)}" y="${(cy-(R+14)*Math.cos(ar)+3).toFixed(1)}" text-anchor="middle" style="font-size:11px;fill:var(--on-surface,#191c1d);font-weight:700">${d.l}</text>`;
   });
 
-  // Hour labels on equinox path
   [6,8,10,12,14,16,18].forEach(h => {
     const ha = (h-12)*15;
     const pos = sunXY(0, ha);
     if (pos) {
-      svg += `<circle cx="${pos.x.toFixed(1)}" cy="${pos.y.toFixed(1)}" r="2" fill="#aaa" opacity="0.7"/>`;
+      svg += `<circle cx="${pos.x.toFixed(1)}" cy="${pos.y.toFixed(1)}" r="2" fill="var(--on-surface-variant,#44474a)" opacity="0.6"/>`;
       const offX = ha < 0 ? -10 : ha > 0 ? 4 : 0;
       const offY = ha === 0 ? -7 : -4;
-      svg += `<text x="${(pos.x+offX).toFixed(1)}" y="${(pos.y+offY).toFixed(1)}" text-anchor="${ha<0?'end':ha>0?'start':'middle'}" style="font-size:7px;fill:#999">${h}h</text>`;
+      svg += `<text x="${(pos.x+offX).toFixed(1)}" y="${(pos.y+offY).toFixed(1)}" text-anchor="${ha<0?'end':ha>0?'start':'middle'}" style="font-size:7.5px;fill:var(--on-surface-variant,#44474a)">${h}h</text>`;
     }
   });
 
@@ -1311,7 +1301,7 @@ function renderDesignPrinciples() {
   <text x="${gx+14}" y="${wwY+30}" style="font-size:8px;fill:#3B8BD4">Ventana N</text>
   <text x="${gx2-70}" y="${wwY+28}" style="font-size:8px;fill:#3B8BD4">Ventana S</text>
   <text x="${px-8}" y="${py-40}" style="font-size:10px;fill:#fff;font-weight:600">Cubierta</text>
-  <text x="${px-22}" y="${gy-4}" style="font-size:8px;fill:#888;text-anchor:middle">🌊 Masa térmica</text>
+  <text x="${px-22}" y="${gy-4}" style="font-size:9px;fill:var(--on-surface-variant,#44474a);text-anchor:middle">🌊 Masa térmica</text>
   <!-- North indicator -->
   <text x="20" y="30" style="font-size:10px;fill:#1a1a1a;font-weight:600">N ←</text>
   <!-- Insulation indicator -->
