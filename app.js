@@ -568,7 +568,7 @@ function drawLote(id, frente, Z, tipo) {
   ctx.moveTo(boxX, sbY - 5); ctx.lineTo(boxX, sbY + 5);
   ctx.moveTo(boxX + 120, sbY - 5); ctx.lineTo(boxX + 120, sbY + 5);
   ctx.stroke();
-  ctx.fillStyle = '#1a1a1a'; ctx.font = '400 7px "Inter",sans-serif'; ctx.textAlign = 'center';
+  ctx.fillStyle = '#1a1a1a'; ctx.font = '400 9px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
   ctx.fillText('5 m', boxX + 60, sbY + 10);
   ctx.fillStyle = '#1a1a1a';
   for (let i = 0; i < 5; i++) { if (i % 2 === 0) ctx.fillRect(boxX + i * 24, sbY - 4, 24, 4); }
@@ -1339,21 +1339,15 @@ function renderStratMatrix() {
   const zoneIds = ZONES.map(z => z.id);
   const zoneNames = ZONES.map(z => z.name);
   const strategies = STRATS;
-  const compat = {
-    subtropical: ['ventilacion','sombreado','masa','cubierta','forma'],
-    chaco: ['masa','ventilacion','cubierta','forma','sombreado'],
-    misionero: ['ventilacion','cubierta','sombreado','forma','masa'],
-    transicion: ['ventilacion','masa','sombreado','cubierta','forma'],
-  };
 
-  const catIcons = { ventilacion:'🌬️', sombreado:'☀️', masa:'🧱', cubierta:'🏠', forma:'📐' };
+  const zoneCodeMap = { subtropical:'OR', chaco:'Chaco', misionero:'Misionero', transicion:'Transición' };
 
   let html = `<table class="sm-table"><thead><tr><th>Estrategia</th>${zoneNames.map(n => `<th>${n}</th>`).join('')}</tr></thead><tbody>`;
   strategies.forEach(s => {
-    const cat = s.cat;
     html += `<tr><td><span class="sm-icon">${s.icon}</span> ${s.name}</td>`;
     zoneIds.forEach((zid, zi) => {
-      const applicable = s.tags.some(t => t === 'Todas las zonas' || t === ZONES[zi].name || t === ZONES[zi].id || t.slice(0,3).toLowerCase() === zid.slice(0,3).toLowerCase());
+      const code = zoneCodeMap[zid];
+      const applicable = s.tags.some(t => t === 'Todas las zonas' || t === code || t.slice(0,3).toLowerCase() === zid.slice(0,3).toLowerCase());
       html += applicable
         ? `<td class="sm-yes" title="Aplicable en ${ZONES[zi].name}">✅</td>`
         : `<td class="sm-no" title="No prioritario en ${ZONES[zi].name}">—</td>`;
@@ -1663,7 +1657,7 @@ function exportSummary() {
   const t = THEMES[theme];
   win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Bioclimática Paraguay — Resumen</title>
     <style>
-      body { font-family:'Inter',sans-serif; font-size:12px; color:#1a1a18; max-width:800px; margin:0 auto; padding:20px; line-height:1.6 }
+      body { font-family:'Hanken Grotesk',sans-serif; font-size:12px; color:#1a1a18; max-width:800px; margin:0 auto; padding:20px; line-height:1.6 }
       h1 { font-size:18px; margin-bottom:4px }
       h2 { font-size:14px; margin:16px 0 6px;border-bottom:1px solid #ddd;padding-bottom:4px }
       h3 { font-size:12px; margin:10px 0 4px }
@@ -1675,7 +1669,6 @@ function exportSummary() {
     <h1>🌿 Bioclimática Paraguay</h1>
     <p>Resumen de recomendaciones · ${new Date().toLocaleDateString()}</p>
     <hr>`);
-  const zi = parseInt(document.getElementById('sel-zona')?.value) || 0;
   const z = ZONES.find(x => x.id === (document.getElementById('sel-zona')?.value));
   if (z) {
     win.document.write(`<h2>📍 Zona: ${z.name}</h2><p>${z.desc}</p>`);
@@ -1699,12 +1692,11 @@ function exportSummary() {
 function renderDashboard() {
   const grid = document.getElementById('dash-grid');
   if (!grid) return;
-  const zi = parseInt(document.getElementById('sel-zona-sidebar')?.value || '0');
   const zid = document.getElementById('sel-zona-sidebar')?.value || 'subtropical';
   const z = ZONES.find(x => x.id === zid) || ZONES[0];
   const cities = CITIES[zid] || [];
 
-  const lat = -25, lon = -57;
+  const lat = -25;
   const decSummer = -23.5, decWinter = 23.5;
   function noonAlt(dec) { return 90 - Math.abs(lat - dec); }
   const altSummer = noonAlt(decSummer);
