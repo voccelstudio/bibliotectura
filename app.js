@@ -7,16 +7,6 @@ let selZ = 0, sfil = 'todos', mfil = 'todos', ufil = 'todos', pcfil = 'todos';
 const fd = { lat:null, lng:null, zona:'', frente:'', tipo:'', entorno:'' };
 let MAP = null, MARKER = null;
 
-/* ── NAV ── */
-function go(id, btn) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
-  document.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
-  document.getElementById('p-' + id).classList.add('on');
-  btn.classList.add('on');
-  if (id === 'guia') { setTimeout(initMap, 100); initGuia(); }
-  if (id === 'herramientas') initHerramientas();
-}
-
 /* ── MAPA ── */
 function initMap() {
   if (MAP) return;
@@ -1445,6 +1435,158 @@ function exportSummary() {
   setTimeout(() => { win.print(); }, 500);
 }
 
+/* ══════════════════════════════════════
+   DASHBOARD — bento grid view
+══════════════════════════════════════ */
+function renderDashboard() {
+  const grid = document.getElementById('dash-grid');
+  if (!grid) return;
+  const zi = parseInt(document.getElementById('sel-zona-sidebar')?.value || '0');
+  const zid = document.getElementById('sel-zona-sidebar')?.value || 'subtropical';
+  const z = ZONES.find(x => x.id === zid) || ZONES[0];
+  const cities = CITIES[zid] || [];
+
+  const lat = -25, lon = -57;
+  const decSummer = -23.5, decWinter = 23.5;
+  function noonAlt(dec) { return 90 - Math.abs(lat - dec); }
+  const altSummer = noonAlt(decSummer);
+  const altWinter = noonAlt(decWinter);
+
+  const subtitle = document.getElementById('dash-subtitle');
+  if (subtitle) subtitle.textContent = `Perfil bioclimático para ${z.name}. Evaluación de confort térmico, radiación solar y estrategias pasivas recomendadas.`;
+
+  const updateEl = document.getElementById('dash-update');
+  if (updateEl) updateEl.textContent = `Actualizado: ${new Date().toLocaleDateString()}`;
+
+  grid.innerHTML = `
+    <!-- Site Data -->
+    <div class="col-span-12 lg:col-span-4 border border-outline-variant p-6 bg-white flex flex-col justify-between">
+      <div>
+        <span class="font-caption text-caption uppercase tracking-widest text-on-surface-variant mb-4 block">Datos del sitio</span>
+        <div class="space-y-4">
+          <div class="flex justify-between items-end border-b border-surface-container py-2"><span class="font-body-main text-on-surface-variant">Zona</span><span class="font-data-label text-data-label">${z.name}</span></div>
+          <div class="flex justify-between items-end border-b border-surface-container py-2"><span class="font-body-main text-on-surface-variant">Temperatura</span><span class="font-data-label text-data-label">${z.temp}</span></div>
+          <div class="flex justify-between items-end border-b border-surface-container py-2"><span class="font-body-main text-on-surface-variant">Humedad</span><span class="font-data-label text-data-label">${z.hum}</span></div>
+          <div class="flex justify-between items-end border-b border-surface-container py-2"><span class="font-body-main text-on-surface-variant">Lluvia anual</span><span class="font-data-label text-data-label">${z.lluvia}</span></div>
+          <div class="flex justify-between items-end border-b border-surface-container py-2"><span class="font-body-main text-on-surface-variant">Viento</span><span class="font-data-label text-data-label">${z.viento}</span></div>
+          <div class="flex justify-between items-end border-b border-surface-container py-2"><span class="font-body-main text-on-surface-variant">Región</span><span class="font-data-label text-data-label">${z.region}</span></div>
+        </div>
+      </div>
+      <div class="mt-6 pt-4 border-t border-outline-variant">
+        <div class="text-secondary font-bold text-headline-md mb-1">${cities.length > 0 ? cities[0].name : z.name}</div>
+        <div class="font-caption text-caption uppercase text-on-surface-variant">${z.desc.slice(0, 80)}…</div>
+      </div>
+    </div>
+
+    <!-- Sun Path -->
+    <div class="col-span-12 lg:col-span-8 border border-outline-variant p-6 bg-white overflow-hidden relative">
+      <span class="font-caption text-caption uppercase tracking-widest text-on-surface-variant mb-4 block">Trayectoria solar · Latitud ${Math.abs(lat)}°S</span>
+      <div class="w-full h-72 flex items-center justify-center relative">
+        <svg class="w-full h-full stroke-on-surface-variant fill-none" viewBox="0 0 400 240">
+          <path class="stroke-outline-variant" d="M 20 200 Q 200 20 380 200" stroke-dasharray="4" stroke-width="1"/>
+          <path class="stroke-secondary" d="M 40 200 Q 200 40 360 200" stroke-width="2"/>
+          <path class="stroke-tertiary-container" d="M 70 200 Q 200 80 330 200" stroke-width="1.5"/>
+          <circle cx="200" cy="40" fill="#fe6b00" r="6"/>
+          <text fill="#a04100" font-family="JetBrains Mono" font-size="10" x="210" y="35">Solsticio verano ${altSummer.toFixed(1)}°</text>
+          <text fill="#75777a" font-family="JetBrains Mono" font-size="10" x="210" y="50">Solsticio invierno ${altWinter.toFixed(1)}°</text>
+          <line class="stroke-outline" stroke-dasharray="2" stroke-width="0.5" x1="200" x2="200" y1="40" y2="200"/>
+          <text fill="#75777a" font-family="JetBrains Mono" font-size="8" x="10" y="215">E</text>
+          <text fill="#75777a" font-family="JetBrains Mono" font-size="8" x="385" y="215">W</text>
+          <text fill="#75777a" font-family="JetBrains Mono" font-size="8" x="195" y="215">S</text>
+          <rect x="100" y="170" width="80" height="30" fill="var(--surface-container,#edeeef)" stroke="var(--outline-variant,#c5c6ca)" stroke-width="0.5"/>
+          <text fill="#44474a" font-family="JetBrains Mono" font-size="7" x="115" y="185">Edificio</text>
+          <line x1="100" y1="170" x2="50" y2="70" stroke="#fe6b00" stroke-width="1" stroke-dasharray="3,2" opacity="0.6"/>
+          <line x1="180" y1="170" x2="240" y2="80" stroke="#2480ff" stroke-width="1" stroke-dasharray="3,2" opacity="0.6"/>
+        </svg>
+        <div class="absolute bottom-4 right-6 text-right">
+          <p class="font-data-label text-data-label">Cenit verano: ${altSummer.toFixed(1)}°</p>
+          <p class="font-caption text-caption text-on-surface-variant">Cenit invierno: ${altWinter.toFixed(1)}°</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Temp Chart -->
+    <div class="col-span-12 lg:col-span-8 border border-outline-variant p-6 bg-white">
+      <div class="flex justify-between items-center mb-6">
+        <span class="font-caption text-caption uppercase tracking-widest text-on-surface-variant">Lluvia mensual (mm)</span>
+        <div class="flex gap-4">
+          <div class="flex items-center gap-2"><div class="w-3 h-3 bg-secondary-container"></div><span class="font-caption text-caption">Precipitación</span></div>
+        </div>
+      </div>
+      <div class="h-56 grid grid-cols-12 items-end gap-2">
+        ${(z.lluviaMensual || [140,145,145,110,90,70,70,70,90,130,140,155]).map((mm, i) => {
+          const h = Math.min(100, mm / 2);
+          return `<div class="bg-surface-container relative group" style="height:100%">
+            <div class="absolute bottom-0 w-full bg-secondary-container transition-all group-hover:opacity-80" style="height:${h}%"></div>
+            <div class="absolute bottom-full left-0 right-0 text-center opacity-0 group-hover:opacity-100 font-data-label text-[10px] text-on-surface-variant mb-1">${mm}mm</div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="grid grid-cols-12 gap-2 mt-2">
+        ${['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DEC'].map(m => `<span class="text-center font-data-label text-[10px] text-on-surface-variant">${m}</span>`).join('')}
+      </div>
+    </div>
+
+    <!-- Wind Rose -->
+    <div class="col-span-12 lg:col-span-4 border border-outline-variant p-6 bg-white flex flex-col">
+      <span class="font-caption text-caption uppercase tracking-widest text-on-surface-variant mb-4 block">Frecuencia / Dirección del viento</span>
+      <div class="flex-1 flex items-center justify-center relative">
+        <div class="relative w-48 h-48 rounded-full border border-surface-container flex items-center justify-center">
+          <div class="absolute w-full h-px bg-surface-container"></div>
+          <div class="absolute h-full w-px bg-surface-container"></div>
+          <div class="absolute inset-0 border border-surface-container rounded-full scale-[0.66]"></div>
+          <div class="absolute inset-0 border border-surface-container rounded-full scale-[0.33]"></div>
+          <svg class="absolute inset-0 w-full h-full fill-tertiary-container/30 stroke-tertiary-container" viewBox="0 0 100 100">
+            <polygon points="50,50 55,15 45,15"></polygon>
+            <polygon points="50,50 85,45 85,55"></polygon>
+            <polygon points="50,50 52,75 48,75"></polygon>
+            <polygon points="50,50 15,48 15,52"></polygon>
+            <polygon points="50,50 75,25 70,20"></polygon>
+          </svg>
+          <span class="absolute top-[-20px] font-data-label text-[10px] text-on-surface-variant">N</span>
+          <span class="absolute right-[-20px] font-data-label text-[10px] text-on-surface-variant">E</span>
+          <span class="absolute bottom-[-20px] font-data-label text-[10px] text-on-surface-variant">S</span>
+          <span class="absolute left-[-20px] font-data-label text-[10px] text-on-surface-variant">W</span>
+        </div>
+      </div>
+      <div class="mt-6 pt-4 border-t border-outline-variant">
+        <div class="flex justify-between font-data-label text-data-label">
+          <span class="text-on-surface-variant">Viento predominante</span>
+          <span class="text-tertiary-container font-bold">${z.viento}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cities -->
+    <div class="col-span-12 lg:col-span-4 border border-outline-variant p-6 bg-white">
+      <span class="font-caption text-caption uppercase tracking-widest text-on-surface-variant mb-4 block">🌆 Ciudades de la zona</span>
+      <div class="space-y-3">
+        ${cities.length > 0 ? cities.slice(0, 5).map(c => `
+          <div class="flex justify-between items-center border-b border-surface-container pb-2">
+            <span class="font-body-main text-on-surface font-semibold">${c.name}</span>
+            <div class="text-right">
+              <span class="font-data-label text-data-label text-on-surface-variant">${c.temp}</span>
+              <span class="font-caption text-caption text-on-surface-variant ml-2">${c.hum}</span>
+            </div>
+          </div>`).join('') : '<span class="font-caption text-caption text-on-surface-variant">Sin datos por ciudad</span>'}
+      </div>
+    </div>
+
+    <!-- Estrategias recomendadas -->
+    <div class="col-span-12 lg:col-span-8 border border-outline-variant p-6 bg-white">
+      <span class="font-caption text-caption uppercase tracking-widest text-on-surface-variant mb-4 block">Estrategias recomendadas para ${z.name}</span>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        ${STRATS.filter(s => s.tags.some(t => t === 'Todas las zonas' || t === z.name || t === z.id)).slice(0, 6).map(s => `
+          <div class="p-4 border border-outline-variant hover:border-secondary transition-all group cursor-pointer" onclick="go('estrategias', document.querySelector('.nav-item[data-panel=estrategias]'))">
+            <div class="w-10 h-10 bg-surface flex items-center justify-center mb-3 group-hover:bg-secondary group-hover:text-on-secondary transition-colors text-xl">${s.icon}</div>
+            <h3 class="font-body-main font-bold mb-1 uppercase tracking-wide text-sm">${s.name}</h3>
+            <p class="font-caption text-on-surface-variant text-xs">${s.desc.slice(0, 70)}…</p>
+          </div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
 /* ── LOCALSTORAGE ── */
 function savePrefs() {
   try {
@@ -1471,12 +1613,6 @@ function loadPrefs() {
 }
 
 /* ══════════════════════════════════════
-   INIT
+   INIT — called by index.html on load
 ══════════════════════════════════════ */
-document.addEventListener('DOMContentLoaded', function() {
-  renderZones(); selZone(0);
-  renderStrats(); renderMats(); renderPlantas();
-  initHerramientas();
-  loadPrefs();
-  setTimeout(initMap, 100);
-});
+/* Everything is now initialized from index.html DOMContentLoaded */

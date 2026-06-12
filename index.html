@@ -4,378 +4,601 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bioclimática Paraguay</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0..1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <link rel="stylesheet" href="style.css"/>
+<style>
+:root {
+  --surface: #f8f9fa;
+  --surface-dim: #d9dadb;
+  --surface-bright: #f8f9fa;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #f3f4f5;
+  --surface-container: #edeeef;
+  --surface-container-high: #e7e8e9;
+  --surface-container-highest: #e1e3e4;
+  --on-surface: #191c1d;
+  --on-surface-variant: #44474a;
+  --inverse-surface: #2e3132;
+  --inverse-on-surface: #f0f1f2;
+  --outline: #75777a;
+  --outline-variant: #c5c6ca;
+  --surface-tint: #5d5e61;
+  --primary: #000101;
+  --on-primary: #ffffff;
+  --primary-container: #1a1c1e;
+  --on-primary-container: #838486;
+  --inverse-primary: #c6c6c9;
+  --secondary: #a04100;
+  --on-secondary: #ffffff;
+  --secondary-container: #fe6b00;
+  --on-secondary-container: #572000;
+  --tertiary: #000001;
+  --on-tertiary: #ffffff;
+  --tertiary-container: #001a41;
+  --on-tertiary-container: #2480ff;
+  --error: #ba1a1a;
+  --on-error: #ffffff;
+  --error-container: #ffdad6;
+  --on-error-container: #93000a;
+  --primary-fixed: #e2e2e5;
+  --primary-fixed-dim: #c6c6c9;
+  --on-primary-fixed: #1a1c1e;
+  --on-primary-fixed-variant: #454749;
+  --secondary-fixed: #ffdbcc;
+  --secondary-fixed-dim: #ffb693;
+  --on-secondary-fixed: #351000;
+  --on-secondary-fixed-variant: #7a3000;
+  --tertiary-fixed: #d8e2ff;
+  --tertiary-fixed-dim: #adc6ff;
+  --on-tertiary-fixed: #001a41;
+  --on-tertiary-fixed-variant: #004493;
+  --background: #f8f9fa;
+  --on-background: #191c1d;
+  --surface-variant: #e1e3e4;
+}
+</style>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        surface: 'var(--surface)',
+        'surface-dim': 'var(--surface-dim)',
+        'surface-bright': 'var(--surface-bright)',
+        'surface-container-lowest': 'var(--surface-container-lowest)',
+        'surface-container-low': 'var(--surface-container-low)',
+        'surface-container': 'var(--surface-container)',
+        'surface-container-high': 'var(--surface-container-high)',
+        'surface-container-highest': 'var(--surface-container-highest)',
+        'on-surface': 'var(--on-surface)',
+        'on-surface-variant': 'var(--on-surface-variant)',
+        'inverse-surface': 'var(--inverse-surface)',
+        'inverse-on-surface': 'var(--inverse-on-surface)',
+        outline: 'var(--outline)',
+        'outline-variant': 'var(--outline-variant)',
+        'surface-tint': 'var(--surface-tint)',
+        primary: 'var(--primary)',
+        'on-primary': 'var(--on-primary)',
+        'primary-container': 'var(--primary-container)',
+        'on-primary-container': 'var(--on-primary-container)',
+        'inverse-primary': 'var(--inverse-primary)',
+        secondary: 'var(--secondary)',
+        'on-secondary': 'var(--on-secondary)',
+        'secondary-container': 'var(--secondary-container)',
+        'on-secondary-container': 'var(--on-secondary-container)',
+        tertiary: 'var(--tertiary)',
+        'on-tertiary': 'var(--on-tertiary)',
+        'tertiary-container': 'var(--tertiary-container)',
+        'on-tertiary-container': 'var(--on-tertiary-container)',
+        error: 'var(--error)',
+        'on-error': 'var(--on-error)',
+        'error-container': 'var(--error-container)',
+        'on-error-container': 'var(--on-error-container)',
+        'primary-fixed': 'var(--primary-fixed)',
+        'primary-fixed-dim': 'var(--primary-fixed-dim)',
+        'on-primary-fixed': 'var(--on-primary-fixed)',
+        'on-primary-fixed-variant': 'var(--on-primary-fixed-variant)',
+        'secondary-fixed': 'var(--secondary-fixed)',
+        'secondary-fixed-dim': 'var(--secondary-fixed-dim)',
+        'on-secondary-fixed': 'var(--on-secondary-fixed)',
+        'on-secondary-fixed-variant': 'var(--on-secondary-fixed-variant)',
+        'tertiary-fixed': 'var(--tertiary-fixed)',
+        'tertiary-fixed-dim': 'var(--tertiary-fixed-dim)',
+        'on-tertiary-fixed': 'var(--on-tertiary-fixed)',
+        'on-tertiary-fixed-variant': 'var(--on-tertiary-fixed-variant)',
+        background: 'var(--background)',
+        'on-background': 'var(--on-background)',
+        'surface-variant': 'var(--surface-variant)',
+      },
+      fontFamily: {
+        sans: ['Hanken Grotesk', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
+        'display-lg': ['Hanken Grotesk', 'sans-serif'],
+        'headline-md': ['Hanken Grotesk', 'sans-serif'],
+        'body-main': ['Hanken Grotesk', 'sans-serif'],
+        'data-label': ['JetBrains Mono', 'monospace'],
+        caption: ['Hanken Grotesk', 'sans-serif'],
+      },
+      fontSize: {
+        'display-lg': ['48px', { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '700' }],
+        'display-lg-mobile': ['32px', { lineHeight: '1.2', letterSpacing: '-0.01em', fontWeight: '700' }],
+        'headline-md': ['24px', { lineHeight: '1.3', fontWeight: '600' }],
+        'body-main': ['16px', { lineHeight: '1.6', fontWeight: '400' }],
+        'data-label': ['14px', { lineHeight: '1.4', letterSpacing: '0.02em', fontWeight: '500' }],
+        'caption': ['12px', { lineHeight: '1.4', fontWeight: '500' }],
+      },
+      spacing: {
+        'margin-desktop': '64px',
+        'container-max': '1440px',
+        gutter: '24px',
+        unit: '4px',
+        'margin-mobile': '16px',
+      },
+      borderRadius: {
+        DEFAULT: '0',
+        lg: '0',
+        xl: '0',
+        full: '9999px',
+      },
+    },
+  },
+}
+</script>
+<style>
+  body { font-family: 'Hanken Grotesk', sans-serif; }
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
+  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  #map { border-radius: 0; }
+  .leaflet-container { border-radius: 0; }
+</style>
 </head>
-<body>
-<div class="app">
+<body class="bg-surface text-on-surface overflow-hidden flex flex-col h-screen">
 
-  <!-- HEADER -->
-  <header class="hdr">
-    <div class="hdr-brand">
-      <div class="hdr-icon">🌿</div>
-      <div>
-        <h1>Bioclimática Paraguay</h1>
-        <p>Recurso técnico de diseño bioclimático</p>
-      </div>
+<!-- TOP APP BAR -->
+<header class="bg-surface-container-lowest border-b border-outline-variant flex justify-between items-center px-margin-desktop py-4 z-50 flex-shrink-0">
+  <div class="flex items-center gap-8">
+    <span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">Bioclimática Paraguay</span>
+    <nav class="hidden md:flex gap-6">
+      <a class="top-nav-link font-caption text-caption text-secondary border-b-2 border-secondary pb-1 transition-colors cursor-pointer" onclick="go('dashboard',this)">Dashboard</a>
+      <a class="top-nav-link font-caption text-caption text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" onclick="go('guia',this)">Guía</a>
+      <a class="top-nav-link font-caption text-caption text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" onclick="go('zonas',this)">Zonas</a>
+      <a class="top-nav-link font-caption text-caption text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" onclick="go('herramientas',this)">Herramientas</a>
+    </nav>
+  </div>
+  <div class="flex items-center gap-4">
+    <div class="flex items-center border border-outline-variant">
+      <button class="font-btn px-3 py-2 font-caption text-caption text-on-surface-variant hover:bg-surface-container font-bold" onclick="setFontSize(-1)">A−</button>
+      <button class="font-btn px-3 py-2 font-caption text-caption text-on-surface-variant hover:bg-surface-container font-bold active" onclick="setFontSize(0)">A</button>
+      <button class="font-btn px-3 py-2 font-caption text-caption text-on-surface-variant hover:bg-surface-container font-bold" onclick="setFontSize(1)">A+</button>
     </div>
-    <div class="font-ctrl">
-      <button class="font-btn" onclick="setFontSize(-1)" title="Texto pequeño">A−</button>
-      <button class="font-btn active" onclick="setFontSize(0)" title="Texto normal">A</button>
-      <button class="font-btn" onclick="setFontSize(1)" title="Texto grande">A+</button>
-    </div>
-    <button class="theme-toggle" onclick="toggleThemePanel()" title="Temas visuales">
-      <span>🎨</span> Temas
+    <button onclick="toggleThemePanel()" class="flex items-center gap-1 px-3 py-2 cursor-pointer text-on-surface-variant hover:text-secondary hover:bg-surface-container transition-all border-0 bg-transparent font-caption text-caption">
+      <span class="material-symbols-outlined text-[18px]">palette</span> Tema
     </button>
-    <button class="theme-toggle" onclick="toggleGlossary()" title="Glosario de términos" style="margin-left:4px">
-      <span>📖</span> Glosario
+    <button onclick="toggleGlossary()" class="flex items-center gap-1 px-3 py-2 cursor-pointer text-on-surface-variant hover:text-secondary hover:bg-surface-container transition-all border-0 bg-transparent font-caption text-caption">
+      <span class="material-symbols-outlined text-[18px]">book</span> Glosario
     </button>
-  </header>
-
-  <!-- THEME PANEL -->
-  <div class="theme-panel" id="theme-panel">
-    <div class="tp-head">
-      <span class="tp-title">Tema visual</span>
-      <button class="tp-close" onclick="closeThemePanel()">✕</button>
-    </div>
-    <div id="theme-picker"></div>
   </div>
-  <div class="theme-overlay" id="theme-overlay" onclick="closeThemePanel()"></div>
+</header>
 
-  <!-- NAV -->
-  <nav class="nav">
-    <button class="nb on" onclick="go('guia',this)"><span class="nb-icon">📋</span>Guía</button>
-    <button class="nb" onclick="go('zonas',this)"><span class="nb-icon">📍</span>Zonas</button>
-    <button class="nb" onclick="go('estrategias',this)"><span class="nb-icon">⚡</span>Estrategias</button>
-    <button class="nb" onclick="go('materiales',this)"><span class="nb-icon">🧱</span>Materiales</button>
-    <button class="nb" onclick="go('plantas',this)"><span class="nb-icon">🌿</span>Plantas</button>
-    <button class="nb" onclick="go('sistemas',this)"><span class="nb-icon">🏗️</span>Sistemas</button>
-    <button class="nb" onclick="go('herramientas',this)"><span class="nb-icon">🛠️</span>Herramientas</button>
-  </nav>
+<div class="flex flex-1 overflow-hidden">
 
-  <div class="content" id="main-content">
+  <!-- SIDEBAR -->
+  <aside class="bg-surface border-r border-outline-variant h-full w-64 flex flex-col flex-shrink-0 hidden lg:flex">
+    <div class="px-6 py-6 border-b border-outline-variant">
+      <div class="flex items-center gap-3 mb-2">
+        <div class="w-10 h-10 bg-primary flex items-center justify-center text-on-primary font-bold font-mono">BP</div>
+        <div>
+          <h3 class="font-body-main text-body-main font-bold leading-tight text-on-surface">Proyecto activo</h3>
+          <p class="font-caption text-caption text-on-surface-variant" id="sidebar-zone-name">Paraguay</p>
+        </div>
+      </div>
+      <div class="w-full mt-4">
+        <select id="sel-zona-sidebar" class="w-full py-2 px-3 bg-surface-container border border-outline-variant font-data-label text-data-label text-on-surface uppercase tracking-widest cursor-pointer" onchange="sidebarZoneChange()">
+          <option value="subtropical">Subtropical húmedo</option>
+          <option value="chaco">Semiárido Chaco</option>
+          <option value="misionero">Subtropical misionero</option>
+          <option value="transicion">Zona de transición</option>
+        </select>
+      </div>
+    </div>
+    <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto hide-scrollbar">
+      <div class="px-3 py-2 font-caption text-caption uppercase tracking-wider text-on-surface-variant">Core</div>
+      <a class="flex items-center gap-3 px-4 py-3 font-caption text-caption uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high transition-all cursor-pointer nav-item active-nav" data-panel="dashboard" onclick="go('dashboard',this)">
+        <span class="material-symbols-outlined text-[20px]">dashboard</span> Dashboard
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 font-caption text-caption uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high transition-all cursor-pointer nav-item" data-panel="guia" onclick="go('guia',this)">
+        <span class="material-symbols-outlined text-[20px]">assignment</span> Guía
+      </a>
 
-    <!-- GUÍA -->
-    <div class="panel on" id="p-guia">
-      <div class="guia-wrap">
+      <div class="px-3 py-2 mt-4 font-caption text-caption uppercase tracking-wider text-on-surface-variant">Análisis</div>
+      <a class="flex items-center gap-3 px-4 py-3 font-caption text-caption uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high transition-all cursor-pointer nav-item" data-panel="zonas" onclick="go('zonas',this)">
+        <span class="material-symbols-outlined text-[20px]">thermostat</span> Zonas
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 font-caption text-caption uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high transition-all cursor-pointer nav-item" data-panel="estrategias" onclick="go('estrategias',this)">
+        <span class="material-symbols-outlined text-[20px]">bolt</span> Estrategias
+      </a>
 
-        <!-- COLUMNA IZQUIERDA: formulario en pasos -->
-        <div class="guia-form">
+      <div class="px-3 py-2 mt-4 font-caption text-caption uppercase tracking-wider text-on-surface-variant">Recursos</div>
+      <a class="flex items-center gap-3 px-4 py-3 font-caption text-caption uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high transition-all cursor-pointer nav-item" data-panel="materiales" onclick="go('materiales',this)">
+        <span class="material-symbols-outlined text-[20px]">layers</span> Materiales
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 font-caption text-caption uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high transition-all cursor-pointer nav-item" data-panel="plantas" onclick="go('plantas',this)">
+        <span class="material-symbols-outlined text-[20px]">forest</span> Plantas
+      </a>
+      <a class="flex items-center gap-3 px-4 py-3 font-caption text-caption uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high transition-all cursor-pointer nav-item" data-panel="sistemas" onclick="go('sistemas',this)">
+        <span class="material-symbols-outlined text-[20px]">construction</span> Sistemas
+      </a>
 
-          <div class="step-block">
-            <div class="step-num">01</div>
-            <div class="step-body">
-              <h3>Ubicación del lote</h3>
-              <p class="step-sub">Hacé clic en el mapa para detectar la zona automáticamente.</p>
-              <div id="map"></div>
-              <div class="map-info" id="minfo">Hacé clic en el mapa para marcar tu terreno.</div>
+      <div class="px-3 py-2 mt-4 font-caption text-caption uppercase tracking-wider text-on-surface-variant">Herramientas</div>
+      <a class="flex items-center gap-3 px-4 py-3 font-caption text-caption uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high transition-all cursor-pointer nav-item" data-panel="herramientas" onclick="go('herramientas',this)">
+        <span class="material-symbols-outlined text-[20px]">calculate</span> Calculadoras
+      </a>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 overflow-y-auto bg-surface-container-lowest hide-scrollbar relative">
+
+    <!-- DASHBOARD VIEW (default) -->
+    <div class="panel-content" id="p-dashboard">
+      <div class="px-margin-desktop py-8">
+        <div class="max-w-container-max mx-auto space-y-gutter">
+
+          <!-- Header -->
+          <div class="flex justify-between items-end mb-6 border-b border-outline pb-6">
+            <div>
+              <h1 class="font-display-lg text-display-lg text-primary mb-2">Análisis Climático</h1>
+              <p class="font-body-main text-body-main text-on-surface-variant max-w-xl" id="dash-subtitle">Perfil bioclimático integral para Paraguay. Evaluación de confort térmico y estrategias pasivas.</p>
             </div>
+            <button class="px-6 py-3 bg-surface text-primary border border-primary font-data-label text-data-label uppercase tracking-widest hover:bg-primary hover:text-on-primary transition-all flex items-center gap-3" onclick="exportSummary()">
+              <span class="material-symbols-outlined text-[20px]">ios_share</span> Exportar
+            </button>
           </div>
 
-          <div class="step-block">
-            <div class="step-num">02</div>
-            <div class="step-body">
-              <h3>Zona climática</h3>
-              <select id="sel-zona">
-                <option value="">— Seleccioná o detectá por mapa —</option>
-                <option value="subtropical">Subtropical húmedo (Región Oriental)</option>
-                <option value="chaco">Semiárido Chaco (Región Occidental)</option>
-                <option value="misionero">Subtropical misionero (Sur)</option>
-                <option value="transicion">Zona de transición (Centro)</option>
-              </select>
-            </div>
-          </div>
+          <!-- Bento Grid (populated by renderDashboard) -->
+          <div class="grid grid-cols-12 gap-gutter" id="dash-grid"></div>
 
-          <div class="step-block">
-            <div class="step-num">03</div>
-            <div class="step-body">
-              <h3>Datos del lote</h3>
-              <span class="flabel">Frente del lote orientado hacia</span>
-              <div class="chips" id="ch-frente">
-                <div class="chip" onclick="selChip('frente','N',this)">Norte</div>
-                <div class="chip" onclick="selChip('frente','S',this)">Sur</div>
-                <div class="chip" onclick="selChip('frente','E',this)">Este</div>
-                <div class="chip" onclick="selChip('frente','O',this)">Oeste</div>
-                <div class="chip" onclick="selChip('frente','NE',this)">NE</div>
-                <div class="chip" onclick="selChip('frente','NO',this)">NO</div>
-                <div class="chip" onclick="selChip('frente','SE',this)">SE</div>
-                <div class="chip" onclick="selChip('frente','SO',this)">SO</div>
+          <!-- Footer info -->
+          <div class="flex justify-between items-center py-6 border-t border-outline-variant">
+            <span class="font-data-label text-[10px] uppercase text-on-surface-variant">Datos climáticos: Dirección de Meteorología e Hidrología — Paraguay</span>
+            <span class="font-data-label text-[10px] uppercase text-on-surface-variant" id="dash-update">Actualizado: —</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GUÍA PANEL -->
+    <div class="panel-content hidden" id="p-guia">
+      <div class="px-margin-desktop py-8">
+        <div class="max-w-container-max mx-auto">
+          <div class="flex justify-between items-end mb-6 border-b border-outline pb-6">
+            <div>
+              <h1 class="font-headline-md text-headline-md text-primary mb-1">Guía de diseño</h1>
+              <p class="font-body-main text-body-main text-on-surface-variant">Asistente paso a paso para recomendaciones bioclimáticas.</p>
+            </div>
+            <button class="px-4 py-2 bg-surface text-on-surface-variant border border-outline-variant font-caption text-caption uppercase hover:bg-surface-container transition-all" onclick="toggleGlossary()">📖 Glosario</button>
+          </div>
+          <div class="guia-wrap">
+            <div class="guia-form">
+              <div class="step-block">
+                <div class="step-num">01</div>
+                <div class="step-body">
+                  <h3>Ubicación del lote</h3>
+                  <p class="step-sub">Hacé clic en el mapa para detectar la zona automáticamente.</p>
+                  <div id="map"></div>
+                  <div class="map-info" id="minfo">Hacé clic en el mapa para marcar tu terreno.</div>
+                </div>
               </div>
-              <span class="flabel">Tipo de edificio</span>
-              <div class="chips" id="ch-tipo">
-                <div class="chip" onclick="selChip('tipo','vivienda',this)">Vivienda</div>
-                <div class="chip" onclick="selChip('tipo','comercial',this)">Comercial</div>
-                <div class="chip" onclick="selChip('tipo','oficina',this)">Oficina</div>
-                <div class="chip" onclick="selChip('tipo','educativo',this)">Educativo</div>
+              <div class="step-block">
+                <div class="step-num">02</div>
+                <div class="step-body">
+                  <h3>Zona climática</h3>
+                  <select id="sel-zona">
+                    <option value="">— Seleccioná o detectá por mapa —</option>
+                    <option value="subtropical">Subtropical húmedo (Región Oriental)</option>
+                    <option value="chaco">Semiárido Chaco (Región Occidental)</option>
+                    <option value="misionero">Subtropical misionero (Sur)</option>
+                    <option value="transicion">Zona de transición (Centro)</option>
+                  </select>
+                </div>
               </div>
-              <span class="flabel">Entorno</span>
-              <div class="chips" id="ch-entorno">
-                <div class="chip" onclick="selChip('entorno','urbano',this)">Urbano denso</div>
-                <div class="chip" onclick="selChip('entorno','suburbano',this)">Suburbano</div>
-                <div class="chip" onclick="selChip('entorno','rural',this)">Rural / abierto</div>
+              <div class="step-block">
+                <div class="step-num">03</div>
+                <div class="step-body">
+                  <h3>Datos del lote</h3>
+                  <span class="flabel">Frente del lote orientado hacia</span>
+                  <div class="chips" id="ch-frente">
+                    <div class="chip" onclick="selChip('frente','N',this)">Norte</div>
+                    <div class="chip" onclick="selChip('frente','S',this)">Sur</div>
+                    <div class="chip" onclick="selChip('frente','E',this)">Este</div>
+                    <div class="chip" onclick="selChip('frente','O',this)">Oeste</div>
+                    <div class="chip" onclick="selChip('frente','NE',this)">NE</div>
+                    <div class="chip" onclick="selChip('frente','NO',this)">NO</div>
+                    <div class="chip" onclick="selChip('frente','SE',this)">SE</div>
+                    <div class="chip" onclick="selChip('frente','SO',this)">SO</div>
+                  </div>
+                  <span class="flabel">Tipo de edificio</span>
+                  <div class="chips" id="ch-tipo">
+                    <div class="chip" onclick="selChip('tipo','vivienda',this)">Vivienda</div>
+                    <div class="chip" onclick="selChip('tipo','comercial',this)">Comercial</div>
+                    <div class="chip" onclick="selChip('tipo','oficina',this)">Oficina</div>
+                    <div class="chip" onclick="selChip('tipo','educativo',this)">Educativo</div>
+                  </div>
+                  <span class="flabel">Entorno</span>
+                  <div class="chips" id="ch-entorno">
+                    <div class="chip" onclick="selChip('entorno','urbano',this)">Urbano denso</div>
+                    <div class="chip" onclick="selChip('entorno','suburbano',this)">Suburbano</div>
+                    <div class="chip" onclick="selChip('entorno','rural',this)">Rural / abierto</div>
+                  </div>
+                </div>
+              </div>
+              <button class="btn-go" onclick="generar()">Generar recomendaciones →</button>
+              <div class="mt-6">
+                <div class="font-caption text-caption uppercase tracking-wider text-on-surface-variant mb-4">📐 Principios de diseño rápido</div>
+                <div class="principles-grid" id="principles-grid"></div>
+              </div>
+              <div class="mt-8">
+                <div class="font-caption text-caption uppercase tracking-wider text-on-surface-variant mb-4">❓ Preguntas frecuentes</div>
+                <div id="faq-list"></div>
+              </div>
+            </div>
+            <div id="resultado">
+              <div style="display:flex;gap:6px;justify-content:flex-end;margin-bottom:8px">
+                <button class="btn-sm" onclick="exportSummary()">🖨️ Exportar resumen</button>
+              </div>
+              <div class="empty">
+                <span>🗺️</span>
+                <p>Completá los pasos del formulario<br>y generá las recomendaciones</p>
               </div>
             </div>
           </div>
-
-          <button class="btn-go" onclick="generar()">Generar recomendaciones →</button>
-
-          <!-- PRINCIPIOS DE DISEÑO -->
-          <div style="margin-top:16px">
-            <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">📐 Principios de diseño rápido</div>
-            <div class="principles-grid" id="principles-grid"></div>
-          </div>
-
-          <!-- FAQ -->
-          <div style="margin-top:20px">
-            <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">❓ Preguntas frecuentes</div>
-            <div id="faq-list"></div>
-          </div>
         </div>
-
-        <!-- COLUMNA DERECHA: resultado -->
-        <div id="resultado">
-          <div style="display:flex;gap:6px;justify-content:flex-end;margin-bottom:8px">
-            <button class="btn-sm" onclick="exportSummary()" title="Exportar resumen a PDF">🖨️ Exportar resumen</button>
-          </div>
-          <div class="empty">
-            <span>🗺️</span>
-            <p>Completá los pasos del formulario<br>y generá las recomendaciones</p>
-          </div>
-        </div>
-
       </div>
     </div>
 
-    <!-- ZONAS -->
-    <div class="panel" id="p-zonas">
-      <div class="stitle">Zonas climáticas de Paraguay</div>
-      <div class="ssub">Seleccioná una zona para ver sus características, diagramas y recomendaciones.</div>
-      <div class="zgrid" id="zgrid"></div>
-      <div id="zdet"></div>
-    </div>
-
-    <!-- ESTRATEGIAS -->
-    <div class="panel" id="p-estrategias">
-      <div class="stitle">Estrategias bioclimáticas</div>
-      <div class="ssub">Técnicas pasivas de acondicionamiento para el clima paraguayo.</div>
-      <div class="frow" id="sfilt"></div>
-      <div class="sgrid" id="sgrid"></div>
-    </div>
-
-    <!-- MATERIALES -->
-    <div class="panel" id="p-materiales">
-      <div class="stitle">Materiales y propiedades térmicas</div>
-      <div class="ssub">Materiales disponibles en Paraguay.</div>
-      <div class="frow" id="mfilt"></div>
-      <div class="mwrap">
-        <table class="mt">
-          <colgroup><col style="width:35%"><col style="width:13%"><col style="width:22%"><col style="width:22%"><col style="width:8%"></colgroup>
-          <thead><tr><th>Material</th><th>λ (W/mK)</th><th>Masa térmica</th><th>Aislamiento</th><th>Zonas</th></tr></thead>
-          <tbody id="mbody"></tbody>
-        </table>
+    <!-- ZONAS PANEL -->
+    <div class="panel-content hidden" id="p-zonas">
+      <div class="px-margin-desktop py-8">
+        <div class="max-w-container-max mx-auto">
+          <h1 class="font-headline-md text-headline-md text-primary mb-2">Zonas climáticas de Paraguay</h1>
+          <p class="font-body-main text-body-main text-on-surface-variant mb-6">Seleccioná una zona para ver sus características y diagramas.</p>
+          <div class="zgrid" id="zgrid"></div>
+          <div id="zdet"></div>
+        </div>
       </div>
     </div>
 
-    <!-- PLANTAS -->
-    <div class="panel" id="p-plantas">
-      <div class="stitle">Plantas autóctonas de Paraguay</div>
-      <div class="ssub">Especies nativas para uso bioclimático en arquitectura y paisajismo.</div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px">
-        <div class="utog">
-          <button class="ub on" onclick="setUso('todos',this)">Todas</button>
-          <button class="ub" onclick="setUso('exterior',this)">Exterior</button>
-          <button class="ub" onclick="setUso('interior',this)">Interior</button>
-          <button class="ub" onclick="setUso('ambos',this)">Int. y Ext.</button>
+    <!-- ESTRATEGIAS PANEL -->
+    <div class="panel-content hidden" id="p-estrategias">
+      <div class="px-margin-desktop py-8">
+        <div class="max-w-container-max mx-auto">
+          <h1 class="font-headline-md text-headline-md text-primary mb-2">Estrategias bioclimáticas</h1>
+          <p class="font-body-main text-body-main text-on-surface-variant mb-6">Técnicas pasivas de acondicionamiento para el clima paraguayo.</p>
+          <div class="frow" id="sfilt"></div>
+          <div class="sgrid" id="sgrid"></div>
         </div>
-        <div class="frow" style="margin:0" id="pcfilt"></div>
-      </div>
-      <div class="pgrid" id="pgrid"></div>
-    </div>
-
-    <!-- SISTEMAS -->
-    <div class="panel" id="p-sistemas">
-      <div class="stitle">🏗️ Sistemas constructivos</div>
-      <div class="ssub">Sistemas de construcción sustentable disponibles y aplicables en Paraguay.</div>
-      <div class="frow" id="sc-filt"></div>
-      <div class="sc-grid" id="sc-grid"></div>
-    </div>
-
-    <!-- HERRAMIENTAS -->
-    <div class="panel" id="p-herramientas">
-      <div class="stitle">🛠️ Herramientas técnicas</div>
-      <div class="ssub">Calculadoras y comparadores para diseñar con datos.</div>
-
-      <div class="ht-grid">
-
-        <!-- CALCULADORA TÉRMICA -->
-        <div class="ht-card">
-          <h3 class="ht-card-title">🧱 Resistencia térmica (R / U)</h3>
-          <p class="ht-card-sub">Calculá la transmitancia térmica de un muro o cubierta multicapa.</p>
-          <div id="tc-body">
-            <div class="tc-capas" id="tc-layers"></div>
-            <div class="tc-add" onclick="tcAddLayer()">+ Agregar capa</div>
-            <div class="tc-result" id="tc-result">
-              <span>R total: <strong id="tc-r">0.00</strong> m²K/W</span>
-              <span>· U: <strong id="tc-u">—</strong> W/m²K</span>
-            </div>
-            <div class="tc-veredict" id="tc-veredict"></div>
-          </div>
-        </div>
-
-        <!-- CAPTACIÓN DE AGUA -->
-        <div class="ht-card">
-          <h3 class="ht-card-title">💧 Captación de agua de lluvia</h3>
-          <p class="ht-card-sub">Estimá el volumen de agua recolectable según zona y superficie de techo.</p>
-          <div class="hc-body">
-            <div class="hc-row">
-              <label>Zona climática</label>
-              <select id="hc-zona" onchange="calcRainwater()">
-                <option value="subtropical">Subtropical húmedo — 1.400 mm/año</option>
-                <option value="chaco">Semiárido Chaco — 800 mm/año</option>
-                <option value="misionero">Subtropical misionero — 1.900 mm/año</option>
-                <option value="transicion">Transición — 1.400 mm/año</option>
-              </select>
-            </div>
-            <div class="hc-row">
-              <label>Superficie de techo (m²)</label>
-              <input type="number" id="hc-area" value="80" min="10" max="2000" oninput="calcRainwater()">
-            </div>
-            <div class="hc-row">
-              <label>Coeficiente de escorrentía</label>
-              <select id="hc-coef" onchange="calcRainwater()">
-                <option value="0.80">Chapa lisa — 0.80</option>
-                <option value="0.75" selected>Teja cerámica — 0.75</option>
-                <option value="0.60">Techo verde — 0.60</option>
-                <option value="0.50">Tierra / grava — 0.50</option>
-              </select>
-            </div>
-            <div class="hc-result" id="hc-result"></div>
-          </div>
-        </div>
-
-        <!-- ACH VENTILACIÓN -->
-        <div class="ht-card">
-          <h3 class="ht-card-title">🌬️ Ventilación natural (ACH)</h3>
-          <p class="ht-card-sub">Calculá las renovaciones de aire por hora según aberturas y viento.</p>
-          <div class="ach-body">
-            <div class="ach-row">
-              <label>Superficie del espacio (m²)</label>
-              <input type="number" id="ach-area" value="80" min="10" max="2000" oninput="calcACH()">
-            </div>
-            <div class="ach-row">
-              <label>Altura del techo (m)</label>
-              <input type="number" id="ach-height" value="2.7" min="2" max="6" step="0.1" oninput="calcACH()">
-            </div>
-            <div class="ach-row">
-              <label>Superficie de cada abertura (m²)</label>
-              <input type="number" id="ach-win" value="2" min="0.1" max="20" step="0.1" oninput="calcACH()">
-            </div>
-            <div class="ach-row">
-              <label>Cantidad de aberturas</label>
-              <input type="number" id="ach-win-n" value="2" min="1" max="20" oninput="calcACH()">
-            </div>
-            <div class="ach-row">
-              <label>Velocidad del viento (m/s)</label>
-              <input type="number" id="ach-wind" value="2" min="0" max="15" step="0.5" oninput="calcACH()">
-            </div>
-            <div class="ach-result" id="ach-result"></div>
-          </div>
-        </div>
-
-        <!-- PUNTO DE ROCÍO -->
-        <div class="ht-card">
-          <h3 class="ht-card-title">💧 Calculadora de punto de rocío</h3>
-          <p class="ht-card-sub">Determiná la temperatura de rocío y riesgo de condensación en superficies.</p>
-          <div class="dew-body">
-            <div class="dew-row">
-              <label>Temperatura del aire (°C)</label>
-              <input type="number" id="dew-temp" value="30" min="-10" max="50" step="0.5" oninput="calcDew()">
-            </div>
-            <div class="dew-row">
-              <label>Humedad relativa (%)</label>
-              <input type="number" id="dew-rh" value="70" min="0" max="100" oninput="calcDew()">
-            </div>
-            <div class="dew-result" id="dew-result"></div>
-          </div>
-        </div>
-
-        <!-- CALCULADORA DE ALERO -->
-        <div class="ht-card">
-          <h3 class="ht-card-title">☀️ Calculadora de alero / voladizo</h3>
-          <p class="ht-card-sub">Dimensioná el alero óptimo para fachada norte según altura de ventana y antepecho.</p>
-          <div class="eave-body">
-            <div class="eave-row">
-              <label>Altura de ventana (cm)</label>
-              <input type="number" id="eave-wh" value="200" min="50" max="400" oninput="calcEave()">
-            </div>
-            <div class="eave-row">
-              <label>Antepecho (altura alféizar, cm)</label>
-              <input type="number" id="eave-sh" value="20" min="0" max="200" oninput="calcEave()">
-            </div>
-            <div class="eave-row">
-              <label>Ancho de ventana (cm)</label>
-              <input type="number" id="eave-wd" value="150" min="30" max="600" oninput="calcEave()">
-            </div>
-            <div class="eave-result" id="eave-result"></div>
-          </div>
-        </div>
-
-        <!-- COMPARADOR DE ZONAS -->
-        <div class="ht-card ht-card-wide">
-          <h3 class="ht-card-title">📊 Comparador de zonas climáticas</h3>
-          <p class="ht-card-sub">Compará dos zonas side-by-side para decidir estrategias compartidas.</p>
-          <div class="zc-body" id="zc-body"></div>
-        </div>
-
-        <!-- MATRIZ ESTRATEGIAS × ZONAS -->
-        <div class="ht-card ht-card-wide">
-          <h3 class="ht-card-title">🔗 Matriz de estrategias × zonas</h3>
-          <p class="ht-card-sub">Vista rápida de qué estrategias pasivas aplicar en cada zona climática.</p>
-          <div id="strat-matrix"></div>
-        </div>
-
       </div>
     </div>
 
-  </div>
-
-  <!-- GLOSARIO PANEL -->
-  <div class="glossary-panel" id="glossary-panel">
-    <div class="glossary-head">
-      <span class="glossary-title">📖 Glosario bioclimático</span>
-      <button class="glossary-close" onclick="closeGlossary()">✕</button>
-    </div>
-    <div class="glossary-list" id="glossary-list"></div>
-  </div>
-  <div class="glossary-overlay" id="glossary-overlay" onclick="closeGlossary()"></div>
-
-  <!-- FOOTER -->
-  <footer class="ftr">
-    <div class="ftr-inner">
-      <div class="ftr-brand">🌿 <strong>Bioclimática Paraguay</strong></div>
-      <div class="ftr-links">
-        <a href="https://github.com/voccelstudio/bibliotectura" target="_blank">GitHub</a>
-        <span class="ftr-dot">·</span>
-        <span>v2.0</span>
-        <span class="ftr-dot">·</span>
-        <span>Hecho en Paraguay 🇵🇾</span>
+    <!-- MATERIALES PANEL -->
+    <div class="panel-content hidden" id="p-materiales">
+      <div class="px-margin-desktop py-8">
+        <div class="max-w-container-max mx-auto">
+          <h1 class="font-headline-md text-headline-md text-primary mb-2">Materiales y propiedades térmicas</h1>
+          <p class="font-body-main text-body-main text-on-surface-variant mb-6">Materiales disponibles en Paraguay.</p>
+          <div class="frow" id="mfilt"></div>
+          <div class="mwrap">
+            <table class="mt">
+              <colgroup><col style="width:35%"><col style="width:13%"><col style="width:22%"><col style="width:22%"><col style="width:8%"></colgroup>
+              <thead><tr><th>Material</th><th>λ (W/mK)</th><th>Masa térmica</th><th>Aislamiento</th><th>Zonas</th></tr></thead>
+              <tbody id="mbody"></tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
-  </footer>
+
+    <!-- PLANTAS PANEL -->
+    <div class="panel-content hidden" id="p-plantas">
+      <div class="px-margin-desktop py-8">
+        <div class="max-w-container-max mx-auto">
+          <h1 class="font-headline-md text-headline-md text-primary mb-2">Plantas autóctonas</h1>
+          <p class="font-body-main text-body-main text-on-surface-variant mb-6">Especies nativas para diseño bioclimático y paisajismo.</p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px">
+            <div class="utog">
+              <button class="ub on" onclick="setUso('todos',this)">Todas</button>
+              <button class="ub" onclick="setUso('exterior',this)">Exterior</button>
+              <button class="ub" onclick="setUso('interior',this)">Interior</button>
+              <button class="ub" onclick="setUso('ambos',this)">Int. y Ext.</button>
+            </div>
+            <div class="frow" style="margin:0" id="pcfilt"></div>
+          </div>
+          <div class="pgrid" id="pgrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SISTEMAS PANEL -->
+    <div class="panel-content hidden" id="p-sistemas">
+      <div class="px-margin-desktop py-8">
+        <div class="max-w-container-max mx-auto">
+          <h1 class="font-headline-md text-headline-md text-primary mb-2">Sistemas constructivos</h1>
+          <p class="font-body-main text-body-main text-on-surface-variant mb-6">Sistemas de construcción sustentable disponibles en Paraguay.</p>
+          <div class="frow" id="sc-filt"></div>
+          <div class="sc-grid" id="sc-grid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HERRAMIENTAS PANEL -->
+    <div class="panel-content hidden" id="p-herramientas">
+      <div class="px-margin-desktop py-8">
+        <div class="max-w-container-max mx-auto">
+          <h1 class="font-headline-md text-headline-md text-primary mb-2">Herramientas técnicas</h1>
+          <p class="font-body-main text-body-main text-on-surface-variant mb-6">Calculadoras y comparadores para diseñar con datos.</p>
+          <div class="ht-grid">
+            <!-- Térmica -->
+            <div class="ht-card">
+              <h3 class="ht-card-title">🧱 Resistencia térmica (R / U)</h3>
+              <p class="ht-card-sub">Calculá la transmitancia térmica de un muro o cubierta multicapa.</p>
+              <div id="tc-body">
+                <div class="tc-capas" id="tc-layers"></div>
+                <div class="tc-add" onclick="tcAddLayer()">+ Agregar capa</div>
+                <div class="tc-result" id="tc-result">
+                  <span>R total: <strong id="tc-r">0.00</strong> m²K/W</span>
+                  <span>· U: <strong id="tc-u">—</strong> W/m²K</span>
+                </div>
+                <div class="tc-veredict" id="tc-veredict"></div>
+              </div>
+            </div>
+            <!-- Agua -->
+            <div class="ht-card">
+              <h3 class="ht-card-title">💧 Captación de agua de lluvia</h3>
+              <p class="ht-card-sub">Estimá el volumen de agua recolectable según zona y superficie de techo.</p>
+              <div class="hc-body">
+                <div class="hc-row"><label>Zona climática</label><select id="hc-zona" onchange="calcRainwater()"><option value="subtropical">Subtropical húmedo — 1.400 mm/año</option><option value="chaco">Semiárido Chaco — 800 mm/año</option><option value="misionero">Subtropical misionero — 1.900 mm/año</option><option value="transicion">Transición — 1.400 mm/año</option></select></div>
+                <div class="hc-row"><label>Superficie de techo (m²)</label><input type="number" id="hc-area" value="80" min="10" max="2000" oninput="calcRainwater()"></div>
+                <div class="hc-row"><label>Coeficiente de escorrentía</label><select id="hc-coef" onchange="calcRainwater()"><option value="0.80">Chapa lisa — 0.80</option><option value="0.75" selected>Teja cerámica — 0.75</option><option value="0.60">Techo verde — 0.60</option><option value="0.50">Tierra / grava — 0.50</option></select></div>
+                <div class="hc-result" id="hc-result"></div>
+              </div>
+            </div>
+            <!-- ACH -->
+            <div class="ht-card">
+              <h3 class="ht-card-title">🌬️ Ventilación natural (ACH)</h3>
+              <p class="ht-card-sub">Calculá las renovaciones de aire por hora según aberturas y viento.</p>
+              <div class="ach-body">
+                <div class="ach-row"><label>Superficie del espacio (m²)</label><input type="number" id="ach-area" value="80" min="10" max="2000" oninput="calcACH()"></div>
+                <div class="ach-row"><label>Altura del techo (m)</label><input type="number" id="ach-height" value="2.7" min="2" max="6" step="0.1" oninput="calcACH()"></div>
+                <div class="ach-row"><label>Superficie de cada abertura (m²)</label><input type="number" id="ach-win" value="2" min="0.1" max="20" step="0.1" oninput="calcACH()"></div>
+                <div class="ach-row"><label>Cantidad de aberturas</label><input type="number" id="ach-win-n" value="2" min="1" max="20" oninput="calcACH()"></div>
+                <div class="ach-row"><label>Velocidad del viento (m/s)</label><input type="number" id="ach-wind" value="2" min="0" max="15" step="0.5" oninput="calcACH()"></div>
+                <div class="ach-result" id="ach-result"></div>
+              </div>
+            </div>
+            <!-- Punto de rocío -->
+            <div class="ht-card">
+              <h3 class="ht-card-title">💧 Calculadora de punto de rocío</h3>
+              <p class="ht-card-sub">Determiná la temperatura de rocío y riesgo de condensación.</p>
+              <div class="dew-body">
+                <div class="dew-row"><label>Temperatura del aire (°C)</label><input type="number" id="dew-temp" value="30" min="-10" max="50" step="0.5" oninput="calcDew()"></div>
+                <div class="dew-row"><label>Humedad relativa (%)</label><input type="number" id="dew-rh" value="70" min="0" max="100" oninput="calcDew()"></div>
+                <div class="dew-result" id="dew-result"></div>
+              </div>
+            </div>
+            <!-- Alero -->
+            <div class="ht-card">
+              <h3 class="ht-card-title">☀️ Calculadora de alero / voladizo</h3>
+              <p class="ht-card-sub">Dimensioná el alero óptimo para fachada norte.</p>
+              <div class="eave-body">
+                <div class="eave-row"><label>Altura de ventana (cm)</label><input type="number" id="eave-wh" value="200" min="50" max="400" oninput="calcEave()"></div>
+                <div class="eave-row"><label>Antepecho (cm)</label><input type="number" id="eave-sh" value="20" min="0" max="200" oninput="calcEave()"></div>
+                <div class="eave-row"><label>Ancho de ventana (cm)</label><input type="number" id="eave-wd" value="150" min="30" max="600" oninput="calcEave()"></div>
+                <div class="eave-result" id="eave-result"></div>
+              </div>
+            </div>
+            <!-- Comparador -->
+            <div class="ht-card ht-card-wide">
+              <h3 class="ht-card-title">📊 Comparador de zonas climáticas</h3>
+              <p class="ht-card-sub">Compará dos zonas side-by-side para decidir estrategias compartidas.</p>
+              <div class="zc-body" id="zc-body"></div>
+            </div>
+            <!-- Matriz -->
+            <div class="ht-card ht-card-wide">
+              <h3 class="ht-card-title">🔗 Matriz de estrategias × zonas</h3>
+              <p class="ht-card-sub">Vista rápida de qué estrategias pasivas aplicar en cada zona.</p>
+              <div id="strat-matrix"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
 </div>
+
+<!-- GLOSSARY PANEL -->
+<div class="glossary-panel" id="glossary-panel">
+  <div class="glossary-head">
+    <span class="glossary-title">📖 Glosario bioclimático</span>
+    <button class="glossary-close" onclick="closeGlossary()">✕</button>
+  </div>
+  <div class="glossary-list" id="glossary-list"></div>
+</div>
+<div class="glossary-overlay" id="glossary-overlay" onclick="closeGlossary()"></div>
+
+<!-- THEME PANEL -->
+<div class="theme-panel" id="theme-panel">
+  <div class="tp-head">
+    <span class="tp-title">Tema visual</span>
+    <button class="tp-close" onclick="closeThemePanel()">✕</button>
+  </div>
+  <div id="theme-picker"></div>
+</div>
+<div class="theme-overlay" id="theme-overlay" onclick="closeThemePanel()"></div>
+
+<!-- FOOTER -->
+<footer class="ftr flex-shrink-0">
+  <div class="ftr-inner">
+    <div class="ftr-brand">🌿 <strong>Bioclimática Paraguay</strong></div>
+    <div class="ftr-links">
+      <a href="https://github.com/voccelstudio/bibliotectura" target="_blank">GitHub</a>
+      <span class="ftr-dot">·</span>
+      <span>v3.0</span>
+      <span class="ftr-dot">·</span>
+      <span>Hecho en Paraguay 🇵🇾</span>
+    </div>
+  </div>
+</footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="data.js"></script>
 <script src="themes.js"></script>
 <script src="app.js"></script>
 <script>
-function go(id, btn) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
-  document.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
-  document.getElementById('p-' + id).classList.add('on');
-  btn.classList.add('on');
-  if (id === 'guia') setTimeout(initMap, 80);
+/* ── NAVIGATION ── */
+function go(id, el) {
+  document.querySelectorAll('.panel-content').forEach(p => p.classList.add('hidden'));
+  document.querySelectorAll('.nav-item').forEach(n => { n.classList.remove('active-nav'); n.style.borderLeft = 'none'; n.style.fontWeight = ''; n.style.color = ''; });
+  document.querySelectorAll('.top-nav-link').forEach(n => { n.classList.remove('border-secondary', 'text-secondary'); n.classList.add('text-on-surface-variant'); n.style.borderBottom = 'none'; });
+
+  const panel = document.getElementById('p-' + id);
+  if (panel) panel.classList.remove('hidden');
+
+  if (el) {
+    if (el.classList.contains('nav-item')) {
+      el.classList.add('active-nav');
+      el.style.borderLeft = '4px solid var(--secondary, #a04100)';
+    }
+    if (el.classList.contains('top-nav-link')) {
+      el.classList.remove('text-on-surface-variant');
+      el.classList.add('text-secondary');
+      el.style.borderBottom = '2px solid #a04100';
+    }
+  }
+
+  if (id === 'dashboard') renderDashboard();
+  if (id === 'guia') { setTimeout(initMap, 80); renderDesignPrinciples(); }
   if (id === 'sistemas') renderConstSystems();
+  if (id === 'herramientas') initHerramientas();
+}
+
+function sidebarZoneChange() {
+  const val = document.getElementById('sel-zona-sidebar').value;
+  const z = ZONES.find(x => x.id === val);
+  if (z) {
+    document.getElementById('sidebar-zone-name').textContent = z.name;
+    document.getElementById('sel-zona').value = val;
+    if (document.getElementById('p-dashboard') && !document.getElementById('p-dashboard').classList.contains('hidden')) {
+      renderDashboard();
+    }
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -385,6 +608,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderZones(); selZone(0);
   renderStrats(); renderMats(); renderPlantas();
   renderFAQ();
+  renderDashboard();
   setTimeout(initMap, 100);
 });
 </script>
