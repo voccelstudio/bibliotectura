@@ -9,7 +9,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0..1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <link rel="stylesheet" href="style.css"/>
-<link rel="stylesheet" href="style-iso.css"/>
 <style>
 :root {
   --surface: #f8f9fa;
@@ -240,9 +239,6 @@ tailwind.config = {
       <div class="px-3 py-2 mt-4 font-caption text-caption uppercase tracking-wider text-on-surface-variant">Herramientas</div>
       <a class="flex items-center gap-3 px-4 py-3 font-caption text-caption uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high transition-all cursor-pointer nav-item" data-panel="herramientas" onclick="go('herramientas',this)">
         <span class="material-symbols-outlined text-[20px]">calculate</span> Calculadoras
-      </a>
-      <a class="flex items-center gap-3 px-4 py-3 font-caption text-caption uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high transition-all cursor-pointer nav-item" data-panel="iso" onclick="go('iso',this)">
-        <span class="material-symbols-outlined text-[20px]">view_in_ar</span> Volumetría 3D
       </a>
     </nav>
   </aside>
@@ -524,110 +520,6 @@ tailwind.config = {
       </div>
     </div>
 
-    <!-- ISO PANEL -->
-    <div class="panel-content hidden" id="p-iso">
-      <div class="iso-toolbar">
-        <div class="iso-tb-group">
-          <button class="iso-btn on" id="iso-mode-select" onclick="isoSetMode('select')" title="Seleccionar">⬆️</button>
-          <button class="iso-btn" id="iso-mode-volume" onclick="isoSetMode('volume')" title="Agregar volumen">📦</button>
-          <button class="iso-btn" id="iso-mode-tree" onclick="isoSetMode('tree')" title="Agregar árbol">🌳</button>
-          <button class="iso-btn" id="iso-mode-measure" onclick="isoSetMode('measure')" title="Medir">📏</button>
-        </div>
-        <div class="iso-tb-group">
-          <label class="iso-lbl" style="font-size:10px;margin:0 4px">Temporada</label>
-          <select class="iso-sel" id="iso-season" onchange="isoRenderAll()" style="width:auto;min-width:80px">
-            <option value="verano">Verano</option>
-            <option value="otono">Otoño</option>
-            <option value="invierno">Invierno</option>
-            <option value="primavera">Primavera</option>
-          </select>
-        </div>
-        <div class="iso-tb-group" style="gap:2px">
-          <button class="iso-btn" onclick="isoResetView()" title="Reset vista">⌖</button>
-          <button class="iso-btn" onclick="isoZoom(1.3)" title="Acercar">⊕</button>
-          <button class="iso-btn" onclick="isoZoom(1/1.3)" title="Alejar">⊖</button>
-          <button class="iso-btn" id="iso-btn-shadow" onclick="isoToggleShadow()" title="Sombras">☀️</button>
-          <span class="iso-tb-label" style="margin-left:4px;font-size:10px;color:#999">Vista axonométrica fija</span>
-        </div>
-        <div class="iso-tb-group">
-          <label class="iso-lbl" style="font-size:10px;margin:0 4px">Norte</label>
-          <input class="iso-range" type="range" id="iso-north" min="-90" max="90" value="0" oninput="isoUpdateNorth(this.value)" style="width:60px">
-          <span id="iso-north-deg" style="font-size:11px;min-width:28px;text-align:center">0°</span>
-        </div>
-        <div class="iso-tb-group" style="margin-left:auto">
-          <button class="iso-btn" onclick="isoClearAll()" style="color:var(--error,#ba1a1a)">🗑️</button>
-          <button class="iso-btn" onclick="isoExportPNG()" style="font-weight:600">⬇ Exportar PNG</button>
-        </div>
-      </div>
-      <div class="iso-main">
-        <div class="iso-sidebar">
-          <div class="iso-sb-section">
-            <label>Terreno</label>
-            <div class="iso-sb-row"><span>Ancho</span><input class="iso-num" type="number" id="iso-lot-w" value="20" min="4" max="200" oninput="isoApplyLot()"></div>
-            <div class="iso-sb-row"><span>Fondo</span><input class="iso-num" type="number" id="iso-lot-d" value="30" min="4" max="200" oninput="isoApplyLot()"></div>
-            <div class="iso-sb-row" id="iso-w2-row"><span>Fondo 2</span><input class="iso-num" type="number" id="iso-lot-w2" value="15" min="2" max="200" oninput="isoApplyLot()"></div>
-            <div class="iso-sb-row">
-              <span>Tipo</span>
-              <select class="iso-sel" id="iso-lot-type" onchange="isoApplyLot()">
-                <option value="r">Rectangular</option>
-                <option value="l">L</option>
-                <option value="trap">Trapezoidal</option>
-                <option value="irreg">Irregular</option>
-              </select>
-            </div>
-          </div>
-          <div class="iso-sb-section">
-            <label>Volumen</label>
-            <div class="iso-sb-row"><span>Ancho</span><input class="iso-num" type="number" id="iso-vol-w" value="8" min="1" max="80"></div>
-            <div class="iso-sb-row"><span>Fondo</span><input class="iso-num" type="number" id="iso-vol-d" value="10" min="1" max="80"></div>
-            <div class="iso-sb-row"><span>Altura</span><input class="iso-num" type="number" id="iso-vol-h" value="3" min="1" max="80"></div>
-            <div class="iso-sb-row">
-              <span>Uso</span>
-              <select class="iso-sel" id="iso-vol-func">
-                <option value="vivienda">Vivienda</option>
-                <option value="comercial">Comercial</option>
-                <option value="oficina">Oficina</option>
-                <option value="galpon">Galpón</option>
-              </select>
-            </div>
-            <div class="iso-sb-row"><span>Nombre</span><input class="iso-txt" type="text" id="iso-vol-name" placeholder="ej: Cuerpo principal"></div>
-          </div>
-          <div class="iso-sb-section">
-            <label>Árbol</label>
-            <div class="iso-sb-row"><span>Radio</span><input class="iso-num" type="number" id="iso-tree-r" value="3" min="1" max="30"></div>
-            <div class="iso-sb-row"><span>Altura</span><input class="iso-num" type="number" id="iso-tree-h" value="6" min="1" max="60"></div>
-            <div class="iso-sb-row">
-              <span>Tipo</span>
-              <select class="iso-sel" id="iso-tree-type">
-                <option value="evergreen">Perenne</option>
-                <option value="deciduous">Caducifolio</option>
-                <option value="palm">Palmera</option>
-                <option value="bush">Arbusto</option>
-              </select>
-            </div>
-          </div>
-          <div class="iso-sb-section">
-            <label>Colores</label>
-            <div class="iso-color-grid" id="iso-color-grid"></div>
-          </div>
-          <div class="iso-sb-section" style="flex:1;min-height:0">
-            <label>Elementos</label>
-            <div class="iso-el-list" id="iso-el-list"></div>
-          </div>
-          <div class="iso-sb-section" style="border-bottom:none;padding-bottom:16px">
-            <div class="iso-stat-row"><span style="font-size:11px;color:#888">Lote</span><span id="iso-st-lot" style="font-size:12px;font-weight:500">—</span></div>
-            <div class="iso-stat-row"><span style="font-size:11px;color:#888">Construido</span><span id="iso-st-built" style="font-size:12px;font-weight:500">—</span></div>
-            <div class="iso-stat-row"><span style="font-size:11px;color:#888">FOS</span><span id="iso-st-fos" style="font-size:12px;font-weight:500">—</span></div>
-            <div class="iso-fos-bar"><div class="iso-fos-fill" id="iso-fos-fill" style="width:0%"></div></div>
-          </div>
-        </div>
-        <div class="iso-canvas-area" id="iso-canvas-area">
-          <canvas id="iso-canvas"></canvas>
-        </div>
-      </div>
-      <div class="iso-hint" id="iso-hint">⬆️ Seleccioná · 📦 Agregá volúmenes · 🌳 Plantá árboles · 📏 Medí distancias</div>
-    </div>
-
   </main>
 </div>
 
@@ -669,7 +561,6 @@ tailwind.config = {
 <script src="data.js"></script>
 <script src="themes.js"></script>
 <script src="app.js"></script>
-<script src="iso.js"></script>
 <script>
 /* ── NAVIGATION ── */
 function go(id, el) {
@@ -696,33 +587,6 @@ function go(id, el) {
   if (id === 'guia') { setTimeout(initMap, 80); renderDesignPrinciples(); }
   if (id === 'sistemas') renderConstSystems();
   if (id === 'herramientas') initHerramientas();
-  if (id === 'iso') {
-    const iso = document.getElementById('p-iso');
-    iso.style.display = 'flex';
-    iso.style.height = '100%';
-    iso.style.width = '100%';
-    document.querySelector('main').style.overflow = 'hidden';
-    setTimeout(() => {
-      isoInit();
-      const frente = fd.frente || 'N';
-      const lotW = { N:20, S:20, E:20, O:20, NE:20, NO:20, SE:20, SO:20 }[frente] || 20;
-      setTimeout(() => {
-        ['iso-lot-w','iso-lot-d','iso-vol-w','iso-vol-d','iso-vol-h'].forEach(id=>{
-          const el=document.getElementById(id); if(el) el.value = id==='iso-lot-w'?lotW: id==='iso-lot-d'?30: id==='iso-vol-w'?Math.round(lotW*0.4): id==='iso-vol-d'?12: 3;
-        });
-        document.getElementById('iso-lot-type').value='r';
-        isoApplyLot();
-        if (isoElements.length===0) {
-          isoElements.push({id:++isoElId,type:'volume',x:4,y:6,z:0,w:Math.round(lotW*0.4),d:12,h:3,color:'#c4462a',label:'Edificio principal',func:'vivienda',selected:false});
-          isoElements.push({id:++isoElId,type:'volume',x:2,y:2,z:0,w:4,d:4,h:2.5,color:'#6b7f4e',label:'Galería',func:'galeria',selected:false});
-        }
-        isoUpdateElList();
-        isoRenderAll();
-      }, 200);
-    }, 80);
-  } else {
-    document.querySelector('main').style.overflow = 'auto';
-  }
 }
 
 function sidebarZoneChange() {

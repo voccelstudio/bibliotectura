@@ -71,7 +71,7 @@ function generar() {
   dDiv.innerHTML = `
     <div class="rsec-hdr">🏗️ &nbsp; Diagrama del lote — frente al ${frente} · ${Z.name}</div>
     <div class="diagram-wrap">
-      <canvas id="lote-cvs" width="900" height="500"></canvas>
+      <canvas id="lote-cvs" width="900" height="560"></canvas>
     </div>`;
   r.appendChild(dDiv);
   setTimeout(() => drawLote('lote-cvs', frente, Z, tipo), 60);
@@ -104,346 +104,457 @@ function generar() {
   });
 }
 
-/* ══════════════════════════════════════
-   DIAGRAMA LOTE — Estilo arquitectónico
-   Limpio, blanco, líneas finas, seccional
-══════════════════════════════════════ */
+/* ════════════════════════════════════════════
+   DIAGRAMA AXONOMÉTRICO — Lote, volumen edilicio,
+   vientos dominantes y trayectoria solar
+════════════════════════════════════════════ */
 function drawLote(id, frente, Z, tipo) {
   const cvs = document.getElementById(id);
   if (!cvs) return;
+  const W = 900, H = 560;
+  cvs.width = W; cvs.height = H;
   const ctx = cvs.getContext('2d');
-  const W = cvs.width, H = cvs.height;
-  ctx.clearRect(0,0,W,H);
+  ctx.clearRect(0, 0, W, H);
+  
+  // Clean architectural background with a very soft grid
+  ctx.fillStyle = '#fbfbfa'; ctx.fillRect(0, 0, W, H);
 
-  // ── FONDO BLANCO limpio ──
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0,0,W,H);
+  const A = Math.PI / 6, S = 10.5;
+  const cx = W / 2 + 10, cy = H - 70; // shift slightly up for legend spacing
+  function ix(x, y)   { return cx + (x - y) * Math.cos(A) * S; }
+  function iy(x, y, z){ return cy + (x + y) * Math.sin(A) * S - z * S; }
+  function ip(x, y, z){ return { x: ix(x, y), y: iy(x, y, z) }; }
 
-  // ── ESCALA: 1m = 9px, lote centrado ──
-  const lotW = 20, lotD = 30; // metros de referencia
-  const S = Math.min((W-280)/lotW, (H-130)/lotD, 18);
-  const offX = (W - lotW*S) / 2 - 30;
-  const offY = 46;
-  const lx=offX, ly=offY, lw=lotW*S, lh=lotD*S;
+  const lotW = 20, lotD = 30;
 
-  function wx(m) { return lx + m*S; }
-  function wy(m) { return ly + m*S; }
+  function poly(pts, fill, stroke, lw, dash = []) {
+    ctx.save();
+    ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y);
+    for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+    ctx.closePath();
+    if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+    if (stroke) {
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth = lw || 1;
+      if (dash.length) ctx.setLineDash(dash);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
 
-  // ── HATCH terreno (exterior lote) ──
+  const edgeIdx = { N:0, NE:0, E:1, SE:1, S:2, SO:2, O:3, NO:3 }[frente] || 0;
+  const lotEdge = [
+    { x1:0, y1:0,   x2:lotW, y2:0,    lo:{x:0, y:-2.5} },
+    { x1:lotW, y1:0, x2:lotW, y2:lotD, lo:{x:2.5, y:0} },
+    { x1:lotW, y1:lotD, x2:0, y2:lotD, lo:{x:0, y:2.5} },
+    { x1:0, y1:lotD, x2:0, y2:0,       lo:{x:-2.5, y:0} },
+  ];
+  const edge = lotEdge[edgeIdx];
+  const stP = [ip(edge.x1, edge.y1, 0), ip(edge.x2, edge.y2, 0)];
+
+  /* ── RETÍCULA PERSPECTIVA (Faded & elegant) ── */
   ctx.save();
-  ctx.strokeStyle = 'rgba(0,0,0,0.06)';
+  ctx.strokeStyle = 'rgba(44, 62, 80, 0.04)';
   ctx.lineWidth = 0.5;
-  for(let i=-lh; i<W+lh; i+=8) {
-    ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i+lh,lh*1.5); ctx.stroke();
+  for (let i = -40; i < 70; i += 4) {
+    const a = ip(i, -10, 0), b = ip(i, lotD + 10, 0);
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.stroke();
+    const c = ip(-10, i, 0), d = ip(lotW + 10, i, 0);
+    ctx.beginPath(); ctx.moveTo(c.x, c.y); ctx.lineTo(d.x, d.y); ctx.stroke();
   }
   ctx.restore();
 
-  // ── LOTE ──
-  ctx.fillStyle = '#f8f8f6';
-  ctx.fillRect(lx,ly,lw,lh);
-  // Thick border = línea de propiedad
-  ctx.strokeStyle = '#1a1a1a';
-  ctx.lineWidth = 1.5;
-  ctx.strokeRect(lx,ly,lw,lh);
+  const bx = 3, by = 4, bw = 14, bh = 20, bz = 3.2;
 
-  // ── VEREDA (frente del lote) ──
-  const frenteDir = {
-    N:{x1:lx,y1:ly,x2:lx+lw,y2:ly},
-    S:{x1:lx,y1:ly+lh,x2:lx+lw,y2:ly+lh},
-    E:{x1:lx+lw,y1:ly,x2:lx+lw,y2:ly+lh},
-    O:{x1:lx,y1:ly,x2:lx,y2:ly+lh},
-    NE:{x1:lx+lw*.5,y1:ly,x2:lx+lw,y2:ly},
-    NO:{x1:lx,y1:ly,x2:lx+lw*.5,y2:ly},
-    SE:{x1:lx+lw*.5,y1:ly+lh,x2:lx+lw,y2:ly+lh},
-    SO:{x1:lx,y1:ly+lh,x2:lx+lw*.5,y2:ly+lh},
-  };
-  const fd_ = frenteDir[frente] || frenteDir['N'];
-  ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=3; ctx.lineCap='round';
-  ctx.beginPath(); ctx.moveTo(fd_.x1,fd_.y1); ctx.lineTo(fd_.x2,fd_.y2); ctx.stroke();
-  // "CALLE" label
-  ctx.fillStyle='#888'; ctx.font='italic 11px sans-serif';
-  ctx.textAlign='center'; ctx.textBaseline='middle';
-  const midX=(fd_.x1+fd_.x2)/2, midY=(fd_.y1+fd_.y2)/2;
-  const offLabel = frente==='N'?-12:frente==='S'?12:frente==='E'?12:frente==='O'?-12:
-    frente==='NE'||(frente==='NO')?-10:10;
-  if('NS'.includes(frente)){ctx.fillText('CALLE',midX,midY+offLabel);}
-  else{ctx.save();ctx.translate(midX+offLabel,midY);ctx.rotate(-Math.PI/2);ctx.fillText('CALLE',0,0);ctx.restore();}
+  /* ── SHADOWS (Realistic transparent grey-blue) ── */
+  // Shadow of building footprint shifted opposite to sun direction
+  const sh = { x: 3.5, y: 1.8 }; // Sun from rear-right casts shadow to front-left
+  const shC = [
+    ip(bx + sh.x, by + sh.y, 0), ip(bx + bw + sh.x, by + sh.y, 0),
+    ip(bx + bw + sh.x, by + bh + sh.y, 0), ip(bx + sh.x, by + bh + sh.y, 0),
+  ];
+  poly(shC, 'rgba(28, 38, 48, 0.08)');
 
-  // ── SOMBRA SOLAR (footprint simplificado) ──
+  /* ── LOTE (Clean green-grey ground) ── */
+  const lP = [ip(0, 0, 0), ip(lotW, 0, 0), ip(lotW, lotD, 0), ip(0, lotD, 0)];
+  poly(lP, '#f1f2eb', '#2c3e50', 1.2);
+
+  /* ── CALLE (Modern asphalt color) ── */
   ctx.save();
-  ctx.fillStyle='rgba(180,160,80,0.1)';
-  const sunOffX=S*3.5, sunOffY=S*1.5; // orientación E-S
-  const ex_=lx+lw*.15, ey_=ly+lh*.18, ew_=lw*.7, eh_=lh*.58;
+  ctx.strokeStyle = '#2c3e50'; ctx.lineWidth = 3.5; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(stP[0].x, stP[0].y); ctx.lineTo(stP[1].x, stP[1].y); ctx.stroke();
+  const lp = ip((edge.x1 + edge.x2) / 2 + edge.lo.x, (edge.y1 + edge.y2) / 2 + edge.lo.y, 0);
+  ctx.font = 'italic 600 10px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  const tw = ctx.measureText('CALLE').width + 16;
+  const rx = lp.x - tw / 2, ry = lp.y - 8;
+  ctx.fillStyle = 'rgba(251,251,250,.92)';
   ctx.beginPath();
-  ctx.moveTo(ex_+sunOffX,ey_+lh*.18+sunOffY);
-  ctx.lineTo(ex_+ew_+sunOffX,ey_+lh*.18+sunOffY);
-  ctx.lineTo(ex_+ew_,ey_+eh_);
-  ctx.lineTo(ex_,ey_+eh_);
-  ctx.closePath(); ctx.fill();
+  if (ctx.roundRect) ctx.roundRect(rx, ry, tw, 16, 8); else ctx.rect(rx, ry, tw, 16);
+  ctx.fill();
+  ctx.fillStyle = '#7f8c8d'; ctx.fillText('CALLE', lp.x, lp.y);
   ctx.restore();
 
-  // ── EDIFICIO ──
-  const ex=lx+lw*.15, ey=ly+lh*.18, ew=lw*.70, eh=lh*.58;
-  ctx.fillStyle='#f0f0ec';
-  ctx.fillRect(ex,ey,ew,eh);
-  ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=1.5;
-  ctx.strokeRect(ex,ey,ew,eh);
-
-  // Interior hatch (light)
-  ctx.save(); ctx.clip();
-  ctx.beginPath(); ctx.rect(ex,ey,ew,eh);
-  ctx.restore();
-
-  // Tipo label
-  ctx.fillStyle='#555'; ctx.font=`600 13px 'Inter',sans-serif`;
-  ctx.textAlign='center'; ctx.textBaseline='middle';
-  ctx.fillText(tipo.charAt(0).toUpperCase()+tipo.slice(1), ex+ew/2, ey+eh/2);
-
-  // ── VENTANAS arquitectónicas (línea doble = vidrio) ──
-  // Norte: principales
-  const wThick=6, wLen=S*1.4;
-  [[.15],[.40],[.67]].forEach(([px]) => {
-    const wx2=ex+ew*px, wy2=ey;
-    // Marco exterior
-    ctx.fillStyle='#e8f0fa'; ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=1;
-    ctx.fillRect(wx2, wy2-wThick, wLen, wThick);
-    ctx.strokeRect(wx2, wy2-wThick, wLen, wThick);
-    // Línea de vidrio (doble línea)
-    ctx.strokeStyle='#4a8ac8'; ctx.lineWidth=1.5;
-    ctx.beginPath(); ctx.moveTo(wx2+2,wy2-wThick/2); ctx.lineTo(wx2+wLen-2,wy2-wThick/2); ctx.stroke();
-    // Cota pequeña
-    ctx.fillStyle='#888'; ctx.font='9px sans-serif'; ctx.textAlign='center';
-    ctx.fillText('V.P.',wx2+wLen/2,wy2-wThick-3);
+  /* ── ROOMS UNDERLAY (Beautiful subtle color zones) ── */
+  const roomZones = [
+    { name: 'ESTAR', x1: bx, y1: by, x2: bx + bw * 0.48, y2: by + bh * 0.55, col: 'rgba(239, 159, 39, 0.07)' },
+    { name: 'DORM.', x1: bx, y1: by + bh * 0.55, x2: bx + bw * 0.48, y2: by + bh, col: 'rgba(59, 139, 212, 0.07)' },
+    { name: 'COCINA', x1: bx + bw * 0.48, y1: by, x2: bx + bw, y2: by + bh * 0.55, col: 'rgba(216, 90, 48, 0.06)' },
+    { name: 'GALERÍA', x1: bx + bw * 0.48, y1: by + bh * 0.55, x2: bx + bw, y2: by + bh, col: 'rgba(76, 175, 80, 0.08)' }
+  ];
+  roomZones.forEach(z => {
+    const pts = [ip(z.x1, z.y1, 0), ip(z.x2, z.y1, 0), ip(z.x2, z.y2, 0), ip(z.x1, z.y2, 0)];
+    poly(pts, z.col);
   });
 
-  // Sur: secundarias
-  [[.20],[.58]].forEach(([px]) => {
-    const wx2=ex+ew*px, wy2=ey+eh;
-    ctx.fillStyle='#edf5ed'; ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=0.8;
-    ctx.fillRect(wx2, wy2, S*1.2, wThick);
-    ctx.strokeRect(wx2, wy2, S*1.2, wThick);
-    ctx.strokeStyle='#4a8a4a'; ctx.lineWidth=1.2;
-    ctx.beginPath(); ctx.moveTo(wx2+2,wy2+wThick/2); ctx.lineTo(wx2+S*1.2-2,wy2+wThick/2); ctx.stroke();
-  });
+  /* ── VOLUMEN EDIFICIO (Semi-transparent architectural model) ── */
+  const e = [ip(bx, by, 0), ip(bx + bw, by, 0), ip(bx + bw, by + bh, 0), ip(bx, by + bh, 0)];
+  const eT = [ip(bx, by, bz), ip(bx + bw, by, bz), ip(bx + bw, by + bh, bz), ip(bx, by + bh, bz)];
 
-  // E y O: mínimas (lateral)
-  [{x:ex+ew,y:ey+eh*.3},{x:ex-wThick,y:ey+eh*.6}].forEach(pt => {
-    ctx.fillStyle='#f0f4f0'; ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=0.8;
-    ctx.fillRect(pt.x,pt.y,wThick,S*.9); ctx.strokeRect(pt.x,pt.y,wThick,S*.9);
-  });
+  // Draw exterior walls (back faces first, then front faces)
+  // Left wall (West/South-West)
+  poly([e[0], e[1], eT[1], eT[0]], 'rgba(247, 245, 240, 0.85)', '#2c3e50', 1.2);
+  // Right wall (South/South-East)
+  poly([e[1], e[2], eT[2], eT[1]], 'rgba(242, 240, 234, 0.85)', '#2c3e50', 1.2);
+  // Roof top (semi-transparent glasshouse look)
+  poly([eT[0], eT[1], eT[2], eT[3]], 'rgba(230, 232, 235, 0.5)', '#2c3e50', 0.8);
 
-  // ── ÁRBOLES estilo planta arq ──
-  const arbData = getArboles2(frente, Z, ex, ey, ew, eh, S);
-  arbData.forEach(a => {
-    drawArbolPlanta(ctx, a.x, a.y, a.r, a.col, a.lbl, a.tipo);
-  });
+  /* ── CABALLETE (Ridge line) ── */
+  const ry_ = by + bh * 0.5;
+  const rL = ip(bx, ry_, bz + 0.4), rR = ip(bx + bw, ry_, bz + 0.4);
+  const rM = ip(bx + bw * 0.5, ry_, bz + 0.8);
+  ctx.strokeStyle = 'rgba(44, 62, 80, 0.25)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(rL.x, rL.y); ctx.lineTo(rR.x, rR.y); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(rL.x, rL.y); ctx.lineTo(rM.x, rM.y); ctx.lineTo(rR.x, rR.y); ctx.stroke();
+  ctx.fillStyle = 'rgba(44, 62, 80, 0.6)'; ctx.font = '600 7px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('caballete', rM.x, rM.y - 7);
 
-  // ── ENTRADA ──
-  const ep = entPos2(frente, ex, ey, ew, eh, lx, ly, lw, lh);
-  // Línea de acceso
-  ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=1.5; ctx.setLineDash([5,3]);
-  ctx.beginPath(); ctx.moveTo(ep.fx,ep.fy); ctx.lineTo(ep.tx,ep.ty); ctx.stroke();
+  /* ── DIVISIONES INTERIORES (Partition walls inside the model) ── */
+  ctx.strokeStyle = 'rgba(44, 62, 80, 0.25)'; ctx.lineWidth = 0.8; ctx.setLineDash([3, 3]);
+  const dx = bx + bw * 0.48;
+  const d1 = ip(dx, by, bz), d2 = ip(dx, by + bh, bz);
+  ctx.beginPath(); ctx.moveTo(d1.x, d1.y); ctx.lineTo(d2.x, d2.y); ctx.stroke();
+  const dY = by + bh * 0.55;
+  const d3 = ip(bx, dY, bz), d4 = ip(dx, dY, bz);
+  ctx.beginPath(); ctx.moveTo(d3.x, d3.y); ctx.lineTo(d4.x, d4.y); ctx.stroke();
   ctx.setLineDash([]);
-  // Flecha
-  const ang=Math.atan2(ep.ty-ep.fy,ep.tx-ep.fx);
-  ctx.fillStyle='#1a1a1a';
-  ctx.beginPath();
-  ctx.moveTo(ep.tx,ep.ty);
-  ctx.lineTo(ep.tx-9*Math.cos(ang-.45),ep.ty-9*Math.sin(ang-.45));
-  ctx.lineTo(ep.tx-9*Math.cos(ang+.45),ep.ty-9*Math.sin(ang+.45));
-  ctx.closePath(); ctx.fill();
-  // Label "ACCESO"
-  ctx.fillStyle='#1a1a1a'; ctx.font='bold 10px sans-serif';
-  ctx.textAlign='center'; ctx.textBaseline='alphabetic';
-  ctx.fillText('ACCESO',(ep.fx+ep.tx)/2+4,(ep.fy+ep.ty)/2-4);
 
-  // ── COTAS ──
-  drawCota(ctx, lx, ly+lh+14, lx+lw, ly+lh+14, (lotW).toFixed(0)+'m', 'bottom');
-  drawCota(ctx, lx-14, ly, lx-14, ly+lh, (lotD).toFixed(0)+'m', 'left');
-
-  // ── BRÚJULA minimalista ──
-  drawBrujulaMin(ctx, W-160, 28, 20, frente);
-
-  // ── SOL ──
-  drawSolDiagrama(ctx, W-100, H-40);
-
-  // ── ORIENTACIONES ──
-  ctx.fillStyle='#777'; ctx.font='600 12px sans-serif';
-  [
-    {t:'N', x:lx+lw/2, y:ly-10},
-    {t:'S', x:lx+lw/2, y:ly+lh+28},
-    {t:'E', x:lx+lw+12, y:ly+lh/2},
-    {t:'O', x:lx-12,   y:ly+lh/2},
-  ].forEach(l=>{
-    ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillText(l.t,l.x,l.y);
-  });
-
-  // ── LEYENDA minimalista ──
-  drawLeyendaMin(ctx, lx, H-48);
-
-  // ── TÍTULO ──
-  ctx.fillStyle='#1a1a1a'; ctx.font=`700 12px 'Inter',sans-serif`;
-  ctx.textAlign='left'; ctx.textBaseline='top';
-  ctx.fillText('PLANTA DE IMPLANTACIÓN', 6, 6);
-  ctx.fillStyle='#888'; ctx.font=`400 11px 'Inter',sans-serif`;
-  ctx.fillText(`Zona: ${Z.name}  ·  Frente: ${frente}  ·  Lat. 25°S`, 6, 18);
-}
-
-// Árbol estilo planta arquitectónica
-function drawArbolPlanta(ctx, x, y, r, col, lbl, tipo) {
-  ctx.save();
-  // Sombra
-  ctx.fillStyle='rgba(0,0,0,0.06)';
-  ctx.beginPath(); ctx.ellipse(x+r*.3, y+r*.3, r*.9, r*.7, 0, 0, Math.PI*2); ctx.fill();
-
-  // Copa — círculo con textura de veins
-  ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2);
-  ctx.fillStyle=col||'#5a9e40'; ctx.fill();
-  // Venas radiales (estilo dibujo técnico)
-  ctx.strokeStyle='rgba(255,255,255,0.5)'; ctx.lineWidth=0.6;
-  ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2);
-  ctx.clip();
-  const nV = tipo==='palmera'?6:8;
-  for(let i=0;i<nV;i++){
-    const a=(i/nV)*Math.PI*2;
-    ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+Math.cos(a)*r*.9,y+Math.sin(a)*r*.9); ctx.stroke();
-  }
-  if(tipo!=='palmera'){
-    [.35,.65,.9].forEach(ri=>{ctx.beginPath();ctx.arc(x,y,r*ri,0,Math.PI*2);ctx.stroke();});
-  }
-  ctx.restore();
-
-  // Outline
-  ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2);
-  ctx.strokeStyle='rgba(0,0,0,0.4)'; ctx.lineWidth=0.8; ctx.stroke();
-
-  // Tronco (punto central)
-  ctx.beginPath(); ctx.arc(x,y,r*.12,0,Math.PI*2);
-  ctx.fillStyle='rgba(0,0,0,0.5)'; ctx.fill();
-
-  // Label
-  if(lbl){
-    ctx.fillStyle='#333'; ctx.font='italic 7px sans-serif';
-    ctx.textAlign='center'; ctx.textBaseline='top';
-    ctx.fillText(lbl, x, y+r+3);
-  }
-}
-
-function getArboles2(frente, Z, ex, ey, ew, eh, S) {
-  const isChaco=Z.id==='chaco';
-  const c1=isChaco?'#8ec06e':'#5a9e40', c2=isChaco?'#7aad5a':'#4a8a30';
-  const n1=isChaco?'Ñandubay':'Lapacho', n2=isChaco?'Ñandubay':'Timbó';
-  const r=S*.9;
-  return [
-    {x:ex+ew*.12,  y:ey-r-2,  r:r,      col:c1, lbl:n1,  tipo:'caduc'},
-    {x:ex+ew*.45,  y:ey-r*1.2-2, r:r*1.2, col:c2, lbl:n2,  tipo:'caduc'},
-    {x:ex+ew*.82,  y:ey-r-2,  r:r*.9,   col:c1, lbl:'',   tipo:'caduc'},
-    {x:ex-r-4,     y:ey+eh*.3, r:r*.8,   col:'#6aae50', lbl:'Arbusto', tipo:'arb'},
-    {x:ex-r-4,     y:ey+eh*.65,r:r*.7,   col:'#6aae50', lbl:'',       tipo:'arb'},
+  /* ── AMBIENTES LABELS ── */
+  ctx.fillStyle = '#2c3e50'; ctx.font = '700 9px "JetBrains Mono",sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  const labs = [
+    ['ESTAR',   bx + bw * 0.22, by + bh * 0.22],
+    ['DORM.',   bx + bw * 0.22, by + bh * 0.78],
+    ['COCINA',  bx + bw * 0.78, by + bh * 0.22],
+    ['GALERÍA', bx + bw * 0.78, by + bh * 0.78],
   ];
-}
-
-function entPos2(frente, ex, ey, ew, eh, lx, ly, lw, lh) {
-  const cx=ex+ew/2, cy=ey+eh/2;
-  const m={
-    N:{fx:cx,fy:ly+4,tx:cx,ty:ey,lx:cx,ly:ly+2},
-    S:{fx:cx,fy:ly+lh-4,tx:cx,ty:ey+eh,lx:cx,ly:ly+lh-2},
-    E:{fx:lx+lw-4,fy:cy,tx:ex+ew,ty:cy,lx:lx+lw-2,ly:cy-8},
-    O:{fx:lx+4,fy:cy,tx:ex,ty:cy,lx:lx+6,ly:cy-8},
-    NE:{fx:lx+lw-10,fy:ly+6,tx:ex+ew*.85,ty:ey,lx:lx+lw-12,ly:ly+4},
-    NO:{fx:lx+10,fy:ly+6,tx:ex+ew*.15,ty:ey,lx:lx+12,ly:ly+4},
-    SE:{fx:lx+lw-10,fy:ly+lh-6,tx:ex+ew*.85,ty:ey+eh,lx:lx+lw-12,ly:ly+lh-2},
-    SO:{fx:lx+10,fy:ly+lh-6,tx:ex+ew*.15,ty:ey+eh,lx:lx+12,ly:ly+lh-2},
-  };
-  return m[frente]||m['N'];
-}
-
-function drawCota(ctx, x1, y1, x2, y2, txt, side) {
-  ctx.save();
-  ctx.strokeStyle='#aaa'; ctx.lineWidth=0.6; ctx.setLineDash([]);
-  // Tick marks
-  const ang=Math.atan2(y2-y1,x2-x1);
-  const perp=ang+Math.PI/2;
-  const tk=4;
-  [[x1,y1],[x2,y2]].forEach(([px,py])=>{
-    ctx.beginPath();
-    ctx.moveTo(px+Math.cos(perp)*tk,py+Math.sin(perp)*tk);
-    ctx.lineTo(px-Math.cos(perp)*tk,py-Math.sin(perp)*tk);
-    ctx.stroke();
+  labs.forEach(([t, x_, y_]) => {
+    const p = ip(x_, y_, bz + 0.3); 
+    // Small background label container
+    ctx.save();
+    ctx.font = '700 9px "JetBrains Mono",sans-serif';
+    const lw = ctx.measureText(t).width + 8;
+    ctx.fillStyle = 'rgba(251,251,250,0.85)';
+    ctx.fillRect(p.x - lw/2, p.y - 7, lw, 14);
+    ctx.fillStyle = '#2c3e50';
+    ctx.fillText(t, p.x, p.y);
+    ctx.restore();
   });
-  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
-  // Text
-  ctx.fillStyle='#666'; ctx.font=`9px 'Inter',sans-serif`;
-  ctx.textAlign='center'; ctx.textBaseline='middle';
-  const mx=(x1+x2)/2, my=(y1+y2)/2;
-  if(side==='bottom') ctx.fillText(txt, mx, my+8);
-  else { ctx.save(); ctx.translate(mx-8,my); ctx.rotate(-Math.PI/2); ctx.fillText(txt,0,0); ctx.restore(); }
-  ctx.restore();
-}
 
-function drawBrujulaMin(ctx, cx, cy, r, frente) {
-  ctx.save();
-  ctx.strokeStyle='rgba(0,0,0,0.15)'; ctx.lineWidth=0.5;
-  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
-  // 4 arms
-  ['N','E','S','O'].forEach((d,i)=>{
-    const a=(i*90-90)*Math.PI/180;
-    ctx.strokeStyle=d==='N'?'#1a1a1a':'rgba(0,0,0,0.25)';
-    ctx.lineWidth=d==='N'?1.5:.8;
+  /* ── VENTANAS (Detailed frames & glass reflection) ── */
+  function drawDetailedWindow(p1, p2, p3, p4, glassCol, borderCol) {
+    // Glass base
+    poly([p1, p2, p3, p4], glassCol, borderCol, 1);
+    // Frame details
+    ctx.save();
+    ctx.strokeStyle = borderCol;
+    ctx.lineWidth = 1.2;
+    // Outer border
+    ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+    // Glass reflection diagonal lines
+    ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+    ctx.lineWidth = 0.8;
+    const midX = (p1.x + p2.x) / 2;
+    const midY = (p1.y + p2.y) / 2;
     ctx.beginPath();
-    ctx.moveTo(cx+(r*.3)*Math.cos(a),cy+(r*.3)*Math.sin(a));
-    ctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));
+    ctx.moveTo(p1.x + (p2.x-p1.x)*0.3, p1.y + (p2.y-p1.y)*0.3 + 2);
+    ctx.lineTo(p4.x + (p3.x-p4.x)*0.5, p4.y + (p3.y-p4.y)*0.5 - 2);
     ctx.stroke();
-    ctx.fillStyle=d==='N'?'#1a1a1a':'#aaa';
-    ctx.font=d==='N'?`bold 10px 'Inter',sans-serif`:`9px 'Inter',sans-serif`;
-    ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillText(d, cx+(r+9)*Math.cos(a), cy+(r+9)*Math.sin(a));
-  });
-  // Center dot
-  ctx.beginPath(); ctx.arc(cx,cy,2,0,Math.PI*2);
-  ctx.fillStyle='#1a1a1a'; ctx.fill();
-  ctx.restore();
-}
-
-function drawSolDiagrama(ctx, cx, cy) {
-  // Minimal sun icon
-  ctx.save();
-  ctx.strokeStyle='rgba(200,140,0,0.6)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.arc(cx,cy,7,0,Math.PI*2); ctx.stroke();
-  ctx.fillStyle='rgba(255,180,0,0.15)'; ctx.fill();
-  for(let i=0;i<8;i++){
-    const a=i*45*Math.PI/180;
-    ctx.beginPath(); ctx.moveTo(cx+9*Math.cos(a),cy+9*Math.sin(a));
-    ctx.lineTo(cx+12*Math.cos(a),cy+12*Math.sin(a)); ctx.stroke();
+    ctx.restore();
   }
-  ctx.fillStyle='#aaa'; ctx.font=`8px 'Inter',sans-serif`;
-  ctx.textAlign='center'; ctx.textBaseline='top';
-  ctx.fillText('Sol → E', cx, cy+14);
-  ctx.restore();
-}
 
-function drawLeyendaMin(ctx, lx, y) {
-  const items = [
-    { draw:(x,yy)=>{ ctx.fillStyle='#e8f0fa'; ctx.strokeStyle='#4a8ac8'; ctx.lineWidth=1.5; ctx.fillRect(x,yy-5,18,10); ctx.strokeRect(x,yy-5,18,10); }, lbl:'Ventana principal (N)' },
-    { draw:(x,yy)=>{ ctx.fillStyle='#edf5ed'; ctx.strokeStyle='#4a8a4a'; ctx.lineWidth=1.5; ctx.fillRect(x,yy-5,18,10); ctx.strokeRect(x,yy-5,18,10); }, lbl:'Ventana secundaria (S)' },
-    { draw:(x,yy)=>{ drawArbolPlanta(ctx,x+8,yy,7,'#5a9e40','','caduc'); }, lbl:'Árbol nativo' },
-    { draw:(x,yy)=>{ ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=1.5; ctx.setLineDash([5,3]); ctx.beginPath(); ctx.moveTo(x,yy); ctx.lineTo(x+18,yy); ctx.stroke(); ctx.setLineDash([]); ctx.beginPath(); ctx.moveTo(x+18,yy); ctx.lineTo(x+12,yy-3); ctx.lineTo(x+12,yy+3); ctx.closePath(); ctx.fillStyle='#1a1a1a'; ctx.fill(); }, lbl:'Acceso principal' },
-    { draw:(x,yy)=>{ ctx.fillStyle='rgba(180,160,80,0.3)'; ctx.fillRect(x,yy-5,18,10); ctx.strokeStyle='rgba(180,130,0,0.5)'; ctx.lineWidth=0.5; ctx.strokeRect(x,yy-5,18,10); }, lbl:'Proyección solar' },
-  ];
-  // Two rows
-  const row1=items.slice(0,3), row2=items.slice(3);
-  [row1,row2].forEach((row,ri)=>{
-    let x=lx;
-    row.forEach(it=>{
-      it.draw(x, y+ri*18);
-      ctx.fillStyle='#555'; ctx.font=`500 10px 'Inter',sans-serif`;
-      ctx.textAlign='left'; ctx.textBaseline='middle';
-      ctx.fillText(it.lbl, x+24, y+ri*18);
-      x += ctx.measureText(it.lbl).width + 42;
+  const ww = 1.8, wh = 0.5;
+  // North Windows
+  [0.18, 0.45, 0.72].forEach(px => {
+    const xo = bx + bw * px, yo = by;
+    const a = ip(xo, yo, 0), b = ip(xo + ww, yo, 0);
+    const c = ip(xo + ww, yo, wh), d = ip(xo, yo, wh);
+    drawDetailedWindow(a, b, c, d, 'rgba(59, 139, 212, 0.25)', '#3a7abf');
+    const lb = ip(xo + ww / 2, yo, wh + 0.4);
+    ctx.fillStyle = '#3a7abf'; ctx.font = 'bold 7px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('V.N.', lb.x, lb.y);
+  });
+  // East/South Windows
+  [0.25, 0.65].forEach(py => {
+    const xo = bx + bw, yo = by + bh * py;
+    const a = ip(xo, yo, 0), b = ip(xo, yo + ww, 0);
+    const c = ip(xo, yo + ww, wh), d = ip(xo, yo, wh);
+    drawDetailedWindow(a, b, c, d, 'rgba(76, 175, 80, 0.25)', '#3a8a3a');
+  });
+
+  /* ── ALERO ── */
+  ctx.strokeStyle = 'rgba(44, 62, 80, 0.35)'; ctx.lineWidth = 0.8; ctx.setLineDash([2, 3]);
+  const ea = ip(bx - 0.6, by - 0.6, bz), eb = ip(bx + bw + 0.6, by - 0.6, bz);
+  ctx.beginPath(); ctx.moveTo(ea.x, ea.y); ctx.lineTo(eb.x, eb.y); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = 'rgba(44, 62, 80, 0.6)'; ctx.font = '600 7px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('alero', (ea.x + eb.x) / 2, ea.y - 7);
+
+  /* ── PERGOLA ── */
+  const pp = { x: bx + bw + 1.8, y: by + bh * 0.50, w: 4.5, h: 3.0 };
+  const ppC = [ip(pp.x, pp.y, 0), ip(pp.x + pp.w, pp.y, 0),
+    ip(pp.x + pp.w, pp.y + pp.h, 0), ip(pp.x, pp.y + pp.h, 0)];
+  ctx.strokeStyle = 'rgba(44, 62, 80, 0.25)'; ctx.lineWidth = 0.8; ctx.setLineDash([3, 4]);
+  poly(ppC, null, 'rgba(44, 62, 80, 0.3)'); ctx.setLineDash([]);
+  
+  // Pergola columns & rafters
+  for (let i = 0; i < 4; i++) {
+    const cPos = ip(pp.x + (i + 0.5) * pp.w / 4, pp.y + pp.h * 0.5, 2.4);
+    ctx.fillStyle = 'rgba(44, 62, 80, 0.2)'; ctx.beginPath(); ctx.arc(cPos.x, cPos.y, 2.5, 0, Math.PI * 2); ctx.fill();
+  }
+  const ppM = ip(pp.x + pp.w / 2, pp.y + pp.h + 0.8, 0);
+  ctx.fillStyle = 'rgba(44, 62, 80, 0.6)'; ctx.font = 'bold 8px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('PÉRGOLA', ppM.x, ppM.y);
+
+  /* ── ÁRBOLES NATIVOS (Architectural tree representation) ── */
+  function arbolIso(ctx, x, y, r, col, lbl) {
+    const base = ip(x, y, 0), copa = ip(x, y, r * 0.85);
+    // Tree Shadow (ground ellipse)
+    ctx.fillStyle = 'rgba(44, 62, 80, 0.06)';
+    ctx.beginPath(); ctx.ellipse(base.x + 4, base.y + 3, r * 0.85, r * 0.6, 0, 0, Math.PI * 2); ctx.fill();
+    
+    // Trunk
+    ctx.strokeStyle = '#5d4037'; ctx.lineWidth = 1.8;
+    ctx.beginPath(); ctx.moveTo(base.x, base.y); ctx.lineTo(copa.x, copa.y); ctx.stroke();
+    
+    // Foliage layers for volumetric look
+    const layers = [
+      { dx: 0, dy: 0, r: r, alpha: 0.8 },
+      { dx: -r*0.15, dy: -r*0.15, r: r*0.8, alpha: 0.25 },
+      { dx: r*0.1, dy: -r*0.1, r: r*0.7, alpha: 0.2 }
+    ];
+    layers.forEach((l, idx) => {
+      const cx_ = copa.x + l.dx;
+      const cy_ = copa.y + l.dy;
+      const grd = ctx.createRadialGradient(cx_ - l.r * 0.2, cy_ - l.r * 0.2, 1, cx_, cy_, l.r);
+      grd.addColorStop(0, idx === 0 ? col : '#ffffff');
+      grd.addColorStop(0.7, col);
+      grd.addColorStop(1, 'rgba(44, 62, 80, 0.15)');
+      
+      ctx.save();
+      ctx.globalAlpha = l.alpha;
+      ctx.fillStyle = grd;
+      ctx.beginPath(); ctx.arc(cx_, cy_, l.r, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
     });
+
+    // Thin elegant outline
+    ctx.strokeStyle = 'rgba(44, 62, 80, 0.35)'; ctx.lineWidth = 0.8;
+    ctx.beginPath(); ctx.arc(copa.x, copa.y, r, 0, Math.PI * 2); ctx.stroke();
+    
+    if (lbl) {
+      ctx.fillStyle = '#2c3e50'; ctx.font = 'italic bold 7px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText(lbl, copa.x, copa.y + r + 5);
+    }
+  }
+
+  const isCh = Z.id === 'chaco';
+  const c1 = isCh ? '#a3cb71' : '#6ab04c', c2 = isCh ? '#8cb860' : '#4bae4f';
+  const n1 = isCh ? 'Ñandubay' : 'Lapacho', n2 = isCh ? 'Ñandubay' : 'Timbó';
+  const r0 = S * 0.95;
+  [
+    [bx + bw * 0.12, by - 1.8, r0,      c1, n1],
+    [bx + bw * 0.48, by - 2.6, r0 * 1.25, c2, n2],
+    [bx + bw * 0.85, by - 1.8, r0 * 0.95, c1, ''],
+    [bx - 2.8,       by + bh * 0.30, r0 * 0.75, '#78c281', 'Arbusto'],
+    [bx - 2.8,       by + bh * 0.65, r0 * 0.65, '#78c281', ''],
+  ].forEach(a => arbolIso(ctx, a[0], a[1], a[2], a[3], a[4]));
+
+  /* ── ACCESO ── */
+  const accX = bx + bw * 0.5, accY = by + bh;
+  const aE = ip(accX, accY + 1.5, 0), aS = ip(accX, accY, 0);
+  ctx.strokeStyle = '#2c3e50'; ctx.lineWidth = 1.2; ctx.setLineDash([4, 3]);
+  ctx.beginPath(); ctx.moveTo(aE.x, aE.y); ctx.lineTo(aS.x, aS.y); ctx.stroke(); ctx.setLineDash([]);
+  const aA = Math.atan2(aE.y - aS.y, aE.x - aS.x);
+  ctx.fillStyle = '#2c3e50';
+  ctx.beginPath(); ctx.moveTo(aE.x, aE.y);
+  ctx.lineTo(aE.x - 8 * Math.cos(aA - 0.5), aE.y - 8 * Math.sin(aA - 0.5));
+  ctx.lineTo(aE.x - 8 * Math.cos(aA + 0.5), aE.y - 8 * Math.sin(aA + 0.5));
+  ctx.closePath(); ctx.fill();
+  const aM = ip(accX, accY + 0.5, 0);
+  ctx.save(); ctx.font = '700 8px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  const aT = 'ACCESO'; const aW = ctx.measureText(aT).width + 8;
+  ctx.fillStyle = 'rgba(251,251,250,.92)';
+  ctx.beginPath();
+  if (ctx.roundRect) ctx.roundRect(aM.x - aW / 2, aM.y - 6, aW, 12, 4); else ctx.rect(aM.x - aW / 2, aM.y - 6, aW, 12);
+  ctx.fill(); ctx.fillStyle = '#2c3e50'; ctx.fillText(aT, aM.x, aM.y);
+  ctx.restore();
+
+  /* ── VIENTO (Elegant aerodynamic flow lines) ── */
+  const wDeg = Z.windDeg || 45, wRad = wDeg * Math.PI / 180;
+  const wLen = 8, wOff = 2;
+  const wS = {
+    x: bx + bw / 2 - Math.cos(wRad) * wLen * 0.6 + wOff,
+    y: by + bh / 2 - Math.sin(wRad) * wLen * 0.6,
+  };
+  const wE = { x: wS.x + Math.cos(wRad) * wLen * 1.8, y: wS.y + Math.sin(wRad) * wLen * 1.8 };
+  const wCol = '#3a7abf';
+  
+  for (let i = -2; i <= 2; i++) {
+    const oX = i * 0.65, oY = i * 0.32;
+    const s = ip(wS.x + oX + 2, wS.y + oY, 1.2), e = ip(wE.x + oX, wE.y + oY, 1.2);
+    
+    ctx.save();
+    ctx.strokeStyle = wCol; ctx.lineWidth = 1.5; ctx.lineCap = 'round';
+    ctx.globalAlpha = 0.55 - Math.abs(i) * 0.11;
+    
+    // Aerodynamic curve path
+    ctx.beginPath();
+    ctx.moveTo(s.x, s.y);
+    const cp1x = s.x + (e.x - s.x) * 0.3;
+    const cp1y = s.y - 12;
+    const cp2x = s.x + (e.x - s.x) * 0.7;
+    const cp2y = e.y + 12;
+    ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, e.x, e.y);
+    ctx.stroke();
+    
+    // Flow arrow heads
+    const wa = Math.atan2(e.y - (s.y+e.y)/2, e.x - (s.x+e.x)/2);
+    ctx.fillStyle = wCol;
+    ctx.beginPath(); ctx.moveTo(e.x, e.y);
+    ctx.lineTo(e.x - 7 * Math.cos(wa - 0.5), e.y - 7 * Math.sin(wa - 0.5));
+    ctx.lineTo(e.x - 7 * Math.cos(wa + 0.5), e.y - 7 * Math.sin(wa + 0.5));
+    ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+  
+  const wM = ip(wS.x + wLen * 0.7, wS.y + wLen * 0.3, 2.0);
+  ctx.fillStyle = wCol; ctx.font = '700 9px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('VIENTO → ' + (Z.viento || ''), wM.x, wM.y);
+
+  /* ── SOL (Glowing architectural overlay) ── */
+  ctx.strokeStyle = 'rgba(239, 159, 39, 0.12)'; ctx.lineWidth = 0.8;
+  for (let i = 0; i < 5; i++) {
+    const t = ip(bx + bw * (0.15 + i * 0.18), by + bh * 0.1, bz);
+    const s = ip(bx + bw + 2 + i * 1.5, by - 2 - i * 1.5, bz + 2.5 + i * 0.5);
+    ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(t.x, t.y); ctx.stroke();
+  }
+  const sp = ip(bx + bw + 3.5, by - 2, 4);
+  
+  // Sun glow ring
+  ctx.fillStyle = 'rgba(239, 159, 39, 0.08)'; ctx.beginPath(); ctx.arc(sp.x, sp.y, 14, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = 'rgba(239, 159, 39, 0.45)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.arc(sp.x, sp.y, 12, 0, Math.PI * 2); ctx.stroke();
+  // Radial rays
+  for (let i = 0; i < 8; i++) {
+    const a = i * 45 * Math.PI / 180;
+    ctx.beginPath();
+    ctx.moveTo(sp.x + 14 * Math.cos(a), sp.y + 14 * Math.sin(a));
+    ctx.lineTo(sp.x + 18 * Math.cos(a), sp.y + 18 * Math.sin(a));
+    ctx.stroke();
+  }
+  ctx.fillStyle = 'rgba(216, 90, 48, 0.75)'; ctx.font = '700 8px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('SOL', sp.x, sp.y + 24);
+
+  /* ── BRÚJULA (Minimalist) ── */
+  const bcX = W - 150, bcY = 45;
+  ctx.save(); ctx.strokeStyle = 'rgba(44, 62, 80, 0.15)'; ctx.lineWidth = 0.6;
+  ctx.beginPath(); ctx.arc(bcX, bcY, 20, 0, Math.PI * 2); ctx.stroke();
+  const dirM = { N: -30, E: 60, S: 150, O: 240 };
+  Object.entries(dirM).forEach(([l, deg]) => {
+    const a = deg * Math.PI / 180 + A;
+    const x = bcX + 18 * Math.cos(a), y = bcY + 18 * Math.sin(a);
+    ctx.strokeStyle = l === 'N' ? '#e74c3c' : 'rgba(44, 62, 80, 0.25)';
+    ctx.lineWidth = l === 'N' ? 1.5 : 0.6;
+    ctx.beginPath(); ctx.moveTo(bcX, bcY); ctx.lineTo(x, y); ctx.stroke();
+    ctx.fillStyle = l === 'N' ? '#e74c3c' : '#7f8c8d';
+    ctx.font = l === 'N' ? '700 9px "JetBrains Mono",sans-serif' : '500 8px "JetBrains Mono",sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(l, bcX + 26 * Math.cos(a), bcY + 26 * Math.sin(a));
   });
+  ctx.fillStyle = '#2c3e50'; ctx.beginPath(); ctx.arc(bcX, bcY, 2, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+
+  const dirL = { N:'NORTE', S:'SUR', E:'ESTE', O:'OESTE',
+    NE:'NORESTE', NO:'NOROESTE', SE:'SURESTE', SO:'SUROESTE' };
+  ctx.fillStyle = 'rgba(44, 62, 80, 0.55)'; ctx.font = '500 8px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('Frente: ' + (dirL[frente] || frente), bcX, bcY + 34);
+
+  /* ── LEYENDA (Sleek minimalist table) ── */
+  let legY = H - 40;
+  const legI = [
+    { col: 'rgba(59, 139, 212, 0.25)', border: '#3a7abf', lbl: 'Ventana N (Principal)', sw: 16 },
+    { col: 'rgba(76, 175, 80, 0.25)', border: '#3a8a3a', lbl: 'Ventana E/S (Secundaria)', sw: 16 },
+    { dr: (x, y) => { ctx.fillStyle='#6ab04c'; ctx.beginPath(); ctx.arc(x+7, y+5, 5, 0, Math.PI*2); ctx.fill();
+      ctx.strokeStyle='rgba(44,62,80,0.3)'; ctx.lineWidth=0.5; ctx.beginPath(); ctx.arc(x+7, y+5, 5, 0, Math.PI*2); ctx.stroke(); }, lbl: 'Árbol nativo' },
+    { dr: (x, y) => { ctx.strokeStyle='#2c3e50'; ctx.lineWidth=1.2; ctx.setLineDash([3,2]);
+      ctx.beginPath(); ctx.moveTo(x, y+5); ctx.lineTo(x+16, y+5); ctx.stroke(); ctx.setLineDash([]); }, lbl: 'Acceso' },
+    { dr: (x, y) => { ctx.strokeStyle='#3a7abf'; ctx.lineWidth=1.5; ctx.lineCap='round';
+      ctx.beginPath(); ctx.moveTo(x, y+3); ctx.lineTo(x+8, y+3); ctx.lineTo(x+14, y+6); ctx.stroke(); }, lbl: 'Viento' },
+    { dr: (x, y) => { ctx.fillStyle='rgba(239, 159, 39, 0.08)'; ctx.beginPath(); ctx.arc(x+8, y+5, 5, 0, Math.PI*2); ctx.fill();
+      ctx.strokeStyle='rgba(239, 159, 39, 0.55)'; ctx.lineWidth=0.8; ctx.beginPath(); ctx.arc(x+8, y+5, 5, 0, Math.PI*2); ctx.stroke(); }, lbl: 'Radiación solar' },
+  ];
+  let legX = 12;
+  legI.forEach((it, i) => {
+    if (i > 0 && i % 3 === 0) { legY += 18; legX = 12; }
+    if (it.dr) it.dr(legX, legY);
+    else { 
+      ctx.fillStyle = it.col; ctx.fillRect(legX, legY - 3, it.sw, 8);
+      ctx.strokeStyle = it.border; ctx.lineWidth = 0.8; ctx.strokeRect(legX, legY - 3, it.sw, 8); 
+    }
+    ctx.fillStyle = '#555'; ctx.font = '500 9px "JetBrains Mono",sans-serif';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText(it.lbl, legX + 22, legY + 2);
+    legX += ctx.measureText(it.lbl).width + 36;
+    if (legX > W - 120) { legY += 18; legX = 12; }
+  });
+
+  /* ── CARTELA / DATA PANEL ── */
+  ctx.fillStyle = '#2c3e50'; ctx.font = '700 13px "JetBrains Mono",sans-serif';
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  ctx.fillText('DIAGRAMA AXONOMÉTRICO — Lote y vivienda', 12, 10);
+  ctx.fillStyle = 'rgba(44, 62, 80, 0.55)'; ctx.font = '500 10px "JetBrains Mono",sans-serif';
+  ctx.fillText(Z.name + '  ·  Frente: ' + (dirL[frente] || frente) + '  ·  Viento: ' + (Z.viento || '') + '  ·  Escala aprox.', 12, 26);
+
+  const boxX = 12, boxY = 42, boxW = 220, boxH = 46;
+  ctx.fillStyle = 'rgba(44, 62, 80, 0.03)'; ctx.beginPath();
+  if (ctx.roundRect) ctx.roundRect(boxX, boxY, boxW, boxH, 4); else ctx.rect(boxX, boxY, boxW, boxH);
+  ctx.fill(); ctx.strokeStyle = 'rgba(44, 62, 80, 0.08)'; ctx.lineWidth = 0.5;
+  ctx.beginPath();
+  if (ctx.roundRect) ctx.roundRect(boxX, boxY, boxW, boxH, 4); else ctx.rect(boxX, boxY, boxW, boxH);
+  ctx.stroke();
+  ctx.fillStyle = 'rgba(44, 62, 80, 0.6)'; ctx.font = '500 9px "JetBrains Mono",sans-serif';
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  ctx.fillText('Lote: ' + lotW + '×' + lotD + ' m  |  Edificio: ' + bw + '×' + bh + '×' + bz + ' m', boxX + 6, boxY + 4);
+  ctx.fillText('Frente al ' + (dirL[frente] || frente) + '  |  Tipo: ' + tipo, boxX + 6, boxY + 17);
+  ctx.fillText('Viento: ' + (Z.viento || '') + ' (' + wDeg + '°)  |  ' + (Z.tags ? Z.tags[0] : ''), boxX + 6, boxY + 30);
+
+  /* ── ESCALA GRÁFICA ── */
+  ctx.save();
+  const sbY = boxY + boxH + 12;
+  ctx.strokeStyle = '#2c3e50'; ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  ctx.moveTo(boxX, sbY); ctx.lineTo(boxX + 120, sbY);
+  ctx.moveTo(boxX, sbY - 5); ctx.lineTo(boxX, sbY + 5);
+  ctx.moveTo(boxX + 120, sbY - 5); ctx.lineTo(boxX + 120, sbY + 5);
+  ctx.stroke();
+  ctx.fillStyle = '#1a1a1a'; ctx.font = '400 7px "Inter",sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('5 m', boxX + 60, sbY + 10);
+  ctx.fillStyle = '#1a1a1a';
+  for (let i = 0; i < 5; i++) { if (i % 2 === 0) ctx.fillRect(boxX + i * 24, sbY - 4, 24, 4); }
+  ctx.restore();
 }
+
+
 
 /* ══════════════════════════════════════
    RECOMENDACIONES
@@ -1242,73 +1353,136 @@ function renderDesignPrinciples() {
   const vbx=800,vby=440;
   const gx=260,gx2=540,gy=340,py=90,px=400;
   const eveX=180,wwY=265,wH=55;
-  let S = `<svg viewBox="0 0 ${vbx} ${vby}" style="width:100%;max-width:800px;height:auto;display:block;margin:0 auto 20px;border:1px solid var(--outline-variant,#c5c6ca);background:var(--surface-container-lowest,#fff)">
+  let S = `<svg viewBox="0 0 ${vbx} ${vby}" style="width:100%;max-width:800px;height:auto;display:block;margin:0 auto 20px;border:1px solid var(--outline-variant,#c5c6ca);background:linear-gradient(to bottom, #f9fbfd, #ffffff)">
   <defs>
     <marker id="arrS" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#EF9F27"/></marker>
     <marker id="arrW" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#3B8BD4"/></marker>
-    <marker id="arrV" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#4CAF50"/></marker>
+    <marker id="arrV" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#2ecc71"/></marker>
+    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ebf4fa" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="wallGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#eae6df"/>
+      <stop offset="100%" stop-color="#fdfcf7"/>
+    </linearGradient>
+    <pattern id="roofTiles" width="20" height="10" patternUnits="userSpaceOnUse">
+      <path d="M 0 10 Q 10 5 20 10" fill="none" stroke="#a03020" stroke-width="0.8"/>
+    </pattern>
+    <style>
+      @keyframes windflow { to { stroke-dashoffset: -20; } }
+      .wind-line { stroke-dasharray: 6, 4; animation: windflow 1.2s linear infinite; }
+      .wind-line-slow { stroke-dasharray: 5, 5; animation: windflow 2s linear infinite; }
+      .g-el { transition: all 0.3s ease; }
+      .g-el:hover { filter: drop-shadow(0 2px 4px rgba(44,62,80,0.15)); }
+      .g-interactive { transition: all 0.2s ease; cursor: pointer; }
+      .g-interactive:hover { filter: saturate(1.4) drop-shadow(0 0 5px rgba(239,159,39,0.5)); opacity: 1 !important; }
+    </style>
   </defs>
+
+  <!-- Sky gradient -->
+  <rect x="0" y="0" width="800" height="${gy}" fill="url(#skyGrad)"/>
+
   <!-- Ground -->
-  <rect x="0" y="${gy}" width="800" height="100" fill="#e8e0d0" stroke="#c5b8a0" stroke-width="0.5"/>
-  <rect x="0" y="${gy+4}" width="800" height="96" fill="#d4c9b6"/>
-  <path d="M0 ${gy} Q200 ${gy-6} 400 ${gy} Q600 ${gy+6} 800 ${gy}" fill="none" stroke="#b8aa92" stroke-width="1.5"/>
-  <!-- Underground -->
-  <rect x="${gx-8}" y="${gy}" width="16" height="18" fill="#999"/>
-  <rect x="${gx2-6}" y="${gy}" width="12" height="14" fill="#999"/>
-  <!-- House fill -->
-  <polygon points="${gx},${gy} ${gx},${py} ${px},${py} ${gx2},${py} ${gx2},${gy}" fill="#f5efe8" stroke="#8a7a6a" stroke-width="1.5"/>
-  <!-- Roof -->
-  <polygon points="${gx},${py} ${px},${py-50} ${gx2},${py}" fill="#c4462a" stroke="#8a3020" stroke-width="1.5"/>
-  <line x1="220" y1="${py}" x2="${gx}" y2="${py}" stroke="#8a7a6a" stroke-width="1"/>
-  <!-- Eave -->
-  <polygon points="${gx},${py} ${eveX},${py+10} ${eveX},${py+16} ${gx},${py+6}" fill="#c4462a" stroke="#8a3020" stroke-width="1"/>
-  <line x1="${eveX}" y1="${py+10}" x2="${eveX}" y2="${py+16}" stroke="#8a3020" stroke-width="1"/>
-  <!-- Floor -->
-  <line x1="${gx}" y1="${gy}" x2="${gx2}" y2="${gy}" stroke="#8a7a6a" stroke-width="2"/>
-  <!-- North wall interior -->
-  <line x1="${gx}" y1="${py}" x2="${gx}" y2="${gy}" stroke="#8a7a6a" stroke-width="2"/>
-  <!-- North window -->
-  <rect x="${gx-2}" y="${wwY}" width="4" height="${wH}" rx="2" fill="#3B8BD4" opacity=".6"/>
-  <line x1="${gx-3}" y1="${wwY}" x2="${gx-3}" y2="${wwY+wH}" stroke="#fff" stroke-width="1.5"/>
-  <line x1="${gx+1}" y1="${wwY}" x2="${gx+1}" y2="${wwY+wH}" stroke="#fff" stroke-width="1.5"/>
-  <!-- South wall interior -->
-  <line x1="${gx2}" y1="${py}" x2="${gx2}" y2="${gy}" stroke="#8a7a6a" stroke-width="2"/>
-  <!-- South window -->
-  <rect x="${gx2-2}" y="${wwY+10}" width="4" height="34" rx="2" fill="#3B8BD4" opacity=".4"/>
-  <!-- Summer sun -->
-  <line x1="${eveX-60}" y1="30" x2="${eveX}" y2="${py+10}" stroke="#EF9F27" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrS)"/>
-  <line x1="${eveX-50}" y1="20" x2="${eveX+10}" y2="${py+5}" stroke="#EF9F27" stroke-width="1" stroke-dasharray="4,4" opacity=".5"/>
-  <line x1="${eveX-70}" y1="40" x2="${eveX-10}" y2="${py+15}" stroke="#EF9F27" stroke-width="1" stroke-dasharray="4,4" opacity=".4"/>
-  <text x="${eveX-75}" y="18" style="font-size:11px;fill:#EF9F27;font-weight:600">Verano 88°</text>
-  <!-- Winter sun -->
-  <line x1="10" y1="${py+100}" x2="${gx}" y2="${wwY+25}" stroke="#3B8BD4" stroke-width="2.5" stroke-dasharray="6,4" marker-end="url(#arrW)"/>
-  <line x1="22" y1="${py+88}" x2="${gx}" y2="${wwY+15}" stroke="#3B8BD4" stroke-width="1" stroke-dasharray="4,4" opacity=".5"/>
-  <line x1="-2" y1="${py+112}" x2="${gx-8}" y2="${wwY+35}" stroke="#3B8BD4" stroke-width="1" stroke-dasharray="4,4" opacity=".4"/>
-  <text x="14" y="${py+118}" style="font-size:11px;fill:#3B8BD4;font-weight:600">Invierno 41°</text>
-  <!-- Ventilation arrows -->
-  <path d="M${gx+10} ${wwY+10} L${gx+40} ${wwY-5} L${gx+40} ${wwY+5} Z" fill="#4CAF50"/>
-  <line x1="${gx+40}" y1="${wwY}" x2="${gx2-10}" y2="${wwY-15}" stroke="#4CAF50" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrV)"/>
-  <path d="M${gx+15} ${gy-5} L${gx+45} ${gy-20} L${gx+45} ${gy-10} Z" fill="#4CAF50" opacity=".5"/>
-  <line x1="${gx+45}" y1="${gy-15}" x2="${gx2-5}" y2="${wwY+35}" stroke="#4CAF50" stroke-width="1" stroke-dasharray="3,3" opacity=".5" marker-end="url(#arrV)"/>
+  <rect x="0" y="${gy}" width="800" height="100" fill="#e2dacc" stroke="#cbbca6" stroke-width="0.5"/>
+  <rect x="0" y="${gy+4}" width="800" height="96" fill="#d0c4b2"/>
+  <path d="M0 ${gy} Q200 ${gy-4} 400 ${gy} Q600 ${gy+4} 800 ${gy}" fill="none" stroke="#b2a490" stroke-width="1.5"/>
+
+  <!-- Foundations (underground structural concrete detail) -->
+  <g class="g-el" opacity="0.85">
+    <rect x="${gx-10}" y="${gy}" width="20" height="22" fill="#bdc3c7" stroke="#7f8c8d" stroke-width="0.8"/>
+    <rect x="${gx2-10}" y="${gy}" width="20" height="22" fill="#bdc3c7" stroke="#7f8c8d" stroke-width="0.8"/>
+    <line x1="${gx-10}" y1="${gy+8}" x2="${gx+10}" y2="${gy+8}" stroke="#7f8c8d" stroke-width="0.5"/>
+    <line x1="${gx2-10}" y1="${gy+8}" x2="${gx2+10}" y2="${gy+8}" stroke="#7f8c8d" stroke-width="0.5"/>
+  </g>
+
+  <!-- House Wall & Slab Fill -->
+  <polygon class="g-el" points="${gx},${gy} ${gx},${py} ${gx2},${py} ${gx2},${gy}" fill="url(#wallGrad)" stroke="#2c3e50" stroke-width="1.2"/>
+
+  <!-- Roof structure with tile pattern -->
+  <polygon class="g-el" points="${gx-10},${py} ${px},${py-50} ${gx2+10},${py}" fill="#d35400" stroke="#a03020" stroke-width="1.2"/>
+  <polygon class="g-el" points="${gx-8},${py} ${px},${py-47} ${gx2+8},${py}" fill="url(#roofTiles)" opacity="0.35"/>
+
+  <!-- Roof Beam/Truss structure -->
+  <line x1="${gx}" y1="${py}" x2="${gx2}" y2="${py}" stroke="#2c3e50" stroke-width="1.5"/>
+  <line x1="${px}" y1="${py-50}" x2="${px}" y2="${py}" stroke="#2c3e50" stroke-width="0.8" stroke-dasharray="2,2"/>
+
+  <!-- Eave (Alero) -->
+  <g class="g-interactive" opacity="0.95">
+    <polygon points="${gx},${py} ${eveX},${py+10} ${eveX},${py+18} ${gx},${py+8}" fill="#d35400" stroke="#a03020" stroke-width="1"/>
+    <line x1="${eveX}" y1="${py+10}" x2="${eveX}" y2="${py+18}" stroke="#a03020" stroke-width="1"/>
+    <text x="${eveX+6}" y="${py+32}" style="font-size:10px;font-family:'JetBrains Mono';fill:#a03020;font-weight:700">Alero</text>
+  </g>
+
+  <!-- Floor slab (Concrete base) -->
+  <rect x="${gx}" y="${gy-8}" width="${gx2-gx}" height="8" fill="#bdc3c7" stroke="#2c3e50" stroke-width="1"/>
+
+  <!-- Insulation indicators (Yellow/orange layered texture in the North wall) -->
+  <g class="g-interactive" opacity="0.9">
+    <rect x="${gx+8}" y="${py+10}" width="6" height="235" rx="3" fill="#f39c12" stroke="#d35400" stroke-width="0.5"/>
+    <text x="${gx+18}" y="${py+60}" style="font-size:8px;font-family:'JetBrains Mono';fill:#d35400;font-weight:700">Aislación Térmica</text>
+  </g>
+
+  <!-- Thermal Mass Indicator (floor text/icon) -->
+  <g class="g-interactive" opacity="0.85">
+    <text x="${px}" y="${gy-14}" style="font-size:10px;font-family:'Hanken Grotesk';fill:#2c3e50;font-weight:700;text-anchor:middle">🧱 Masa Térmica (Suelo y Cimientos)</text>
+  </g>
+
+  <!-- North window detail -->
+  <g class="g-interactive" opacity="0.95">
+    <rect x="${gx-4}" y="${wwY}" width="8" height="${wH}" rx="1" fill="#ebf5fb" stroke="#2980b9" stroke-width="1"/>
+    <line x1="${gx}" y1="${wwY}" x2="${gx}" y2="${wwY+wH}" stroke="#2980b9" stroke-width="0.8"/>
+    <line x1="${gx-4}" y1="${wwY+wH/2}" x2="${gx+4}" y2="${wwY+wH/2}" stroke="#2980b9" stroke-width="0.8"/>
+    <text x="${gx+14}" y="${wwY+wH/2}" style="font-size:9px;font-family:'JetBrains Mono';fill:#2980b9;font-weight:700;text-anchor:start">Ventana Norte (Captación)</text>
+  </g>
+
+  <!-- South window detail -->
+  <g class="g-interactive" opacity="0.9">
+    <rect x="${gx2-4}" y="${wwY+10}" width="8" height="34" rx="1" fill="#ebf5fb" stroke="#2980b9" stroke-width="1"/>
+    <line x1="${gx2}" y1="${wwY+10}" x2="${gx2}" y2="${wwY+44}" stroke="#2980b9" stroke-width="0.8"/>
+    <text x="${gx2-14}" y="${wwY+27}" style="font-size:9px;font-family:'JetBrains Mono';fill:#2980b9;font-weight:700;text-anchor:end">Ventana Sur</text>
+  </g>
+
+  <!-- Summer sun radiation -->
+  <g class="g-interactive" opacity="0.9">
+    <line x1="${eveX-60}" y1="30" x2="${eveX}" y2="${py+10}" stroke="#EF9F27" stroke-width="2.5" stroke-dasharray="6,4" marker-end="url(#arrS)"/>
+    <line x1="${eveX-50}" y1="20" x2="${eveX+10}" y2="${py+5}" stroke="#EF9F27" stroke-width="1" stroke-dasharray="4,4" opacity=".5"/>
+    <line x1="${eveX-70}" y1="40" x2="${eveX-10}" y2="${py+15}" stroke="#EF9F27" stroke-width="1" stroke-dasharray="4,4" opacity=".4"/>
+    <text x="${eveX-75}" y="18" style="font-size:11px;font-family:'JetBrains Mono';fill:#EF9F27;font-weight:700">Verano 88° (Bloqueado)</text>
+  </g>
+
+  <!-- Winter sun radiation -->
+  <g class="g-interactive" opacity="0.9">
+    <line x1="10" y1="${py+100}" x2="${gx}" y2="${wwY+25}" stroke="#3B8BD4" stroke-width="2.5" stroke-dasharray="6,4" marker-end="url(#arrW)"/>
+    <line x1="22" y1="${py+88}" x2="${gx}" y2="${wwY+15}" stroke="#3B8BD4" stroke-width="1" stroke-dasharray="4,4" opacity=".5"/>
+    <line x1="-2" y1="${py+112}" x2="${gx-8}" y2="${wwY+35}" stroke="#3B8BD4" stroke-width="1" stroke-dasharray="4,4" opacity=".4"/>
+    <text x="14" y="${py+120}" style="font-size:11px;font-family:'JetBrains Mono';fill:#3B8BD4;font-weight:700">Invierno 41° (Ingresa)</text>
+  </g>
+
+  <!-- Ventilation arrows (ANIMATED SVG LINES) -->
+  <g class="g-interactive" opacity="0.9">
+    <!-- Main flow -->
+    <path d="M ${gx-30} ${wwY+25} Q ${gx+40} ${wwY-15} ${px} ${wwY+15} T ${gx2+30} ${wwY+25}" stroke="#2ecc71" stroke-width="2.2" fill="none" class="wind-line" marker-end="url(#arrV)"/>
+    <!-- Secondary flow -->
+    <path d="M ${gx-35} ${wwY+35} Q ${gx+30} ${gy-20} ${px} ${gy-30} T ${gx2+35} ${wwY+30}" stroke="#2ecc71" stroke-width="1.5" fill="none" class="wind-line-slow" opacity="0.6" marker-end="url(#arrV)"/>
+    
+    <text x="${px}" y="${wwY-3}" style="font-size:10px;font-family:'Hanken Grotesk';fill:#27ae60;font-weight:700;text-anchor:middle">🌬️ Ventilación Cruzada Natural</text>
+  </g>
+
   <!-- Tree (deciduous north side) -->
-  <rect x="140" y="${gy-18}" width="8" height="18" fill="#6b5a4a"/>
-  <circle cx="144" cy="${gy-38}" r="20" fill="#6b7f4e" opacity=".6"/>
-  <circle cx="134" cy="${gy-30}" r="14" fill="#7a8f5e" opacity=".4"/>
-  <circle cx="154" cy="${gy-30}" r="14" fill="#5c7040" opacity=".5"/>
-  <text x="130" y="${gy-55}" style="font-size:9px;fill:#6b7f4e;font-weight:500">Caducifolio</text>
-  <!-- Labels -->
-  <text x="${eveX+6}" y="${py+30}" style="font-size:9px;fill:#8a3020;font-weight:600">Alero</text>
-  <text x="${gx+14}" y="${wwY+30}" style="font-size:8px;fill:#3B8BD4">Ventana N</text>
-  <text x="${gx2-70}" y="${wwY+28}" style="font-size:8px;fill:#3B8BD4">Ventana S</text>
-  <text x="${px-8}" y="${py-40}" style="font-size:10px;fill:#fff;font-weight:600">Cubierta</text>
-  <text x="${px-22}" y="${gy-4}" style="font-size:9px;fill:var(--on-surface-variant,#44474a);text-anchor:middle">🌊 Masa térmica</text>
+  <g class="g-interactive" opacity="0.95">
+    <rect x="140" y="${gy-20}" width="8" height="20" fill="#78341a"/>
+    <circle cx="144" cy="${gy-42}" r="22" fill="#27ae60" opacity=".8"/>
+    <circle cx="132" cy="${gy-34}" r="16" fill="#2ecc71" opacity=".7"/>
+    <circle cx="156" cy="${gy-34}" r="16" fill="#1e824c" opacity=".7"/>
+    <text x="144" y="${gy-70}" style="font-size:9px;font-family:'JetBrains Mono';fill:#27ae60;font-weight:700;text-anchor:middle">Caducifolio</text>
+    <text x="144" y="${gy-60}" style="font-size:7.5px;font-family:'Hanken Grotesk';fill:#7f8c8d;text-anchor:middle">Sombra en verano / Sol en invierno</text>
+  </g>
+
   <!-- North indicator -->
-  <text x="20" y="30" style="font-size:10px;fill:#1a1a1a;font-weight:600">N ←</text>
-  <!-- Insulation indicator -->
-  <rect x="${gx+20}" y="${py+10}" width="6" height="60" rx="3" fill="#f90" opacity=".7"/>
-  <text x="${gx+28}" y="${py+30}" style="font-size:7px;fill:#f90;font-weight:500">Aislación</text>
+  <text x="20" y="32" style="font-size:11px;font-family:'JetBrains Mono';fill:#2c3e50;font-weight:700">Norte ←</text>
 </svg>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:8px;padding:0 2px">`;
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;padding:0 2px">`;
   DESIGN_PRINCIPLES.forEach(p => {
     S += `<div style="display:flex;gap:6px;padding:8px;background:var(--surface-container-low,#f3f4f5);border:1px solid var(--outline-variant,#c5c6ca);align-items:flex-start">
       <span style="font-size:16px;flex-shrink:0;margin-top:1px">${p.icon}</span>
