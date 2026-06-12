@@ -1,0 +1,1145 @@
+/* ══════════════════════════════════════
+   APP.JS — Bioclimática Paraguay
+══════════════════════════════════════ */
+
+/* ── ESTADO ── */
+let selZ = 0, sfil = 'todos', mfil = 'todos', ufil = 'todos', pcfil = 'todos';
+const fd = { lat:null, lng:null, zona:'', frente:'', tipo:'', entorno:'' };
+let MAP = null, MARKER = null;
+
+/* ── NAV ── */
+function go(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
+  document.getElementById('p-' + id).classList.add('on');
+  btn.classList.add('on');
+  if (id === 'guia') setTimeout(initMap, 100);
+}
+
+/* ── MAPA ── */
+function initMap() {
+  if (MAP) return;
+  const el = document.getElementById('map');
+  if (!el) return;
+  try {
+    MAP = L.map('map', { zoomControl:true, scrollWheelZoom:false }).setView([-23.4, -58.5], 6);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a>',
+      maxZoom: 18, minZoom: 5
+    }).addTo(MAP);
+    MAP.on('click', function(e) {
+      const la = e.latlng.lat, lo = e.latlng.lng;
+      fd.lat = la; fd.lng = lo;
+      if (MARKER) MAP.removeLayer(MARKER);
+      MARKER = L.marker([la, lo]).addTo(MAP);
+      const zid = detZona(la, lo);
+      document.getElementById('sel-zona').value = zid;
+      fd.zona = zid;
+      const zname = ZONES.find(x => x.id === zid).name;
+      document.getElementById('minfo').textContent =
+        'Lat ' + la.toFixed(3) + '° · Lon ' + lo.toFixed(3) + '°  →  ' + zname;
+    });
+  } catch(e) {
+    document.getElementById('minfo').textContent =
+      'No se pudo cargar el mapa. Seleccioná la zona manualmente.';
+  }
+}
+
+function detZona(la, lo) {
+  if (lo < -58.1)  return 'chaco';
+  if (la < -26.2)  return 'misionero';
+  if (la > -21.8 || (lo > -56.5 && la > -23)) return 'transicion';
+  return 'subtropical';
+}
+
+/* ── CHIPS ── */
+function selChip(campo, val, el) {
+  document.querySelectorAll('#ch-' + campo + ' .chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  fd[campo] = val;
+}
+
+/* ══════════════════════════════════════
+   GENERAR RECOMENDACIONES
+══════════════════════════════════════ */
+function generar() {
+  const zona = fd.zona || document.getElementById('sel-zona').value;
+  if (!zona) { alert('Por favor seleccioná una zona climática.'); return; }
+  fd.zona = zona;
+  const frente  = fd.frente  || 'N';
+  const tipo    = fd.tipo    || 'vivienda';
+  const entorno = fd.entorno || 'suburbano';
+  const Z = ZONES.find(z => z.id === zona);
+
+  const r = document.getElementById('resultado');
+  r.innerHTML = '';
+
+  /* ── DIAGRAMA ── */
+  const dDiv = document.createElement('div');
+  dDiv.className = 'rsec';
+  dDiv.innerHTML = `
+    <div class="rsec-hdr">🏗️ &nbsp; Diagrama del lote — frente al ${frente} · ${Z.name}</div>
+    <div class="diagram-wrap">
+      <canvas id="lote-cvs" width="900" height="500"></canvas>
+    </div>`;
+  r.appendChild(dDiv);
+  setTimeout(() => drawLote('lote-cvs', frente, Z, tipo), 60);
+
+  /* ── SECCIONES ── */
+  buildRecs(Z, frente, tipo, entorno).forEach(sec => {
+    const d = document.createElement('div');
+    d.className = 'rsec';
+    d.innerHTML = `
+      <div class="rsec-hdr">${sec.icon} &nbsp; ${sec.titulo}</div>
+      <div class="rsec-body">
+        ${sec.items.map(it => `
+          <div class="ritem${it.cls?' '+it.cls:''}">
+            <span class="ritem-ico">${it.icon}</span>
+            <div>
+              <h5>${it.titulo}</h5>
+              <p>${it.desc}</p>
+              <div class="why">💡 ${it.why}</div>
+            </div>
+          </div>`).join('')}
+        ${sec.plantas ? `<div class="precs">${sec.plantas.map(p => `
+          <div class="prec">
+            <h5>${p.nombre}</h5>
+            <div class="sci">${p.sci}</div>
+            <div class="pwhy">${p.why}</div>
+            <span class="pbadge ${p.cls}">${p.pos}</span>
+          </div>`).join('')}</div>` : ''}
+      </div>`;
+    r.appendChild(d);
+  });
+}
+
+/* ══════════════════════════════════════
+   DIAGRAMA LOTE — Estilo arquitectónico
+   Limpio, blanco, líneas finas, seccional
+══════════════════════════════════════ */
+function drawLote(id, frente, Z, tipo) {
+  const cvs = document.getElementById(id);
+  if (!cvs) return;
+  const ctx = cvs.getContext('2d');
+  const W = cvs.width, H = cvs.height;
+  ctx.clearRect(0,0,W,H);
+
+  // ── FONDO BLANCO limpio ──
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0,0,W,H);
+
+  // ── ESCALA: 1m = 9px, lote centrado ──
+  const lotW = 20, lotD = 30; // metros de referencia
+  const S = Math.min((W-280)/lotW, (H-130)/lotD, 18);
+  const offX = (W - lotW*S) / 2 - 30;
+  const offY = 46;
+  const lx=offX, ly=offY, lw=lotW*S, lh=lotD*S;
+
+  function wx(m) { return lx + m*S; }
+  function wy(m) { return ly + m*S; }
+
+  // ── HATCH terreno (exterior lote) ──
+  ctx.save();
+  ctx.strokeStyle = 'rgba(0,0,0,0.06)';
+  ctx.lineWidth = 0.5;
+  for(let i=-lh; i<W+lh; i+=8) {
+    ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i+lh,lh*1.5); ctx.stroke();
+  }
+  ctx.restore();
+
+  // ── LOTE ──
+  ctx.fillStyle = '#f8f8f6';
+  ctx.fillRect(lx,ly,lw,lh);
+  // Thick border = línea de propiedad
+  ctx.strokeStyle = '#1a1a1a';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(lx,ly,lw,lh);
+
+  // ── VEREDA (frente del lote) ──
+  const frenteDir = {
+    N:{x1:lx,y1:ly,x2:lx+lw,y2:ly},
+    S:{x1:lx,y1:ly+lh,x2:lx+lw,y2:ly+lh},
+    E:{x1:lx+lw,y1:ly,x2:lx+lw,y2:ly+lh},
+    O:{x1:lx,y1:ly,x2:lx,y2:ly+lh},
+    NE:{x1:lx+lw*.5,y1:ly,x2:lx+lw,y2:ly},
+    NO:{x1:lx,y1:ly,x2:lx+lw*.5,y2:ly},
+    SE:{x1:lx+lw*.5,y1:ly+lh,x2:lx+lw,y2:ly+lh},
+    SO:{x1:lx,y1:ly+lh,x2:lx+lw*.5,y2:ly+lh},
+  };
+  const fd_ = frenteDir[frente] || frenteDir['N'];
+  ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=3; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(fd_.x1,fd_.y1); ctx.lineTo(fd_.x2,fd_.y2); ctx.stroke();
+  // "CALLE" label
+  ctx.fillStyle='#888'; ctx.font='italic 11px sans-serif';
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  const midX=(fd_.x1+fd_.x2)/2, midY=(fd_.y1+fd_.y2)/2;
+  const offLabel = frente==='N'?-12:frente==='S'?12:frente==='E'?12:frente==='O'?-12:
+    frente==='NE'||(frente==='NO')?-10:10;
+  if('NS'.includes(frente)){ctx.fillText('CALLE',midX,midY+offLabel);}
+  else{ctx.save();ctx.translate(midX+offLabel,midY);ctx.rotate(-Math.PI/2);ctx.fillText('CALLE',0,0);ctx.restore();}
+
+  // ── SOMBRA SOLAR (footprint simplificado) ──
+  ctx.save();
+  ctx.fillStyle='rgba(180,160,80,0.1)';
+  const sunOffX=S*3.5, sunOffY=S*1.5; // orientación E-S
+  const ex_=lx+lw*.15, ey_=ly+lh*.18, ew_=lw*.7, eh_=lh*.58;
+  ctx.beginPath();
+  ctx.moveTo(ex_+sunOffX,ey_+lh*.18+sunOffY);
+  ctx.lineTo(ex_+ew_+sunOffX,ey_+lh*.18+sunOffY);
+  ctx.lineTo(ex_+ew_,ey_+eh_);
+  ctx.lineTo(ex_,ey_+eh_);
+  ctx.closePath(); ctx.fill();
+  ctx.restore();
+
+  // ── EDIFICIO ──
+  const ex=lx+lw*.15, ey=ly+lh*.18, ew=lw*.70, eh=lh*.58;
+  ctx.fillStyle='#f0f0ec';
+  ctx.fillRect(ex,ey,ew,eh);
+  ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=1.5;
+  ctx.strokeRect(ex,ey,ew,eh);
+
+  // Interior hatch (light)
+  ctx.save(); ctx.clip();
+  ctx.beginPath(); ctx.rect(ex,ey,ew,eh);
+  ctx.restore();
+
+  // Tipo label
+  ctx.fillStyle='#555'; ctx.font=`600 13px 'Inter',sans-serif`;
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText(tipo.charAt(0).toUpperCase()+tipo.slice(1), ex+ew/2, ey+eh/2);
+
+  // ── VENTANAS arquitectónicas (línea doble = vidrio) ──
+  // Norte: principales
+  const wThick=6, wLen=S*1.4;
+  [[.15],[.40],[.67]].forEach(([px]) => {
+    const wx2=ex+ew*px, wy2=ey;
+    // Marco exterior
+    ctx.fillStyle='#e8f0fa'; ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=1;
+    ctx.fillRect(wx2, wy2-wThick, wLen, wThick);
+    ctx.strokeRect(wx2, wy2-wThick, wLen, wThick);
+    // Línea de vidrio (doble línea)
+    ctx.strokeStyle='#4a8ac8'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(wx2+2,wy2-wThick/2); ctx.lineTo(wx2+wLen-2,wy2-wThick/2); ctx.stroke();
+    // Cota pequeña
+    ctx.fillStyle='#888'; ctx.font='9px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('V.P.',wx2+wLen/2,wy2-wThick-3);
+  });
+
+  // Sur: secundarias
+  [[.20],[.58]].forEach(([px]) => {
+    const wx2=ex+ew*px, wy2=ey+eh;
+    ctx.fillStyle='#edf5ed'; ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=0.8;
+    ctx.fillRect(wx2, wy2, S*1.2, wThick);
+    ctx.strokeRect(wx2, wy2, S*1.2, wThick);
+    ctx.strokeStyle='#4a8a4a'; ctx.lineWidth=1.2;
+    ctx.beginPath(); ctx.moveTo(wx2+2,wy2+wThick/2); ctx.lineTo(wx2+S*1.2-2,wy2+wThick/2); ctx.stroke();
+  });
+
+  // E y O: mínimas (lateral)
+  [{x:ex+ew,y:ey+eh*.3},{x:ex-wThick,y:ey+eh*.6}].forEach(pt => {
+    ctx.fillStyle='#f0f4f0'; ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=0.8;
+    ctx.fillRect(pt.x,pt.y,wThick,S*.9); ctx.strokeRect(pt.x,pt.y,wThick,S*.9);
+  });
+
+  // ── ÁRBOLES estilo planta arq ──
+  const arbData = getArboles2(frente, Z, ex, ey, ew, eh, S);
+  arbData.forEach(a => {
+    drawArbolPlanta(ctx, a.x, a.y, a.r, a.col, a.lbl, a.tipo);
+  });
+
+  // ── ENTRADA ──
+  const ep = entPos2(frente, ex, ey, ew, eh, lx, ly, lw, lh);
+  // Línea de acceso
+  ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=1.5; ctx.setLineDash([5,3]);
+  ctx.beginPath(); ctx.moveTo(ep.fx,ep.fy); ctx.lineTo(ep.tx,ep.ty); ctx.stroke();
+  ctx.setLineDash([]);
+  // Flecha
+  const ang=Math.atan2(ep.ty-ep.fy,ep.tx-ep.fx);
+  ctx.fillStyle='#1a1a1a';
+  ctx.beginPath();
+  ctx.moveTo(ep.tx,ep.ty);
+  ctx.lineTo(ep.tx-9*Math.cos(ang-.45),ep.ty-9*Math.sin(ang-.45));
+  ctx.lineTo(ep.tx-9*Math.cos(ang+.45),ep.ty-9*Math.sin(ang+.45));
+  ctx.closePath(); ctx.fill();
+  // Label "ACCESO"
+  ctx.fillStyle='#1a1a1a'; ctx.font='bold 10px sans-serif';
+  ctx.textAlign='center'; ctx.textBaseline='alphabetic';
+  ctx.fillText('ACCESO',(ep.fx+ep.tx)/2+4,(ep.fy+ep.ty)/2-4);
+
+  // ── COTAS ──
+  drawCota(ctx, lx, ly+lh+14, lx+lw, ly+lh+14, (lotW).toFixed(0)+'m', 'bottom');
+  drawCota(ctx, lx-14, ly, lx-14, ly+lh, (lotD).toFixed(0)+'m', 'left');
+
+  // ── BRÚJULA minimalista ──
+  drawBrujulaMin(ctx, W-160, 28, 20, frente);
+
+  // ── SOL ──
+  drawSolDiagrama(ctx, W-100, H-40);
+
+  // ── ORIENTACIONES ──
+  ctx.fillStyle='#777'; ctx.font='600 12px sans-serif';
+  [
+    {t:'N', x:lx+lw/2, y:ly-10},
+    {t:'S', x:lx+lw/2, y:ly+lh+28},
+    {t:'E', x:lx+lw+12, y:ly+lh/2},
+    {t:'O', x:lx-12,   y:ly+lh/2},
+  ].forEach(l=>{
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(l.t,l.x,l.y);
+  });
+
+  // ── LEYENDA minimalista ──
+  drawLeyendaMin(ctx, lx, H-48);
+
+  // ── TÍTULO ──
+  ctx.fillStyle='#1a1a1a'; ctx.font=`700 12px 'Inter',sans-serif`;
+  ctx.textAlign='left'; ctx.textBaseline='top';
+  ctx.fillText('PLANTA DE IMPLANTACIÓN', 6, 6);
+  ctx.fillStyle='#888'; ctx.font=`400 11px 'Inter',sans-serif`;
+  ctx.fillText(`Zona: ${Z.name}  ·  Frente: ${frente}  ·  Lat. 25°S`, 6, 18);
+}
+
+// Árbol estilo planta arquitectónica
+function drawArbolPlanta(ctx, x, y, r, col, lbl, tipo) {
+  ctx.save();
+  // Sombra
+  ctx.fillStyle='rgba(0,0,0,0.06)';
+  ctx.beginPath(); ctx.ellipse(x+r*.3, y+r*.3, r*.9, r*.7, 0, 0, Math.PI*2); ctx.fill();
+
+  // Copa — círculo con textura de veins
+  ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2);
+  ctx.fillStyle=col||'#5a9e40'; ctx.fill();
+  // Venas radiales (estilo dibujo técnico)
+  ctx.strokeStyle='rgba(255,255,255,0.5)'; ctx.lineWidth=0.6;
+  ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2);
+  ctx.clip();
+  const nV = tipo==='palmera'?6:8;
+  for(let i=0;i<nV;i++){
+    const a=(i/nV)*Math.PI*2;
+    ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+Math.cos(a)*r*.9,y+Math.sin(a)*r*.9); ctx.stroke();
+  }
+  if(tipo!=='palmera'){
+    [.35,.65,.9].forEach(ri=>{ctx.beginPath();ctx.arc(x,y,r*ri,0,Math.PI*2);ctx.stroke();});
+  }
+  ctx.restore();
+
+  // Outline
+  ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2);
+  ctx.strokeStyle='rgba(0,0,0,0.4)'; ctx.lineWidth=0.8; ctx.stroke();
+
+  // Tronco (punto central)
+  ctx.beginPath(); ctx.arc(x,y,r*.12,0,Math.PI*2);
+  ctx.fillStyle='rgba(0,0,0,0.5)'; ctx.fill();
+
+  // Label
+  if(lbl){
+    ctx.fillStyle='#333'; ctx.font='italic 7px sans-serif';
+    ctx.textAlign='center'; ctx.textBaseline='top';
+    ctx.fillText(lbl, x, y+r+3);
+  }
+}
+
+function getArboles2(frente, Z, ex, ey, ew, eh, S) {
+  const isChaco=Z.id==='chaco';
+  const c1=isChaco?'#8ec06e':'#5a9e40', c2=isChaco?'#7aad5a':'#4a8a30';
+  const n1=isChaco?'Ñandubay':'Lapacho', n2=isChaco?'Ñandubay':'Timbó';
+  const r=S*.9;
+  return [
+    {x:ex+ew*.12,  y:ey-r-2,  r:r,      col:c1, lbl:n1,  tipo:'caduc'},
+    {x:ex+ew*.45,  y:ey-r*1.2-2, r:r*1.2, col:c2, lbl:n2,  tipo:'caduc'},
+    {x:ex+ew*.82,  y:ey-r-2,  r:r*.9,   col:c1, lbl:'',   tipo:'caduc'},
+    {x:ex-r-4,     y:ey+eh*.3, r:r*.8,   col:'#6aae50', lbl:'Arbusto', tipo:'arb'},
+    {x:ex-r-4,     y:ey+eh*.65,r:r*.7,   col:'#6aae50', lbl:'',       tipo:'arb'},
+  ];
+}
+
+function entPos2(frente, ex, ey, ew, eh, lx, ly, lw, lh) {
+  const cx=ex+ew/2, cy=ey+eh/2;
+  const m={
+    N:{fx:cx,fy:ly+4,tx:cx,ty:ey,lx:cx,ly:ly+2},
+    S:{fx:cx,fy:ly+lh-4,tx:cx,ty:ey+eh,lx:cx,ly:ly+lh-2},
+    E:{fx:lx+lw-4,fy:cy,tx:ex+ew,ty:cy,lx:lx+lw-2,ly:cy-8},
+    O:{fx:lx+4,fy:cy,tx:ex,ty:cy,lx:lx+6,ly:cy-8},
+    NE:{fx:lx+lw-10,fy:ly+6,tx:ex+ew*.85,ty:ey,lx:lx+lw-12,ly:ly+4},
+    NO:{fx:lx+10,fy:ly+6,tx:ex+ew*.15,ty:ey,lx:lx+12,ly:ly+4},
+    SE:{fx:lx+lw-10,fy:ly+lh-6,tx:ex+ew*.85,ty:ey+eh,lx:lx+lw-12,ly:ly+lh-2},
+    SO:{fx:lx+10,fy:ly+lh-6,tx:ex+ew*.15,ty:ey+eh,lx:lx+12,ly:ly+lh-2},
+  };
+  return m[frente]||m['N'];
+}
+
+function drawCota(ctx, x1, y1, x2, y2, txt, side) {
+  ctx.save();
+  ctx.strokeStyle='#aaa'; ctx.lineWidth=0.6; ctx.setLineDash([]);
+  // Tick marks
+  const ang=Math.atan2(y2-y1,x2-x1);
+  const perp=ang+Math.PI/2;
+  const tk=4;
+  [[x1,y1],[x2,y2]].forEach(([px,py])=>{
+    ctx.beginPath();
+    ctx.moveTo(px+Math.cos(perp)*tk,py+Math.sin(perp)*tk);
+    ctx.lineTo(px-Math.cos(perp)*tk,py-Math.sin(perp)*tk);
+    ctx.stroke();
+  });
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  // Text
+  ctx.fillStyle='#666'; ctx.font=`9px 'Inter',sans-serif`;
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  const mx=(x1+x2)/2, my=(y1+y2)/2;
+  if(side==='bottom') ctx.fillText(txt, mx, my+8);
+  else { ctx.save(); ctx.translate(mx-8,my); ctx.rotate(-Math.PI/2); ctx.fillText(txt,0,0); ctx.restore(); }
+  ctx.restore();
+}
+
+function drawBrujulaMin(ctx, cx, cy, r, frente) {
+  ctx.save();
+  ctx.strokeStyle='rgba(0,0,0,0.15)'; ctx.lineWidth=0.5;
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
+  // 4 arms
+  ['N','E','S','O'].forEach((d,i)=>{
+    const a=(i*90-90)*Math.PI/180;
+    ctx.strokeStyle=d==='N'?'#1a1a1a':'rgba(0,0,0,0.25)';
+    ctx.lineWidth=d==='N'?1.5:.8;
+    ctx.beginPath();
+    ctx.moveTo(cx+(r*.3)*Math.cos(a),cy+(r*.3)*Math.sin(a));
+    ctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));
+    ctx.stroke();
+    ctx.fillStyle=d==='N'?'#1a1a1a':'#aaa';
+    ctx.font=d==='N'?`bold 10px 'Inter',sans-serif`:`9px 'Inter',sans-serif`;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(d, cx+(r+9)*Math.cos(a), cy+(r+9)*Math.sin(a));
+  });
+  // Center dot
+  ctx.beginPath(); ctx.arc(cx,cy,2,0,Math.PI*2);
+  ctx.fillStyle='#1a1a1a'; ctx.fill();
+  ctx.restore();
+}
+
+function drawSolDiagrama(ctx, cx, cy) {
+  // Minimal sun icon
+  ctx.save();
+  ctx.strokeStyle='rgba(200,140,0,0.6)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.arc(cx,cy,7,0,Math.PI*2); ctx.stroke();
+  ctx.fillStyle='rgba(255,180,0,0.15)'; ctx.fill();
+  for(let i=0;i<8;i++){
+    const a=i*45*Math.PI/180;
+    ctx.beginPath(); ctx.moveTo(cx+9*Math.cos(a),cy+9*Math.sin(a));
+    ctx.lineTo(cx+12*Math.cos(a),cy+12*Math.sin(a)); ctx.stroke();
+  }
+  ctx.fillStyle='#aaa'; ctx.font=`8px 'Inter',sans-serif`;
+  ctx.textAlign='center'; ctx.textBaseline='top';
+  ctx.fillText('Sol → E', cx, cy+14);
+  ctx.restore();
+}
+
+function drawLeyendaMin(ctx, lx, y) {
+  const items = [
+    { draw:(x,yy)=>{ ctx.fillStyle='#e8f0fa'; ctx.strokeStyle='#4a8ac8'; ctx.lineWidth=1.5; ctx.fillRect(x,yy-5,18,10); ctx.strokeRect(x,yy-5,18,10); }, lbl:'Ventana principal (N)' },
+    { draw:(x,yy)=>{ ctx.fillStyle='#edf5ed'; ctx.strokeStyle='#4a8a4a'; ctx.lineWidth=1.5; ctx.fillRect(x,yy-5,18,10); ctx.strokeRect(x,yy-5,18,10); }, lbl:'Ventana secundaria (S)' },
+    { draw:(x,yy)=>{ drawArbolPlanta(ctx,x+8,yy,7,'#5a9e40','','caduc'); }, lbl:'Árbol nativo' },
+    { draw:(x,yy)=>{ ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=1.5; ctx.setLineDash([5,3]); ctx.beginPath(); ctx.moveTo(x,yy); ctx.lineTo(x+18,yy); ctx.stroke(); ctx.setLineDash([]); ctx.beginPath(); ctx.moveTo(x+18,yy); ctx.lineTo(x+12,yy-3); ctx.lineTo(x+12,yy+3); ctx.closePath(); ctx.fillStyle='#1a1a1a'; ctx.fill(); }, lbl:'Acceso principal' },
+    { draw:(x,yy)=>{ ctx.fillStyle='rgba(180,160,80,0.3)'; ctx.fillRect(x,yy-5,18,10); ctx.strokeStyle='rgba(180,130,0,0.5)'; ctx.lineWidth=0.5; ctx.strokeRect(x,yy-5,18,10); }, lbl:'Proyección solar' },
+  ];
+  // Two rows
+  const row1=items.slice(0,3), row2=items.slice(3);
+  [row1,row2].forEach((row,ri)=>{
+    let x=lx;
+    row.forEach(it=>{
+      it.draw(x, y+ri*18);
+      ctx.fillStyle='#555'; ctx.font=`500 10px 'Inter',sans-serif`;
+      ctx.textAlign='left'; ctx.textBaseline='middle';
+      ctx.fillText(it.lbl, x+24, y+ri*18);
+      x += ctx.measureText(it.lbl).width + 42;
+    });
+  });
+}
+
+/* ══════════════════════════════════════
+   RECOMENDACIONES
+══════════════════════════════════════ */
+function buildRecs(Z, frente, tipo, entorno) {
+  const ch = Z.id==='chaco', mis=Z.id==='misionero', or=Z.id==='subtropical';
+  const fN = ['N','NE','NO'].includes(frente);
+
+  return [
+    /* 1. VENTANAS */
+    { icon:'🪟', titulo:'Orientación de ventanas y aberturas', items:[
+      { icon:'⬆️', titulo:'Ventanas principales al norte (40–60% del área vidriada)',
+        desc:`Concentrá la mayor superficie vidriada al norte. Alero de ${ch?'50–60':'60–80'} cm bloquea el sol de verano (88°) y permite el sol de invierno (41°) en lat. 25°S. Usá DVH bajo emisivo en aberturas grandes.`,
+        why:`Con frente al ${frente}, la fachada norte ${fN ? 'da a la calle — aprovechás apertura generosa al norte con diseño visible desde la vía pública' : 'queda hacia el interior — el corredor de acceso no debe bloquear esta fachada clave'}.` },
+      { icon:'⬇️', titulo:'Ventanas secundarias al sur (15–25%)',
+        desc:`La fachada sur nunca recibe sol directo. Usala para ventilación cruzada con aberturas altas y regulables. ${or||mis ? 'Esencial para el flujo N→S en clima húmedo.' : 'Minimizá el área para reducir pérdidas en invierno.'}`,
+        why:`El par norte-sur genera ventilación cruzada con el viento ${Z.viento}. Abertura alta en sur extrae el aire caliente por estratificación sin equipos mecánicos.` },
+      { icon:'↔️', titulo:`Fachadas este y oeste — ${ch?'protección máxima':'control obligatorio'}`,
+        desc:`Este: celosías verticales a 25° o alero de 40 cm. Oeste: celosías o enredaderas densas — el sol de tarde es el más crítico. ${ch ? 'En el Chaco ninguna ventana al oeste sin 100% de protección.' : 'Minimizá aberturas al oeste o usá DVH con factor solar <0.3.'}`,
+        why:'El sol de tarde (15–19 hs) en Paraguay tiene ángulo bajo (20–35°) y penetra profundamente. Es el mayor aportante de calor no deseado en la OR y el Chaco.' },
+    ]},
+
+    /* 2. ENTRADA */
+    { icon:'🚪', titulo:'Entrada principal y acceso', items:[
+      { icon:'🏠', titulo:`Acceso desde fachada ${frente} con espacio de transición`,
+        desc:`Con frente al ${frente}: ${ fN ? 'La entrada al norte es ideal — incorporá una galería cubierta de 1.5–2 m de profundidad que actúe como transición entre exterior soleado e interior.' : ['S','SE','SO'].includes(frente) ? 'Fachada sur sin sol directo — el acceso es fresco. Diseñá un porche cerrado o galería acristalada hacia el norte.' : `Fachada ${frente} — protegé la entrada con alero profundo (>1.2 m) o pérgola con enredadera.`}`,
+        why:`El espacio de transición reduce el intercambio de calor con el exterior en cada apertura de puerta. Disminuye la carga de climatización hasta un 15%.` },
+      { icon:'🌀', titulo:'Vestíbulo de doble puerta interior',
+        desc:`Vestíbulo mínimo 1.5 × 2 m antes del espacio principal. ${or||mis ? 'En clima húmedo frena insectos y regula humedad.' : ch ? 'En el Chaco reduce el choque térmico al entrar desde 42°C exterior.' : 'Regula la transición térmica entre exterior e interior.'}`,
+        why:`Una diferencia de 8–12°C entre exterior e interior genera intercambio de 0.5–1 m³ de aire en cada apertura de puerta. El vestíbulo reduce ese impacto en un 70%.` },
+    ]},
+
+    /* 3. ESTRATEGIAS */
+    { icon:'🌡️', titulo:'Estrategias bioclimáticas — ' + Z.name, items:
+      ch ? [
+        { icon:'📐', titulo:'Orientación compacta — eje O-E',
+          desc:'Edificio compacto con relación largo:ancho de 1.2–1.4. Minimizá la superficie expuesta al sol en fachadas E y O.',
+          why:'En el Chaco, cada m² de fachada E-O sin proteger equivale a una ganancia de calor de 300–500 W en horas pico.' },
+        { icon:'🧱', titulo:'Masa térmica máxima — 25–30 cm de muro',
+          desc:'Ladrillo macizo 25 cm + revoque barro 3 cm = retardo térmico de 9–11 horas. Combinar con ventilación nocturna total (21–6 hs).',
+          why:'Amplitud de 20°C en el Chaco: con masa adecuada el interior puede mantenerse 8–12°C por debajo de la temperatura exterior pico.' },
+        { icon:'💧', titulo:'Patio central + enfriamiento evaporativo',
+          desc:'Patio central con fuente o vegetación húmeda. El evaporativo enfría el aire 5–8°C antes de ingresar. Relación patio: ancho ≥ 0.5× altura muros.',
+          why:'El enfriamiento evaporativo es el único sistema pasivo viable en el Chaco por su baja humedad (30–50%). No funciona en la OR (HR >70%).' },
+      ] : or ? [
+        { icon:'🌬️', titulo:'Ventilación cruzada N-S como sistema principal',
+          desc:'Abertura norte = 60% del total vidriado, sur = 40%. Para 80 m², necesitás 4–5 m² de abertura norte. Usá puertas-ventana de piso a techo.',
+          why:'Con viento NE a 3 m/s (habitual en Asunción), 2 m² de abertura generan 6 m³/s de circulación — suficiente para 100 m² sin aire acondicionado.' },
+        { icon:'🏠', titulo:'Cubierta con cámara de aire ventilada',
+          desc:'Chapa prepintada blanca (albedo 0.70) + cámara de aire de 15 cm + cielorraso flotante. Temperatura interior del cielorraso: 35°C vs 60°C de cubierta convencional.',
+          why:'La cubierta recibe radiación pico de 1.200 W/m² en enero. Cámara + albedo alto reduce transmisión al interior en 65–70%.' },
+        { icon:'🌿', titulo:'Sombreado vegetal caducifolio sincronizado',
+          desc:'Lapacho o timbó al norte: sin hojas en jun–ago (sol invernal necesario a 41°), copa densa en nov–mar (bloquea sol a 88°). Distancia = radio copa adulta.',
+          why:'Un árbol caducifolio adulto bien posicionado reduce la ganancia solar de la fachada norte hasta un 80% en verano, sin costo operativo.' },
+      ] : mis ? [
+        { icon:'🌧️', titulo:'Gestión del agua pluvial — prioridad',
+          desc:'Techo inclinado mínimo 30%. Canaletas sobredimensionadas para >100 mm/día. Cisterna de 5.000–10.000 L para recolección pluvial.',
+          why:'La zona misionera recibe hasta 200 mm en 24 horas. Sin gestión adecuada, el agua penetra cubiertas y muros en pocos años.' },
+        { icon:'🌿', titulo:'Techo verde extensivo — solución integral',
+          desc:'Membrana + geotextil + sustrato 10 cm + vegetación local. Reduce temperatura superficial 20°C y retiene el 40–60% de la lluvia. Carga: 100–130 kg/m².',
+          why:'El techo verde resuelve simultáneamente: aislación térmica (= 5 cm EPS), impermeabilización y gestión de escorrentía.' },
+        { icon:'💨', titulo:'Ventilación elevada por efecto chimenea',
+          desc:'Aberturas bajas (40 cm del piso) + aberturas altas (2.5–3 m). La diferencia de temperatura genera convección de 0.5–1 m/s sin viento exterior.',
+          why:'Con HR 65–80% y ventilación de 1 m/s, el confort percibido mejora 3–4°C equivalentes. Puede eliminar el A/A en el 60–70% de los días del año.' },
+      ] : [
+        { icon:'📐', titulo:'Diseño flexible — dos modos estacionales',
+          desc:'Aberturas regulables grandes (norte) + celosías orientables (E, O). Dos modos: verano (ventilación + sombra) e invierno (captación solar + masa).',
+          why:'La zona de transición tiene veranos similares a la OR e inviernos con heladas ocasionales. Un diseño fijo subutiliza el potencial de confort pasivo.' },
+        { icon:'🌙', titulo:'Masa térmica + ventilación nocturna',
+          desc:'Muros de 20–25 cm de ladrillo cerámico. Ventilación nocturna de 21–6 hs cuando baja >8°C. Cerrar herméticamente de día.',
+          why:'La amplitud de 12–15°C en esta zona permite enfriamiento nocturno pasivo. Con masa adecuada, el interior se mantiene 5–8°C bajo la máxima diaria.' },
+        { icon:'🌿', titulo:'Microclima vegetal — cortaviento',
+          desc:'Arbolado denso al norte y oeste (caducos) para verano. Cerca viva al sur-este para protección de vientos fríos en invierno.',
+          why:'Los frentes polares en junio-agosto bajan la sensación térmica hasta 3–4°C equivalentes. Un cortaviento vegetal al sur mitiga ese efecto.' },
+      ]
+    },
+
+    /* 4. MATERIALES */
+    { icon:'🧱', titulo:'Materiales recomendados para esta zona', items:
+      ch ? [
+        { icon:'🧱', titulo:'Muros: ladrillo macizo 25 cm + revoque barro',
+          desc:'λ = 0.70 W/mK. Retardo térmico 8–10 h. El barro agrega masa y regulación higroscópica. Disponibilidad y costo bajos en el Chaco.',
+          why:'En el Chaco: priorizar masa sobre aislación. Mayor masa → mayor retardo → menor temperatura interior en el pico de 42°C.' },
+        { icon:'🏠', titulo:'Cubierta: chapa blanca + cámara 15 cm + cielorraso',
+          desc:'Albedo chapa blanca: 0.70–0.75. Cámara ventilada 15 cm reduce transmisión un 60% adicional. Temperatura interior cubierta: 38°C vs 65°C sin protección.',
+          why:'Sin aislación, la cubierta transmite 400 W/m² al interior en el Chaco. Con este sistema baja a 60–80 W/m².' },
+        { icon:'🪟', titulo:'Aberturas: DVH bajo emisivo, mínimas al E-O',
+          desc:'E y O: máximo 8% de la fachada. Norte y sur: DVH Low-E, factor solar 0.3–0.4. Reduce ganancia solar de aberturas en un 65% vs vidrio simple.',
+          why:'1 m² de vidrio simple en el Chaco transmite hasta 800 W en horas pico. DVH bajo emisivo: solo 240 W.' },
+      ] : mis ? [
+        { icon:'🧱', titulo:'Muros: ladrillo cerámico hueco 20 cm + revoque hidrófugo',
+          desc:'λ = 0.41 W/mK. Retardo 6–8 h. Revoque hidrófugo exterior obligatorio por alta humedad. Disponibilidad excelente en Itapúa y Encarnación.',
+          why:'En zona misionera la resistencia a la humedad es más importante que la masa extrema. El revoque hidrófugo previene patologías en 10–15 años.' },
+        { icon:'🏠', titulo:'Cubierta: membrana PVC blanca + techo verde extensivo',
+          desc:'Membrana PVC termosoldada (albedo 0.75) + sustrato 10 cm + vegetación. Pendiente mínima 30%. Canaletas sobredimensionadas.',
+          why:'El techo verde retiene 40–60% de lluvia y reduce picos de escorrentía. Con 1.900 mm/año, es la cubierta más adecuada para la zona.' },
+        { icon:'🪟', titulo:'Aberturas: vidrio simple con protección exterior',
+          desc:'Vidrio simple 6 mm + celosías exteriores + aleros 70 cm. DVH solo si hay aire acondicionado. Priorizar protección solar exterior.',
+          why:'En zona misionera el DVH se recupera en 8–12 años vs 5–7 en la OR. La protección exterior es más efectiva y barata.' },
+      ] : [
+        { icon:'🧱', titulo:'Muros: ladrillo cerámico hueco 20 cm',
+          desc:'λ = 0.41 W/mK. Retardo 6–8 h. Equilibrio óptimo entre masa, disponibilidad y costo. Material más costo-efectivo para la OR.',
+          why:'El ladrillo hueco retarda el pico de temperatura 6–8 h, llevando el máximo interior de las 12 hs a las 18–20 hs cuando ya comenzó a bajar afuera.' },
+        { icon:'🏠', titulo:'Cubierta: chapa blanca + cámara de aire 15 cm',
+          desc:'Albedo objetivo >0.65. Cámara ventilada de 15 cm + cielorraso yeso-cartón. Temperatura cielorraso: 35–38°C vs 60°C sin protección.',
+          why:'En enero en Asunción la cubierta recibe 1.200–1.400 W/m². Con cubierta oscura se transmiten 250–350 W/m² al interior. Con este sistema: 60–90 W/m².' },
+        { icon:'🪟', titulo:'Aberturas: DVH bajo emisivo en norte y oeste',
+          desc:'Norte: DVH Low-E, U = 1.1–1.4 W/m²K, factor solar 0.3–0.4. Oeste: factor solar <0.25. Este y sur: vidrio simple + protección exterior.',
+          why:'La inversión en DVH en la OR se recupera en 5–7 años. La fachada norte con gran superficie vidriada es la que más se beneficia.' },
+      ]
+    },
+
+    /* 5. ESTACIONES */
+    { icon:'🗓️', titulo:'Estrategias por estación del año', items:[
+      { icon: Z.estaciones.verano.icon,
+        titulo:`Verano · ${Z.estaciones.verano.meses} · ${Z.estaciones.verano.tmp}`,
+        desc: Z.estaciones.verano.tip,
+        why:`Precipitaciones en este período: ~${Z.estaciones.verano.mm} mm. ${ch?'La escasa lluvia concentrada en pocas tormentas exige cisternas.':'Aprovechar las lluvias para recarga de cisternas y vegetación.'}`,
+        cls:'season-verano' },
+      { icon: Z.estaciones.otono.icon,
+        titulo:`Otoño · ${Z.estaciones.otono.meses} · ${Z.estaciones.otono.tmp}`,
+        desc: Z.estaciones.otono.tip,
+        why:`Precipitaciones en este período: ~${Z.estaciones.otono.mm} mm. ${mis?'Aún con lluvias moderadas, el confort térmico mejora notablemente.':'Período de menor demanda energética del año.'}`,
+        cls:'season-otono' },
+      { icon: Z.estaciones.invierno.icon,
+        titulo:`Invierno · ${Z.estaciones.invierno.meses} · ${Z.estaciones.invierno.tmp}`,
+        desc: Z.estaciones.invierno.tip,
+        why:`Precipitaciones en este período: ~${Z.estaciones.invierno.mm} mm. El sol de invierno (ángulo 41° a lat. 25°S) penetra profundamente por fachada norte — diseñá aleros que lo permitan.`,
+        cls:'season-invierno' },
+      { icon: Z.estaciones.primavera.icon,
+        titulo:`Primavera · ${Z.estaciones.primavera.meses} · ${Z.estaciones.primavera.tmp}`,
+        desc: Z.estaciones.primavera.tip,
+        why:`Precipitaciones en este período: ~${Z.estaciones.primavera.mm} mm. La primavera en Paraguay puede alcanzar picos de calor similares al verano antes de diciembre.`,
+        cls:'season-primavera' },
+    ]},
+
+    /* 6. PLANTAS */
+    { icon:'🌿', titulo:'Árboles y plantas recomendados por posición',
+      items:[{ icon:'📋', titulo:'Selección para ' + Z.name + ' — frente al ' + frente,
+        desc:`Especies nativas seleccionadas por función bioclimática específica en el lote. Todas son autóctonas del Paraguay, adaptadas al clima local, de bajo mantenimiento una vez establecidas.`,
+        why:'Especies nativas requieren 40–60% menos agua que exóticas, no necesitan fertilizantes especiales y su comportamiento estacional está sincronizado con el clima local.' }],
+      plantas: getPlantas(Z, frente)
+    },
+  ];
+}
+
+function getPlantas(Z, frente) {
+  const ch = Z.id==='chaco', mis=Z.id==='misionero';
+  if (ch) return [
+    { nombre:'Ñandubay',      sci:'Prosopis affinis',         why:'Tolerancia extrema a calor y sequía. Copa abierta que tamiza sin bloquear completamente. Raíces profundas no invasivas.',     pos:'Fachada Norte', cls:'pn' },
+    { nombre:'Palo borracho', sci:'Ceiba speciosa',           why:'Caducifolio: permite sol invernal valioso en el Chaco. Copa densa en verano. Raíces que no dañan veredas ni cimientos.',      pos:'Fachada NO',    cls:'po' },
+    { nombre:'Guayacán',      sci:'Bulnesia sarmientoi',      why:'Árbol chaqueño de gran resistencia. Flores amarillas ornamentales. Sombreado puntual en patios centrales.',                   pos:'Patio central', cls:'pper' },
+    { nombre:'Cactus cardón', sci:'Cereus peruvianus',        why:'Interior luminoso: riego mínimo, purifica el aire. Exterior en patio: elemento ornamental vernáculo chaqueño.',               pos:'Interior / Patio', cls:'pint' },
+    { nombre:'Stevia / Kaa he',sci:'Stevia rebaudiana',       why:'Medicinal nativa. En ventana con luz intensa. 4h de sol filtrado es suficiente. Endulzante natural en cocina.',               pos:'Interior Norte', cls:'pint' },
+  ];
+  if (mis) return [
+    { nombre:'Lapacho rosado', sci:'Handroanthus impetiginosus', why:'Caducifolio: sin hojas en jun–ago (sol invernal), sombra máxima en dic–mar. Floración en agosto de alto valor.',          pos:'Fachada Norte', cls:'pn' },
+    { nombre:'Ingá / Pacay',   sci:'Inga vera',                 why:'Árbol de ribera perennifolio. Ideal para napas freáticas altas o anegamiento temporal. Sombra continua.',                  pos:'Fachada E / jardín', cls:'pe' },
+    { nombre:'Ceibo',          sci:'Erythrina crista-galli',    why:'Tolera suelos anegados. Flores rojas ornamentales. Ubicar en zona de mayor acumulación de agua pluvial del lote.',          pos:'Zona húmeda',   cls:'pper' },
+    { nombre:'Mburukuja',      sci:'Passiflora caerulea',       why:'Enredadera nativa. Cubre pérgolas o celosías al oeste en 1–2 temporadas. Bloquea hasta 70% de radiación de tarde.',        pos:'Fachada Oeste', cls:'po' },
+    { nombre:'Helecho de palo',sci:'Blechnum brasiliense',      why:'Interior en baños o cocinas húmedas. Transpira mejorando la HR interior. En zona misionera equilibra el microclima.',       pos:'Interior húmedo', cls:'pint' },
+  ];
+  return [
+    { nombre:'Lapacho rosado',  sci:'Handroanthus impetiginosus', why:'Principal árbol bioclimático de la OR. Caducidad sincronizada: sombra en verano (nov–mar), sol en invierno (jun–ago). Plantarlo a 4–5 m del edificio.', pos:'Fachada Norte',    cls:'pn' },
+    { nombre:'Timbó',           sci:'Enterolobium contortisiliquum', why:'Copa horizontal 10–15 m. Para lotes amplios, 1 timbó al norte crea microclima 3–4°C más fresco. Sombra efectiva en 4–5 años.',                      pos:'Norte — lote amplio', cls:'pn' },
+    { nombre:'Mbokaja',         sci:'Acrocomia aculeata',         why:'Palmera nativa de sombreado vertical. No bloquea el sol bajo invernal. Excelente eje visual de acceso. Frutos comestibles.',                           pos:'Acceso / borde',   cls:'pe' },
+    { nombre:'Mburukuja',       sci:'Passiflora caerulea',        why:'Enredadera para fachada oeste. Con celosía simple cubre 4–6 m² por temporada y bloquea hasta 70% de radiación solar de tarde.',                       pos:'Fachada Oeste',    cls:'po' },
+    { nombre:'Jazmín Paraguay', sci:'Brunfelsia australis',       why:'Arbusto aromático para patio o jardín de sombra. Floración prolongada. Plantarlo a >1.5 m del edificio para no bloquear ventilación sur.',             pos:'Patio / Sur',      cls:'ps' },
+    { nombre:'Pitanga',         sci:'Eugenia uniflora',           why:'Seto vivo exterior (barrera visual, cortaviento) o planta interior en ventana norte. Frutos comestibles. Hojas repelen insectos.',                     pos:'Seto / Interior',  cls:'pint' },
+  ];
+}
+
+/* ══════════════════════════════════════
+   ZONAS
+══════════════════════════════════════ */
+function renderZones() {
+  document.getElementById('zgrid').innerHTML = ZONES.map((z,i) => `
+    <div class="zcard${selZ===i?' on':''}" onclick="selZone(${i})"
+         style="${selZ===i?`border-color:${z.color};border-width:1.5px`:''};
+                background:${selZ===i?z.color+'10':''}">
+      <div class="zdot" style="background:${z.color}"></div>
+      <h3>${z.name}</h3><p>${z.region}</p>
+      <div style="margin-top:8px;font-size:10px;color:${z.color};font-weight:600">${z.reto}</div>
+    </div>`).join('');
+}
+
+function selZone(i) {
+  selZ = i; renderZones();
+  const z = ZONES[i];
+  document.getElementById('zdet').innerHTML = `
+    <div class="zdet">
+      <h2 style="color:${z.color}">${z.name}</h2>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:8px">📍 ${z.region}</p>
+      <div class="zdesc">${z.desc}</div>
+      <div class="stats">
+        <div class="sbox"><div class="v">${z.temp}</div><div class="l">Temperatura</div></div>
+        <div class="sbox"><div class="v">${z.hum}</div><div class="l">Humedad</div></div>
+        <div class="sbox"><div class="v" style="font-size:13px">${z.lluvia}</div><div class="l">Lluvia</div></div>
+        <div class="sbox"><div class="v" style="font-size:11px">${z.viento}</div><div class="l">Viento</div></div>
+      </div>
+      <div style="font-size:13px;margin-bottom:12px"><strong>Reto:</strong> ${z.reto}</div>
+      <div class="dgrid">
+        <div class="dbox"><h4>Rosa de vientos</h4>${wrose(z)}</div>
+        <div class="dbox"><h4>Trayectoria solar — Perfil E→O</h4>${sunpath()}</div>
+        ${solarMap()}
+        ${lluviaChart(z)}
+        <div class="dbox"><h4>Estaciones del año</h4>${seasonBadges(z)}</div>
+      </div>
+    </div>`;
+}
+
+function lluviaChart(z) {
+  if (!z.lluviaMensual) return '';
+  const meses = ['E','F','M','A','M','J','J','A','S','O','N','D'];
+  const max = Math.max(...z.lluviaMensual);
+  const total = z.lluviaMensual.reduce((a,b)=>a+b,0);
+  const W=190, H=82, padX=12, padY=10;
+  const barW = (W-padX*2)/12;
+  let bars='';
+  z.lluviaMensual.forEach((mm,i)=>{
+    const x=padX+i*barW;
+    const h=Math.max(2,(mm/max)*(H-padY*2));
+    const y=H-padY-h;
+    const isMax=mm===max;
+    bars+=`<rect x="${x+1}" y="${y}" width="${barW-2}" height="${h}" fill="${z.color}" opacity="${isMax?'0.85':'0.5'}" rx="1.5"/>`;
+    bars+=`<text x="${x+barW/2}" y="${H-1}" text-anchor="middle" style="font-size:6.5px;fill:var(--text3,#aaa)">${meses[i]}</text>`;
+    if(isMax) bars+=`<text x="${x+barW/2}" y="${y-3}" text-anchor="middle" style="font-size:7px;fill:${z.color};font-weight:600">${mm}</text>`;
+  });
+  return `<div class="dbox"><h4>Precipitaciones mensuales · ${total} mm/año</h4><svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block">${bars}</svg></div>`;
+}
+
+function seasonBadges(z) {
+  if (!z.estaciones) return '';
+  const s=z.estaciones;
+  const colors={verano:'#EF9F27',otono:'#D85A30',invierno:'#3B8BD4',primavera:'#1D9E75'};
+  return `<div style="display:flex;flex-direction:column;gap:6px;font-size:11px">
+    ${['verano','otono','invierno','primavera'].map(k=>`
+    <div style="display:flex;align-items:baseline;gap:7px">
+      <span style="font-size:13px">${s[k].icon}</span>
+      <div>
+        <span style="font-weight:600;color:${colors[k]}">${s[k].meses}</span>
+        <span style="color:var(--text3);margin-left:5px;font-size:10px">${s[k].tmp} · ~${s[k].mm} mm</span>
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+function wrose(z) {
+  const dirs=['N','NE','E','SE','S','SO','O','NO'], base=[30,55,20,15,25,20,18,22];
+  const sh = Math.round(z.windDeg/45)%8;
+  const vals = [...base.slice(sh),...base.slice(0,sh)];
+  const mx = Math.max(...vals), cx=85, cy=85, r=62;
+  let p='', l='';
+  dirs.forEach((d,i) => {
+    const an=(i*45-90)*Math.PI/180, len=(vals[i]/mx)*r, w=12;
+    const a1=((i*45-90-w/2))*Math.PI/180, a2=((i*45-90+w/2))*Math.PI/180;
+    p += `<path d="M${cx+8*Math.cos(a1)},${cy+8*Math.sin(a1)} L${cx+len*Math.cos(a1)},${cy+len*Math.sin(a1)} L${cx+len*Math.cos(a2)},${cy+len*Math.sin(a2)} L${cx+8*Math.cos(a2)},${cy+8*Math.sin(a2)}Z" fill="${vals[i]===mx?z.color:'#ccc'}" opacity="${vals[i]===mx?.85:.4}"/>`;
+    const lx=cx+(r+14)*Math.cos(an), ly=cy+(r+14)*Math.sin(an);
+    l += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="central" style="font-size:10px;fill:#888">${d}</text>`;
+  });
+  return `<svg viewBox="0 0 170 170" width="100%"><circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#ddd" stroke-width="0.5"/><circle cx="${cx}" cy="${cy}" r="${r*.6}" fill="none" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3"/>${p}${l}</svg>`;
+}
+
+function sunpath() {
+  // Arc data: dec = solar declination for lat 25°S
+  // dic (summer SH): dec=-23.5 → noon alt ≈ 88°
+  // equinox: dec=0 → noon alt ≈ 65°
+  // jun (winter SH): dec=+23.5 → noon alt ≈ 41°
+  const W=220, H=140, padX=18, hz=110; // hz = horizon y
+  const arcs = [
+    {lbl:'Jun · 41°', col:'#3B8BD4', alt:41, r1:-110, r2:110, dash:'5,3'},
+    {lbl:'Sep · 65°', col:'#888888', alt:65, r1:-90,  r2:90,  dash:'3,2'},
+    {lbl:'Dic · 88°', col:'#EF9F27', alt:88, r1:-70,  r2:70,  dash:''},
+  ];
+  const xScale = (W-padX*2)/220;
+  let svg = '';
+
+  // Altitude grid lines
+  [30,60].forEach(a => {
+    const yy = hz - (a/90)*(hz-10);
+    svg += `<line x1="${padX}" y1="${yy}" x2="${W-padX}" y2="${yy}" stroke="rgba(128,128,128,0.15)" stroke-width="0.5" stroke-dasharray="3,2"/>`;
+    svg += `<text x="${padX-2}" y="${yy}" text-anchor="end" dominant-baseline="middle" style="font-size:8px;fill:#aaa">${a}°</text>`;
+  });
+
+  // Horizon
+  svg += `<line x1="${padX}" y1="${hz}" x2="${W-padX}" y2="${hz}" stroke="rgba(128,128,128,0.4)" stroke-width="1"/>`;
+  svg += `<text x="${padX}" y="${hz+10}" style="font-size:9px;fill:#888;font-weight:600">E</text>`;
+  svg += `<text x="${W-padX-8}" y="${hz+10}" style="font-size:9px;fill:#888;font-weight:600">O</text>`;
+  svg += `<text x="${W/2}" y="${hz+10}" text-anchor="middle" style="font-size:9px;fill:#aaa">N (cenit solar)</text>`;
+
+  // Sun arcs
+  arcs.forEach(a => {
+    const pts = [];
+    for (let az=a.r1; az<=a.r2; az+=3) {
+      const t = (az-a.r1)/(a.r2-a.r1);
+      const x = padX + (az - a.r1) / (a.r2 - a.r1) * (W - padX*2);
+      const y = hz - Math.sin(t*Math.PI) * a.alt * (hz-10)/90;
+      pts.push(`${x.toFixed(1)},${y.toFixed(1)}`);
+    }
+    const dashAttr = a.dash ? `stroke-dasharray="${a.dash}"` : '';
+    svg += `<polyline points="${pts.join(' ')}" fill="none" stroke="${a.col}" stroke-width="2.5" stroke-linecap="round" ${dashAttr}/>`;
+    // Label at peak (t=0.5 = noon)
+    const peakX = W/2;
+    const peakY = hz - a.alt * (hz-10)/90 - 6;
+    svg += `<text x="${peakX}" y="${peakY}" text-anchor="middle" style="font-size:8.5px;fill:${a.col};font-weight:600">${a.lbl}</text>`;
+  });
+
+  // Noon line
+  svg += `<line x1="${W/2}" y1="${hz}" x2="${W/2}" y2="8" stroke="rgba(128,128,128,0.15)" stroke-width="0.5" stroke-dasharray="3,2"/>`;
+  svg += `<text x="${W/2}" y="6" text-anchor="middle" style="font-size:8px;fill:#aaa">Mediodía</text>`;
+
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block">${svg}</svg>`;
+}
+
+function solarMap() {
+  const lat = -25 * Math.PI / 180;
+  const R = 100, cx = 150, cy = 150, W = 300, H = 300;
+
+  function toRad(d) { return d * Math.PI / 180; }
+
+  function sunXY(dec_deg, ha_deg) {
+    const dec = toRad(dec_deg);
+    const ha = toRad(ha_deg);
+    const sinAlt = Math.sin(lat)*Math.sin(dec) + Math.cos(lat)*Math.cos(dec)*Math.cos(ha);
+    const alt = Math.asin(Math.max(-1, Math.min(1, sinAlt)));
+    if (alt < 0.001) return null;
+    const cosAz = (Math.sin(dec) - Math.sin(alt)*Math.sin(lat)) / (Math.cos(alt)*Math.cos(lat));
+    let az = Math.acos(Math.max(-1, Math.min(1, cosAz)));
+    if (ha_deg > 0) az = 2*Math.PI - az;
+    const r = R * (1 - alt/(Math.PI/2));
+    return { x: cx + r*Math.sin(az), y: cy - r*Math.cos(az), alt: alt*180/Math.PI };
+  }
+
+  const months = [
+    {name:'Jun', dec:23.5,  col:'#3B8BD4', dash:'5,3', season:'Invierno'},
+    {name:'Sep', dec:0,     col:'#888888', dash:'3,2', season:'Equinoccio'},
+    {name:'Dic', dec:-23.5, col:'#EF9F27', dash:'',    season:'Verano'},
+  ];
+
+  let svg = '';
+
+  // Alt circles
+  [0,30,60,80].forEach(alt => {
+    const r = R * (1 - alt/90);
+    const op = alt===0 ? '0.5' : '0.2';
+    svg += `<circle cx="${cx}" cy="${cy}" r="${r.toFixed(1)}" fill="none" stroke="rgba(128,128,128,${op})" stroke-width="${alt===0?1:'0.5'}"/>`;
+    if (alt > 0 && alt < 80) svg += `<text x="${(cx+4).toFixed(1)}" y="${(cy-r-3).toFixed(1)}" style="font-size:7.5px;fill:#aaa">${alt}°</text>`;
+  });
+
+  // Az lines every 30°
+  for (let a=0; a<360; a+=30) {
+    const ar = toRad(a);
+    svg += `<line x1="${cx}" y1="${cy}" x2="${(cx+R*Math.sin(ar)).toFixed(1)}" y2="${(cy-R*Math.cos(ar)).toFixed(1)}" stroke="rgba(128,128,128,0.1)" stroke-width="0.5"/>`;
+  }
+
+  // Compass N/S/E/O
+  [{l:'N',a:0},{l:'S',a:180},{l:'E',a:90},{l:'O',a:270}].forEach(d => {
+    const ar = toRad(d.a);
+    svg += `<text x="${(cx+(R+14)*Math.sin(ar)).toFixed(1)}" y="${(cy-(R+14)*Math.cos(ar)+3).toFixed(1)}" text-anchor="middle" style="font-size:10px;fill:#666;font-weight:700">${d.l}</text>`;
+  });
+
+  // Hour labels on equinox path
+  [6,8,10,12,14,16,18].forEach(h => {
+    const ha = (h-12)*15;
+    const pos = sunXY(0, ha);
+    if (pos) {
+      svg += `<circle cx="${pos.x.toFixed(1)}" cy="${pos.y.toFixed(1)}" r="2" fill="#aaa" opacity="0.7"/>`;
+      const offX = ha < 0 ? -10 : ha > 0 ? 4 : 0;
+      const offY = ha === 0 ? -7 : -4;
+      svg += `<text x="${(pos.x+offX).toFixed(1)}" y="${(pos.y+offY).toFixed(1)}" text-anchor="${ha<0?'end':ha>0?'start':'middle'}" style="font-size:7px;fill:#999">${h}h</text>`;
+    }
+  });
+
+  // Sun paths
+  months.forEach(m => {
+    const pts = [];
+    for (let ha=-120; ha<=120; ha+=2) {
+      const pos = sunXY(m.dec, ha);
+      if (pos) pts.push(`${pos.x.toFixed(1)},${pos.y.toFixed(1)}`);
+    }
+    if (pts.length > 1) {
+      const da = m.dash ? `stroke-dasharray="${m.dash}"` : '';
+      svg += `<polyline points="${pts.join(' ')}" fill="none" stroke="${m.col}" stroke-width="2.5" stroke-linecap="round" ${da}/>`;
+    }
+    // Peak label at noon (ha=0)
+    const peak = sunXY(m.dec, 0);
+    if (peak) {
+      svg += `<circle cx="${peak.x.toFixed(1)}" cy="${peak.y.toFixed(1)}" r="4" fill="${m.col}" opacity="0.85"/>`;
+      const lx = peak.x > cx+5 ? peak.x + 7 : peak.x - 7;
+      const ta = peak.x > cx+5 ? 'start' : 'end';
+      svg += `<text x="${lx.toFixed(1)}" y="${(peak.y-2).toFixed(1)}" text-anchor="${ta}" style="font-size:8.5px;fill:${m.col};font-weight:700">${m.name}</text>`;
+      svg += `<text x="${lx.toFixed(1)}" y="${(peak.y+8).toFixed(1)}" text-anchor="${ta}" style="font-size:7.5px;fill:${m.col}">${peak.alt.toFixed(0)}° alt.</text>`;
+    }
+    // Sunrise/sunset markers
+    const rise = sunXY(m.dec, -120);
+    const set_ = sunXY(m.dec, 120);
+    if (rise) svg += `<circle cx="${rise.x.toFixed(1)}" cy="${rise.y.toFixed(1)}" r="3" fill="${m.col}" opacity="0.5"/>`;
+    if (set_) svg += `<circle cx="${set_.x.toFixed(1)}" cy="${set_.y.toFixed(1)}" r="3" fill="${m.col}" opacity="0.5"/>`;
+  });
+
+  const legend = months.map(m =>
+    `<span><svg width="18" height="4" style="vertical-align:middle"><line x1="0" y1="2" x2="18" y2="2" stroke="${m.col}" stroke-width="2.5" stroke-dasharray="${m.dash||''}"/></svg> ${m.name} (${m.season})</span>`
+  ).join('');
+
+  return `<div class="dbox solar-map-box">
+    <h4>Mapa solar anual — Lat. 25°S · Punto = altitud al mediodía</h4>
+    <svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;max-height:260px">${svg}</svg>
+    <div class="solar-legend">${legend}</div>
+  </div>`;
+}
+
+/* ══════════════════════════════════════
+   ESTRATEGIAS
+══════════════════════════════════════ */
+function renderStrats() {
+  const cats = ['todos','ventilacion','sombreado','masa','cubierta','forma'];
+  const cl = {todos:'Todas',ventilacion:'Ventilación',sombreado:'Sombreado',masa:'Masa térmica',cubierta:'Cubiertas',forma:'Forma'};
+  const co = {ventilacion:'#3B8BD4',sombreado:'#EF9F27',masa:'#D85A30',cubierta:'#1D9E75',forma:'#888780'};
+  document.getElementById('sfilt').innerHTML = cats.map(c =>
+    `<button class="fb${sfil===c?' on':''}" onclick="setSF('${c}')">${cl[c]}</button>`).join('');
+  const list = sfil==='todos' ? STRATS : STRATS.filter(s => s.cat===sfil);
+  document.getElementById('sgrid').innerHTML = list.map(s => `
+    <div class="sc">
+      <div class="sc-hdr" style="background:${(co[s.cat]||'#888888')}22">${s.icon}</div>
+      <div class="sc-body"><h3>${s.name}</h3><p>${s.desc}</p>${s.tags.map(t=>`<span class="stag">${t}</span>`).join('')}</div>
+    </div>`).join('');
+}
+function setSF(c) { sfil=c; renderStrats(); }
+
+/* ══════════════════════════════════════
+   MATERIALES
+══════════════════════════════════════ */
+function renderMats() {
+  const fl=['todos','muros','cubiertas','aberturas'];
+  const fl2={todos:'Todos',muros:'Muros',cubiertas:'Cubiertas',aberturas:'Aberturas'};
+  // Info box (only insert once)
+  if (!document.getElementById('mat-info-box')) {
+    const box = document.createElement('div');
+    box.id = 'mat-info-box';
+    box.className = 'mat-info';
+    box.innerHTML = `<strong>Masa térmica:</strong> capacidad de absorber y almacenar calor (retarda el pico térmico 6–10 hs). Alta en ladrillo, hormigón, adobe. &nbsp;|&nbsp; <strong>Aislamiento:</strong> resistencia a la transmisión de calor (λ bajo = mejor aislante). Un buen diseño combina <em>masa + aislación</em> según la zona.`;
+    document.getElementById('mfilt').before(box);
+  }
+  document.getElementById('mfilt').innerHTML = fl.map(f =>
+    `<button class="fb${mfil===f?' on':''}" onclick="setMF('${f}')">${fl2[f]}</button>`).join('');
+  const kw = {muros:['Ladrillo','Adobe','Bloque','Madera','bambú','yeso','fardo','paja','Tierra','PET','suelo'],cubiertas:['Chapa','Membrana','Poliestireno','Lana','verde','policarbonato'],aberturas:['Vidrio','DVH']};
+  const list = mfil==='todos' ? MATS : MATS.filter(m => kw[mfil]?.some(k => m.name.toLowerCase().includes(k.toLowerCase())));
+  document.getElementById('mbody').innerHTML = list.map(m => `
+    <tr>
+      <td style="font-weight:500">${m.name}</td>
+      <td>${m.lam}</td>
+      <td><div class="brow"><div class="btr"><div class="bfill" style="width:${m.mv}%;background:${m.col}"></div></div><span class="blbl">${m.masa}</span></div></td>
+      <td><div class="brow"><div class="btr"><div class="bfill" style="width:${m.av}%;background:#3B8BD4"></div></div><span class="blbl">${m.ais}</span></div></td>
+      <td style="font-size:11px;color:#888">${m.zon}</td>
+    </tr>`).join('');
+}
+function setMF(f) { mfil=f; renderMats(); }
+
+/* ══════════════════════════════════════
+   PLANTAS
+══════════════════════════════════════ */
+function renderPlantas() {
+  const cats = ['todos','arbol','arbusto','palmera','enredadera','helecho','cactus','hierba','acuatica'];
+  const cl = {todos:'Todas',arbol:'Árboles',arbusto:'Arbustos',palmera:'Palmeras',enredadera:'Enredaderas',helecho:'Helechos',cactus:'Cactus',hierba:'Hierbas',acuatica:'Acuáticas'};
+  document.getElementById('pcfilt').innerHTML = cats.map(c =>
+    `<button class="fb${pcfil===c?' on':''}" onclick="setPC('${c}')">${cl[c]}</button>`).join('');
+  let list = ufil==='todos' ? PLANTAS : ufil==='ambos' ? PLANTAS.filter(p=>p.uso==='ambos') : PLANTAS.filter(p=>p.uso===ufil||p.uso==='ambos');
+  if (pcfil !== 'todos') list = list.filter(p => p.cat===pcfil);
+  const bc = {exterior:'bext', interior:'bint', ambos:'bamb'};
+  document.getElementById('pgrid').innerHTML = list.map(p => `
+    <div class="pc">
+      <div class="pc-ilus" style="background:${p.bg}">${p.il()}<span class="pbdg ${bc[p.uso]}">${p.bt}</span></div>
+      <div class="pc-info">
+        <h3>${p.nombre}</h3>
+        <div class="pci">${p.ci}</div>
+        <p>${p.desc}</p>
+        ${p.at.map(a=>`<div class="arow"><span class="aico">${a.i}</span><span class="atxt">${a.t}</span></div>`).join('')}
+        <div style="margin-top:6px">${p.us.map(u=>`<span class="uchip">${u}</span>`).join('')}</div>
+      </div>
+    </div>`).join('');
+}
+function setPC(c) { pcfil=c; renderPlantas(); }
+function setUso(v, btn) {
+  ufil=v;
+  document.querySelectorAll('.ub').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  renderPlantas();
+}
+
+/* ══════════════════════════════════════
+   HERRAMIENTAS
+══════════════════════════════════════ */
+
+/* ── MATERIAL CONSTANTS for TC ── */
+const TC_MATS = [
+  { name:'Ladrillo cerámico hueco',   lam:0.41 },
+  { name:'Ladrillo macizo cocido',    lam:0.70 },
+  { name:'Hormigón armado',           lam:1.63 },
+  { name:'Adobe estabilizado',        lam:0.52 },
+  { name:'Bloque de hormigón',        lam:0.79 },
+  { name:'Madera nativa',             lam:0.14 },
+  { name:'Panel de bambú',            lam:0.17 },
+  { name:'Placa yeso-cartón',         lam:0.25 },
+  { name:'Poliestireno expandido EPS',lam:0.04 },
+  { name:'Lana de roca',              lam:0.036},
+  { name:'Chapa zinc',                lam:50.0 },
+  { name:'Membrana asfáltica',        lam:0.17 },
+  { name:'Mortero de cemento',        lam:0.72 },
+  { name:'Fardo de paja',             lam:0.07 },
+  { name:'Tierra compactada',         lam:0.65 },
+  { name:'Piedra basáltica',          lam:1.40 },
+  { name:'Policarbonato alveolar',    lam:0.22 },
+  { name:'Revoque de barro',          lam:0.52 },
+  { name:'Aire (cámara 5+ cm)',       lam:0.17 },
+];
+
+function tcInit() {
+  const container = document.getElementById('tc-layers');
+  if (!container) return;
+  container.innerHTML = '';
+  tcAddLayer();
+  tcAddLayer();
+}
+
+function tcAddLayer() {
+  const container = document.getElementById('tc-layers');
+  if (!container) return;
+  const div = document.createElement('div');
+  div.className = 'tc-capa';
+  const idx = container.children.length;
+  div.innerHTML = `
+    <select onchange="tcCalc()">
+      ${TC_MATS.map(m => `<option value="${m.lam}">${m.name}</option>`).join('')}
+    </select>
+    <input type="number" value="${idx===0?15:idx===1?5:5}" min="1" max="80" oninput="tcCalc()">
+    <span class="tc-esp">cm</span>
+    <span class="tc-del" onclick="this.parentElement.remove();tcCalc()">×</span>`;
+  container.appendChild(div);
+  tcCalc();
+}
+
+function tcCalc() {
+  const capas = document.querySelectorAll('.tc-capa');
+  let rTotal = 0.13 + 0.04; // Rsi + Rse
+  capas.forEach(c => {
+    const lam = parseFloat(c.querySelector('select').value);
+    const esp = parseFloat(c.querySelector('input').value) / 100;
+    rTotal += esp / lam;
+  });
+  const u = rTotal > 0 ? (1 / rTotal).toFixed(3) : '—';
+  document.getElementById('tc-r').textContent = rTotal.toFixed(2);
+  document.getElementById('tc-u').textContent = u;
+
+  const v = document.getElementById('tc-veredict');
+  if (rTotal < 0.5) {
+    v.innerHTML = '⚠️ <strong>Muy baja resistencia.</strong> Sin aislar. Transmite demasiado calor.';
+    v.style.background = '#fde8e8'; v.style.color = '#7a0000';
+  } else if (rTotal < 1.5) {
+    v.innerHTML = '🔶 <strong>Aislación insuficiente.</strong> Necesitás más capa aislante o cambiar materiales.';
+    v.style.background = '#fff0d6'; v.style.color = '#7a4000';
+  } else if (rTotal < 3.0) {
+    v.innerHTML = '✅ <strong>Aislación aceptable.</strong> Cumple estándares básicos para la zona.';
+    v.style.background = '#e2f0d6'; v.style.color = '#2a5e0a';
+  } else {
+    v.innerHTML = '🌟 <strong>Excelente aislación térmica.</strong> Ideal para cubiertas o muros en Chaco.';
+    v.style.background = '#d6eaf8'; v.style.color = '#0d4480';
+  }
+}
+
+/* ── RAINWATER ── */
+function calcRainwater() {
+  const zona = document.getElementById('hc-zona').value;
+  const area = parseFloat(document.getElementById('hc-area').value) || 0;
+  const coef = parseFloat(document.getElementById('hc-coef').value) || 0;
+  const lluviaAnual = { subtropical:1400, chaco:800, misionero:1900, transicion:1400 };
+  const mm = lluviaAnual[zona] || 1400;
+  const litros = area * mm * coef;
+  const m3 = litros / 1000;
+  const famSize = 4;
+  const consumoDiario = famSize * 150; // L/día para 4 personas
+  const diasCobertura = litros / consumoDiario;
+  const el = document.getElementById('hc-result');
+  el.innerHTML = `
+    <strong>${litros.toLocaleString()}</strong> L/año <span style="color:var(--text3)">≈ ${m3.toFixed(1)} m³</span><br>
+    <span style="font-size:11px">Precipitación: ${mm} mm/año · Coeficiente: ${coef} · Superficie: ${area} m²</span><br>
+    <span style="font-size:11px">🚿 Cobertura para ${famSize} personas: <strong>${diasCobertura.toFixed(0)} días/año</strong> (${(diasCobertura/365*100).toFixed(0)}% del año)</span>
+    ${diasCobertura > 300 ? '<br><span style="color:#2a5e0a;font-size:11px">💧 Podés ser autosuficiente en agua con este sistema.</span>' : ''}
+    ${diasCobertura < 60 ? '<br><span style="color:#7a4000;font-size:11px">☀️ Usá para riego de jardín o como respaldo.</span>' : ''}
+  `;
+}
+
+/* ── COMPARADOR ── */
+function zcInit() {
+  const body = document.getElementById('zc-body');
+  if (!body) return;
+  body.innerHTML = `
+    <div class="zc-picker">
+      <select id="zc-a" onchange="zcRender()">
+        ${ZONES.map((z,i) => `<option value="${i}">${z.name}</option>`).join('')}
+      </select>
+      <select id="zc-b" onchange="zcRender()">
+        ${ZONES.map((z,i) => `<option value="${i}" ${i===1?'selected':''}>${z.name}</option>`).join('')}
+      </select>
+    </div>
+    <div class="zc-col" id="zc-cola"></div>
+    <div class="zc-col" id="zc-colb"></div>
+    <div class="zc-diff" id="zc-diff"></div>
+    <div class="zc-season" id="zc-season"></div>`;
+  zcRender();
+}
+
+function zcRender() {
+  const ia = parseInt(document.getElementById('zc-a').value);
+  const ib = parseInt(document.getElementById('zc-b').value);
+  if (ia === ib) {
+    document.getElementById('zc-diff').textContent = '📌 Seleccioná dos zonas diferentes para comparar.';
+    document.getElementById('zc-cola').innerHTML = renderZcCol(ZONES[ia]);
+    document.getElementById('zc-colb').innerHTML = '';
+    document.getElementById('zc-season').innerHTML = '';
+    return;
+  }
+  const a = ZONES[ia], b = ZONES[ib];
+  document.getElementById('zc-cola').innerHTML = renderZcCol(a);
+  document.getElementById('zc-colb').innerHTML = renderZcCol(b);
+  document.getElementById('zc-diff').innerHTML = `↔ ${a.name} vs ${b.name} — ${a.reto.split('+')[0].trim()} · ${b.reto.split('+')[0].trim()}`;
+  document.getElementById('zc-season').innerHTML = `
+    <h5>Estaciones comparadas</h5>
+    <div class="zc-sgrid">
+      ${['verano','otono','invierno','primavera'].map(k => `
+        <div class="zc-sitem">
+          <span>${a.estaciones[k].icon}</span>
+          <div><strong>${a.estaciones[k].meses}</strong>: ${a.estaciones[k].tmp} / ${b.estaciones[k].tmp}</div>
+        </div>`).join('')}
+    </div>`;
+}
+
+function renderZcCol(z) {
+  return `
+    <h4 style="color:${z.color};border-color:${z.color}">${z.name}</h4>
+    <div class="zc-stat"><span class="lbl">Región</span><span class="val">${z.region}</span></div>
+    <div class="zc-stat"><span class="lbl">Temperatura</span><span class="val">${z.temp}</span></div>
+    <div class="zc-stat"><span class="lbl">Humedad</span><span class="val">${z.hum}</span></div>
+    <div class="zc-stat"><span class="lbl">Lluvia</span><span class="val">${z.lluvia}</span></div>
+    <div class="zc-stat"><span class="lbl">Viento</span><span class="val">${z.viento}</span></div>
+    <div class="zc-stat"><span class="lbl">Reto</span><span class="val">${z.reto}</span></div>
+    <div class="zc-tags">${(z.tags||[]).map(t => `<span class="zc-tag">${t}</span>`).join('')}</div>`;
+}
+
+/* ── HERRAMIENTAS INIT ── */
+function initHerramientas() {
+  tcInit();
+  calcRainwater();
+  zcInit();
+}
+
+/* ── LOCALSTORAGE ── */
+function savePrefs() {
+  try {
+    const prefs = {
+      theme: currentTheme,
+      fontSize: document.querySelector('.font-btn.active')?.textContent?.trim?.() === 'A−' ? -1 :
+                document.querySelector('.font-btn.active')?.textContent?.trim?.() === 'A' ? 0 : 1,
+    };
+    localStorage.setItem('bioclim-py-prefs', JSON.stringify(prefs));
+  } catch(e) {}
+}
+function loadPrefs() {
+  try {
+    const raw = localStorage.getItem('bioclim-py-prefs');
+    if (!raw) return;
+    const prefs = JSON.parse(raw);
+    if (prefs.theme && THEMES[prefs.theme]) applyTheme(prefs.theme);
+    if (prefs.fontSize !== undefined) {
+      const btns = document.querySelectorAll('.font-btn');
+      const idx = prefs.fontSize + 1;
+      if (btns[idx]) btns[idx].click();
+    }
+  } catch(e) {}
+}
+
+/* ══════════════════════════════════════
+   INIT
+══════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', function() {
+  renderZones(); selZone(0);
+  renderStrats(); renderMats(); renderPlantas();
+  initHerramientas();
+  loadPrefs();
+  setTimeout(initMap, 100);
+});

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bioclimática Paraguay</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="hdr">
+    <div class="hdr-brand">
+      <div class="hdr-icon">🌿</div>
+      <div>
+        <h1>Bioclimática Paraguay</h1>
+        <p>Recurso técnico de diseño bioclimático</p>
+      </div>
+    </div>
+    <div class="font-ctrl">
+      <button class="font-btn" onclick="setFontSize(-1)" title="Texto pequeño">A−</button>
+      <button class="font-btn active" onclick="setFontSize(0)" title="Texto normal">A</button>
+      <button class="font-btn" onclick="setFontSize(1)" title="Texto grande">A+</button>
+    </div>
+    <button class="theme-toggle" onclick="toggleThemePanel()" title="Temas visuales">
+      <span>🎨</span> Temas
+    </button>
+  </header>
+
+  <!-- THEME PANEL -->
+  <div class="theme-panel" id="theme-panel">
+    <div class="tp-head">
+      <span class="tp-title">Tema visual</span>
+      <button class="tp-close" onclick="closeThemePanel()">✕</button>
+    </div>
+    <div id="theme-picker"></div>
+  </div>
+  <div class="theme-overlay" id="theme-overlay" onclick="closeThemePanel()"></div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <button class="nb on" onclick="go('guia',this)"><span class="nb-icon">📋</span>Guía</button>
+    <button class="nb" onclick="go('zonas',this)"><span class="nb-icon">📍</span>Zonas</button>
+    <button class="nb" onclick="go('estrategias',this)"><span class="nb-icon">⚡</span>Estrategias</button>
+    <button class="nb" onclick="go('materiales',this)"><span class="nb-icon">🧱</span>Materiales</button>
+    <button class="nb" onclick="go('plantas',this)"><span class="nb-icon">🌿</span>Plantas</button>
+    <button class="nb" onclick="go('herramientas',this)"><span class="nb-icon">🛠️</span>Herramientas</button>
+  </nav>
+
+  <div class="content" id="main-content">
+
+    <!-- GUÍA -->
+    <div class="panel on" id="p-guia">
+      <div class="guia-wrap">
+
+        <!-- COLUMNA IZQUIERDA: formulario en pasos -->
+        <div class="guia-form">
+
+          <div class="step-block">
+            <div class="step-num">01</div>
+            <div class="step-body">
+              <h3>Ubicación del lote</h3>
+              <p class="step-sub">Hacé clic en el mapa para detectar la zona automáticamente.</p>
+              <div id="map"></div>
+              <div class="map-info" id="minfo">Hacé clic en el mapa para marcar tu terreno.</div>
+            </div>
+          </div>
+
+          <div class="step-block">
+            <div class="step-num">02</div>
+            <div class="step-body">
+              <h3>Zona climática</h3>
+              <select id="sel-zona">
+                <option value="">— Seleccioná o detectá por mapa —</option>
+                <option value="subtropical">Subtropical húmedo (Región Oriental)</option>
+                <option value="chaco">Semiárido Chaco (Región Occidental)</option>
+                <option value="misionero">Subtropical misionero (Sur)</option>
+                <option value="transicion">Zona de transición (Centro)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="step-block">
+            <div class="step-num">03</div>
+            <div class="step-body">
+              <h3>Datos del lote</h3>
+              <span class="flabel">Frente del lote orientado hacia</span>
+              <div class="chips" id="ch-frente">
+                <div class="chip" onclick="selChip('frente','N',this)">Norte</div>
+                <div class="chip" onclick="selChip('frente','S',this)">Sur</div>
+                <div class="chip" onclick="selChip('frente','E',this)">Este</div>
+                <div class="chip" onclick="selChip('frente','O',this)">Oeste</div>
+                <div class="chip" onclick="selChip('frente','NE',this)">NE</div>
+                <div class="chip" onclick="selChip('frente','NO',this)">NO</div>
+                <div class="chip" onclick="selChip('frente','SE',this)">SE</div>
+                <div class="chip" onclick="selChip('frente','SO',this)">SO</div>
+              </div>
+              <span class="flabel">Tipo de edificio</span>
+              <div class="chips" id="ch-tipo">
+                <div class="chip" onclick="selChip('tipo','vivienda',this)">Vivienda</div>
+                <div class="chip" onclick="selChip('tipo','comercial',this)">Comercial</div>
+                <div class="chip" onclick="selChip('tipo','oficina',this)">Oficina</div>
+                <div class="chip" onclick="selChip('tipo','educativo',this)">Educativo</div>
+              </div>
+              <span class="flabel">Entorno</span>
+              <div class="chips" id="ch-entorno">
+                <div class="chip" onclick="selChip('entorno','urbano',this)">Urbano denso</div>
+                <div class="chip" onclick="selChip('entorno','suburbano',this)">Suburbano</div>
+                <div class="chip" onclick="selChip('entorno','rural',this)">Rural / abierto</div>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-go" onclick="generar()">Generar recomendaciones →</button>
+        </div>
+
+        <!-- COLUMNA DERECHA: resultado -->
+        <div id="resultado">
+          <div class="empty">
+            <span>🗺️</span>
+            <p>Completá los pasos del formulario<br>y generá las recomendaciones</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ZONAS -->
+    <div class="panel" id="p-zonas">
+      <div class="stitle">Zonas climáticas de Paraguay</div>
+      <div class="ssub">Seleccioná una zona para ver sus características, diagramas y recomendaciones.</div>
+      <div class="zgrid" id="zgrid"></div>
+      <div id="zdet"></div>
+    </div>
+
+    <!-- ESTRATEGIAS -->
+    <div class="panel" id="p-estrategias">
+      <div class="stitle">Estrategias bioclimáticas</div>
+      <div class="ssub">Técnicas pasivas de acondicionamiento para el clima paraguayo.</div>
+      <div class="frow" id="sfilt"></div>
+      <div class="sgrid" id="sgrid"></div>
+    </div>
+
+    <!-- MATERIALES -->
+    <div class="panel" id="p-materiales">
+      <div class="stitle">Materiales y propiedades térmicas</div>
+      <div class="ssub">Materiales disponibles en Paraguay.</div>
+      <div class="frow" id="mfilt"></div>
+      <div class="mwrap">
+        <table class="mt">
+          <colgroup><col style="width:35%"><col style="width:13%"><col style="width:22%"><col style="width:22%"><col style="width:8%"></colgroup>
+          <thead><tr><th>Material</th><th>λ (W/mK)</th><th>Masa térmica</th><th>Aislamiento</th><th>Zonas</th></tr></thead>
+          <tbody id="mbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PLANTAS -->
+    <div class="panel" id="p-plantas">
+      <div class="stitle">Plantas autóctonas de Paraguay</div>
+      <div class="ssub">Especies nativas para uso bioclimático en arquitectura y paisajismo.</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px">
+        <div class="utog">
+          <button class="ub on" onclick="setUso('todos',this)">Todas</button>
+          <button class="ub" onclick="setUso('exterior',this)">Exterior</button>
+          <button class="ub" onclick="setUso('interior',this)">Interior</button>
+          <button class="ub" onclick="setUso('ambos',this)">Int. y Ext.</button>
+        </div>
+        <div class="frow" style="margin:0" id="pcfilt"></div>
+      </div>
+      <div class="pgrid" id="pgrid"></div>
+    </div>
+
+    <!-- HERRAMIENTAS -->
+    <div class="panel" id="p-herramientas">
+      <div class="stitle">🛠️ Herramientas técnicas</div>
+      <div class="ssub">Calculadoras y comparadores para diseñar con datos.</div>
+
+      <div class="ht-grid">
+
+        <!-- CALCULADORA TÉRMICA -->
+        <div class="ht-card">
+          <h3 class="ht-card-title">🧱 Resistencia térmica (R / U)</h3>
+          <p class="ht-card-sub">Calculá la transmitancia térmica de un muro o cubierta multicapa.</p>
+          <div id="tc-body">
+            <div class="tc-capas" id="tc-layers"></div>
+            <div class="tc-add" onclick="tcAddLayer()">+ Agregar capa</div>
+            <div class="tc-result" id="tc-result">
+              <span>R total: <strong id="tc-r">0.00</strong> m²K/W</span>
+              <span>· U: <strong id="tc-u">—</strong> W/m²K</span>
+            </div>
+            <div class="tc-veredict" id="tc-veredict"></div>
+          </div>
+        </div>
+
+        <!-- CAPTACIÓN DE AGUA -->
+        <div class="ht-card">
+          <h3 class="ht-card-title">💧 Captación de agua de lluvia</h3>
+          <p class="ht-card-sub">Estimá el volumen de agua recolectable según zona y superficie de techo.</p>
+          <div class="hc-body">
+            <div class="hc-row">
+              <label>Zona climática</label>
+              <select id="hc-zona" onchange="calcRainwater()">
+                <option value="subtropical">Subtropical húmedo — 1.400 mm/año</option>
+                <option value="chaco">Semiárido Chaco — 800 mm/año</option>
+                <option value="misionero">Subtropical misionero — 1.900 mm/año</option>
+                <option value="transicion">Transición — 1.400 mm/año</option>
+              </select>
+            </div>
+            <div class="hc-row">
+              <label>Superficie de techo (m²)</label>
+              <input type="number" id="hc-area" value="80" min="10" max="2000" oninput="calcRainwater()">
+            </div>
+            <div class="hc-row">
+              <label>Coeficiente de escorrentía</label>
+              <select id="hc-coef" onchange="calcRainwater()">
+                <option value="0.80">Chapa lisa — 0.80</option>
+                <option value="0.75" selected>Teja cerámica — 0.75</option>
+                <option value="0.60">Techo verde — 0.60</option>
+                <option value="0.50">Tierra / grava — 0.50</option>
+              </select>
+            </div>
+            <div class="hc-result" id="hc-result"></div>
+          </div>
+        </div>
+
+        <!-- COMPARADOR DE ZONAS -->
+        <div class="ht-card ht-card-wide">
+          <h3 class="ht-card-title">📊 Comparador de zonas climáticas</h3>
+          <p class="ht-card-sub">Compará dos zonas side-by-side para decidir estrategias compartidas.</p>
+          <div class="zc-body" id="zc-body"></div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="ftr">
+    <div class="ftr-inner">
+      <div class="ftr-brand">🌿 <strong>Bioclimática Paraguay</strong></div>
+      <div class="ftr-links">
+        <a href="https://github.com/voccelstudio/bibliotectura" target="_blank">GitHub</a>
+        <span class="ftr-dot">·</span>
+        <span>v2.0</span>
+        <span class="ftr-dot">·</span>
+        <span>Hecho en Paraguay 🇵🇾</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="data.js"></script>
+<script src="themes.js"></script>
+<script src="app.js"></script>
+<script>
+function go(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
+  document.getElementById('p-' + id).classList.add('on');
+  btn.classList.add('on');
+  if (id === 'guia') setTimeout(initMap, 80);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  setFontSize(0);
+  buildThemePicker();
+  applyTheme('arq');
+  renderZones(); selZone(0);
+  renderStrats(); renderMats(); renderPlantas();
+  setTimeout(initMap, 100);
+});
+</script>
+</body>
+</html>
