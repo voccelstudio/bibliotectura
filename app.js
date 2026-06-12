@@ -636,7 +636,7 @@ function selZone(i) {
   document.getElementById('zdet').innerHTML = `
     <div class="zdet">
       <h2 style="color:${z.color}">${z.name}</h2>
-      <p style="font-size:12px;color:var(--text2);margin-bottom:8px">📍 ${z.region}</p>
+      <p style="font-size:12px;color:var(--on-surface-variant);margin-bottom:8px">📍 ${z.region}</p>
       <div class="zdesc">${z.desc}</div>
       <div class="stats">
         <div class="sbox"><div class="v">${z.temp}</div><div class="l">Temperatura</div></div>
@@ -670,7 +670,7 @@ function lluviaChart(z) {
     const y=H-padY-h;
     const isMax=mm===max;
     bars+=`<rect x="${x+1}" y="${y}" width="${barW-2}" height="${h}" fill="${z.color}" opacity="${isMax?'0.85':'0.5'}" rx="1.5"/>`;
-    bars+=`<text x="${x+barW/2}" y="${H-1}" text-anchor="middle" style="font-size:6.5px;fill:var(--text3,#aaa)">${meses[i]}</text>`;
+    bars+=`<text x="${x+barW/2}" y="${H-1}" text-anchor="middle" style="font-size:6.5px;fill:var(--on-surface-variant,#aaa)">${meses[i]}</text>`;
     if(isMax) bars+=`<text x="${x+barW/2}" y="${y-3}" text-anchor="middle" style="font-size:7px;fill:${z.color};font-weight:600">${mm}</text>`;
   });
   return `<div class="dbox"><h4>Precipitaciones mensuales · ${total} mm/año</h4><svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block">${bars}</svg></div>`;
@@ -686,7 +686,7 @@ function seasonBadges(z) {
       <span style="font-size:13px">${s[k].icon}</span>
       <div>
         <span style="font-weight:600;color:${colors[k]}">${s[k].meses}</span>
-        <span style="color:var(--text3);margin-left:5px;font-size:10px">${s[k].tmp} · ~${s[k].mm} mm</span>
+        <span style="color:var(--on-surface-variant);margin-left:5px;font-size:10px">${s[k].tmp} · ~${s[k].mm} mm</span>
       </div>
     </div>`).join('')}
   </div>`;
@@ -1028,7 +1028,7 @@ function calcRainwater() {
   const diasCobertura = litros / consumoDiario;
   const el = document.getElementById('hc-result');
   el.innerHTML = `
-    <strong>${litros.toLocaleString()}</strong> L/año <span style="color:var(--text3)">≈ ${m3.toFixed(1)} m³</span><br>
+    <strong>${litros.toLocaleString()}</strong> L/año <span style="color:var(--on-surface-variant)">≈ ${m3.toFixed(1)} m³</span><br>
     <span style="font-size:11px">Precipitación: ${mm} mm/año · Coeficiente: ${coef} · Superficie: ${area} m²</span><br>
     <span style="font-size:11px">🚿 Cobertura para ${famSize} personas: <strong>${diasCobertura.toFixed(0)} días/año</strong> (${(diasCobertura/365*100).toFixed(0)}% del año)</span>
     ${diasCobertura > 300 ? '<br><span style="color:#2a5e0a;font-size:11px">💧 Podés ser autosuficiente en agua con este sistema.</span>' : ''}
@@ -1267,13 +1267,13 @@ function renderCities(zid) {
   const cities = CITIES[zid];
   if (!cities) return '';
   return `<div class="zcities" style="margin-top:12px">
-    <h4 style="font-size:10px;font-weight:600;margin-bottom:6px;color:var(--text3);text-transform:uppercase;letter-spacing:0.3px">🌆 Datos por ciudad</h4>
+    <h4 style="font-size:10px;font-weight:600;margin-bottom:6px;color:var(--on-surface-variant);text-transform:uppercase;letter-spacing:0.3px">🌆 Datos por ciudad</h4>
     <div class="zcities-grid">
       ${cities.map(c => `
         <div class="zcities-card">
           <strong>${c.name}</strong>
-          <span style="display:block;font-size:10px;color:var(--text2);margin:4px 0">${c.temp} · ${c.hum}</span>
-          <span style="display:block;font-size:10px;color:var(--text3)">💧 ${c.lluvia} · 🏔️ ${c.alt} · 💨 ${c.viento}</span>
+          <span style="display:block;font-size:10px;color:var(--on-surface-variant);margin:4px 0">${c.temp} · ${c.hum}</span>
+          <span style="display:block;font-size:10px;color:var(--on-surface-variant)">💧 ${c.lluvia} · 🏔️ ${c.alt} · 💨 ${c.viento}</span>
         </div>`).join('')}
     </div>
   </div>`;
@@ -1304,7 +1304,7 @@ function calcACH() {
       ach < 10 ? '<div class="ach-ver" style="background:#fff0d6;color:#7a4000;padding:8px;border-radius:6px;margin-top:6px;font-size:11px">🔶 Ventilación <strong>básica</strong>. Aceptable para espacios secundarios. Para espacios principales buscá 10–15 ACH.</div>' :
       ach < 20 ? '<div class="ach-ver" style="background:#e2f0d6;color:#2a5e0a;padding:8px;border-radius:6px;margin-top:6px;font-size:11px">✅ <strong>Buena ventilación.</strong> Adecuada para clima cálido-húmedo. Renueva el aire cada 3–6 minutos.</div>' :
       '<div class="ach-ver" style="background:#d6eaf8;color:#0d4480;padding:8px;border-radius:6px;margin-top:6px;font-size:11px">🌟 <strong>Excelente ventilación.</strong> Ideal para climas húmedos. Renovación completa cada 1–3 minutos.</div>'}
-    <div style="font-size:10px;color:var(--text3);margin-top:6px;line-height:1.5">
+    <div style="font-size:10px;color:var(--on-surface-variant);margin-top:6px;line-height:1.5">
       💡 Fórmula: Q = C<sub>d</sub> × A × v &rarr; ACH = Q × 3600 / V. Coeficiente de descarga C<sub>d</sub> = 0.61 (abertura tipo ventana). Velocidad del viento: ${windSpeed} m/s (${windSpeed < 1 ? 'calma' : windSpeed < 3 ? 'brisa suave' : windSpeed < 5 ? 'brisa moderada' : 'viento fuerte'}).
     </div>`;
 }
@@ -1332,7 +1332,7 @@ function calcDew() {
       <div class="dewnum"><span class="dewv" style="color:#3B8BD4">${dp.toFixed(1)}°C</span><span class="dewl">Punto de rocío</span></div>
       <div class="dewnum"><span class="dewv">${rh.toFixed(0)}%</span><span class="dewl">Humedad</span></div>
     </div>
-    <div style="background:${color};color:var(--text);padding:8px;border-radius:6px;margin-top:6px;font-size:11px">${risk}<br><span style="font-size:10px;opacity:.7">Diferencia temp - punto rocío: <strong>${diff.toFixed(1)}°C</strong>. Si la superficie está por debajo del punto de rocío, se forma condensación.</span></div>
+    <div style="background:${color};color:var(--on-surface);padding:8px;border-radius:6px;margin-top:6px;font-size:11px">${risk}<br><span style="font-size:10px;opacity:.7">Diferencia temp - punto rocío: <strong>${diff.toFixed(1)}°C</strong>. Si la superficie está por debajo del punto de rocío, se forma condensación.</span></div>
     <div class="dew-bar">
       <div class="dew-fill" style="width:${Math.min(100, diff*10)}%;background:${diff < 3 ? '#e33' : diff < 6 ? '#f90' : '#3B8BD4'}"></div>
     </div>`;

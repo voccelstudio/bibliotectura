@@ -525,7 +525,7 @@ tailwind.config = {
     </div>
 
     <!-- ISO PANEL -->
-    <div class="panel-content hidden" id="p-iso" style="position:absolute;top:0;left:0;right:0;bottom:0">
+    <div class="panel-content hidden" id="p-iso">
       <div class="iso-toolbar">
         <div class="iso-tb-group">
           <button class="iso-btn on" id="iso-mode-select" onclick="isoSetMode('select')" title="Seleccionar">⬆️</button>
@@ -698,33 +698,31 @@ function go(id, el) {
   if (id === 'sistemas') renderConstSystems();
   if (id === 'herramientas') initHerramientas();
   if (id === 'iso') {
+    const iso = document.getElementById('p-iso');
+    iso.style.display = 'flex';
+    iso.style.height = '100%';
+    iso.style.width = '100%';
+    document.querySelector('main').style.overflow = 'hidden';
     setTimeout(() => {
       isoInit();
       const frente = fd.frente || 'N';
-      const lotW = { N: 20, S: 20, E: 20, O: 20, NE: 20, NO: 20, SE: 20, SO: 20 }[frente] || 20;
+      const lotW = { N:20, S:20, E:20, O:20, NE:20, NO:20, SE:20, SO:20 }[frente] || 20;
       setTimeout(() => {
-        document.getElementById('iso-lot-w').value = lotW;
-        document.getElementById('iso-lot-d').value = 30;
-        document.getElementById('iso-lot-type').value = 'r';
+        ['iso-lot-w','iso-lot-d','iso-vol-w','iso-vol-d','iso-vol-h'].forEach(id=>{
+          const el=document.getElementById(id); if(el) el.value = id==='iso-lot-w'?lotW: id==='iso-lot-d'?30: id==='iso-vol-w'?Math.round(lotW*0.4): id==='iso-vol-d'?12: 3;
+        });
+        document.getElementById('iso-lot-type').value='r';
         isoApplyLot();
-        isoElements.push({
-          id: ++isoElId, type: 'volume',
-          x: 4, y: 6, z: 0,
-          w: Math.round(lotW * 0.4), d: 12, h: 3,
-          color: '#c4462a', label: 'Edificio principal',
-          func: 'vivienda', selected: false
-        });
-        isoElements.push({
-          id: ++isoElId, type: 'volume',
-          x: 2, y: 2, z: 0,
-          w: 4, d: 4, h: 2.5,
-          color: '#6b7f4e', label: 'Galería',
-          func: 'galeria', selected: false
-        });
+        if (isoElements.length===0) {
+          isoElements.push({id:++isoElId,type:'volume',x:4,y:6,z:0,w:Math.round(lotW*0.4),d:12,h:3,color:'#c4462a',label:'Edificio principal',func:'vivienda',selected:false});
+          isoElements.push({id:++isoElId,type:'volume',x:2,y:2,z:0,w:4,d:4,h:2.5,color:'#6b7f4e',label:'Galería',func:'galeria',selected:false});
+        }
         isoUpdateElList();
         isoRenderAll();
-      }, 150);
-    }, 50);
+      }, 200);
+    }, 80);
+  } else {
+    document.querySelector('main').style.overflow = 'auto';
   }
 }
 

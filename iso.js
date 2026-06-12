@@ -98,6 +98,7 @@ function isoInit(){
   topCanvas.addEventListener('mousemove',  tvMV);
   topCanvas.addEventListener('mouseleave', ()=>{ghostPos=null;tvMousePos=null;renderTopView();isoRenderAll();});
 
+  isoBuildColorGrid();
   isoApplyLot();
 }
 
@@ -1099,6 +1100,20 @@ function isoSetMode(m){
 
 function isoSetHint(t){const h=document.getElementById('iso-hint');if(h)h.textContent=t;}
 
+function isoBuildColorGrid(){
+  const g=document.getElementById('iso-color-grid');
+  if(!g||g.children.length>0)return;
+  const cols=['#c4462a','#6b7f4e','#3B8BD4','#EF9F27','#42A5F5','#9C27B0','#4CAF50','#F44336','#607D8B','#795548','#212121','#f5f5f5'];
+  cols.forEach(c=>{
+    const s=document.createElement('div');
+    s.className='iso-swatch'+(c===isoSelColor?' on':'');
+    s.style.background=c;
+    s.dataset.col=c;
+    s.onclick=()=>isoSelColorFn(s);
+    g.appendChild(s);
+  });
+}
+
 function isoSelColorFn(el){
   document.querySelectorAll('.iso-swatch').forEach(s=>s.classList.remove('on'));
   el.classList.add('on');isoSelColor=el.dataset.col;
@@ -1163,7 +1178,7 @@ function isoUpdateStats(){
   const sv=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
   sv('iso-st-lot',lA.toFixed(1)+' m²');sv('iso-st-built',bA.toFixed(1)+' m²');sv('iso-st-fos',(fos*100).toFixed(1)+'%');
   const fill=document.getElementById('iso-fos-fill');
-  if(fill){fill.style.width=(fos*100)+'%';fill.style.background=fos>.6?'#e33':fos>.4?'#f90':'var(--accent)';}
+  if(fill){fill.style.width=(fos*100)+'%';fill.style.background=fos>.6?'#e33':fos>.4?'#f90':'var(--primary,#000101)';}
 }
 
 /* ── EXPORT ── */
