@@ -61,8 +61,10 @@ function generar() {
   const tipo    = fd.tipo    || 'vivienda';
   const entorno = fd.entorno || 'suburbano';
   const Z = ZONES.find(z => z.id === zona);
+  if (!Z) { alert('Zona no encontrada.'); return; }
 
   const r = document.getElementById('resultado');
+  if (!r) return;
   r.innerHTML = '';
 
   /* ── DIAGRAMA ── */
@@ -120,7 +122,7 @@ function drawLote(id, frente, Z, tipo) {
   ctx.fillStyle = '#fbfbfa'; ctx.fillRect(0, 0, W, H);
 
   const A = Math.PI / 6, S = 10.5;
-  const cx = W / 2 + 10, cy = H - 70; // shift slightly up for legend spacing
+  const cx = W / 2 + 45, cy = 130; // Centered vertically and horizontally for the isometric lot
   function ix(x, y)   { return cx + (x - y) * Math.cos(A) * S; }
   function iy(x, y, z){ return cy + (x + y) * Math.sin(A) * S - z * S; }
   function ip(x, y, z){ return { x: ix(x, y), y: iy(x, y, z) }; }
@@ -158,7 +160,7 @@ function drawLote(id, frente, Z, tipo) {
   ctx.lineWidth = 0.5;
   for (let i = -40; i < 70; i += 4) {
     const a = ip(i, -10, 0), b = ip(i, lotD + 10, 0);
-    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
     const c = ip(-10, i, 0), d = ip(lotW + 10, i, 0);
     ctx.beginPath(); ctx.moveTo(c.x, c.y); ctx.lineTo(d.x, d.y); ctx.stroke();
   }
@@ -469,9 +471,9 @@ function drawLote(id, frente, Z, tipo) {
   const bcX = W - 150, bcY = 45;
   ctx.save(); ctx.strokeStyle = 'rgba(44, 62, 80, 0.15)'; ctx.lineWidth = 0.6;
   ctx.beginPath(); ctx.arc(bcX, bcY, 20, 0, Math.PI * 2); ctx.stroke();
-  const dirM = { N: -30, E: 60, S: 150, O: 240 };
+  const dirM = { N: -30, E: 30, S: 150, O: 210 };
   Object.entries(dirM).forEach(([l, deg]) => {
-    const a = deg * Math.PI / 180 + A;
+    const a = deg * Math.PI / 180;
     const x = bcX + 18 * Math.cos(a), y = bcY + 18 * Math.sin(a);
     ctx.strokeStyle = l === 'N' ? '#e74c3c' : 'rgba(44, 62, 80, 0.25)';
     ctx.lineWidth = l === 'N' ? 1.5 : 0.6;
@@ -747,7 +749,7 @@ function selZone(i) {
   document.getElementById('zdet').innerHTML = `
     <div class="zdet">
       <h2 style="color:${z.color}">${z.name}</h2>
-      <p style="font-size:12px;color:var(--on-surface-variant);margin-bottom:8px">📍 ${z.region}</p>
+      <p style="font-size:12px;color:var(--on-surface-variant,#44474a);margin-bottom:8px">📍 ${z.region}</p>
       <div class="zdesc">${z.desc}</div>
       <div class="stats">
         <div class="sbox"><div class="v">${z.temp}</div><div class="l">Temperatura</div></div>
@@ -797,7 +799,7 @@ function seasonBadges(z) {
       <span style="font-size:13px">${s[k].icon}</span>
       <div>
         <span style="font-weight:600;color:${colors[k]}">${s[k].meses}</span>
-        <span style="color:var(--on-surface-variant);margin-left:5px;font-size:10px">${s[k].tmp} · ~${s[k].mm} mm</span>
+        <span style="color:var(--on-surface-variant,#44474a);margin-left:5px;font-size:10px">${s[k].tmp} · ~${s[k].mm} mm</span>
       </div>
     </div>`).join('')}
   </div>`;
@@ -813,7 +815,7 @@ function wrose(z) {
     const an=(i*45-90)*Math.PI/180, len=(vals[i]/mx)*r, w=14;
     const a1=((i*45-90-w/2))*Math.PI/180, a2=((i*45-90+w/2))*Math.PI/180;
     const isDom=vals[i]===mx;
-    p += `<path d="M${cx+10*Math.cos(a1)},${cy+10*Math.sin(a1)} L${cx+len*Math.cos(a1)},${cy+len*Math.sin(a1)} L${cx+len*Math.cos(a2)},${cy+len*Math.sin(a2)} L${cx+10*Math.cos(a2)},${cy+10*Math.sin(a2)}Z" fill="${isDom?z.color:'#999'}" opacity="${isDom?.9:.45}"/>`;
+    p += `<path d="M${cx+10*Math.cos(a1)},${cy+10*Math.sin(a1)} L${cx+len*Math.cos(a1)},${cy+len*Math.sin(a1)} L${cx+len*Math.cos(a2)},${cy+len*Math.sin(a2)} L${cx+10*Math.cos(a2)},${cy+10*Math.sin(a2)}Z" fill="${isDom?z.color:'#999'}" opacity="${isDom ? .9 : .45}"/>`;
     const lx=cx+(r+17)*Math.cos(an), ly=cy+(r+17)*Math.sin(an);
     l += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="central" style="font-size:${d==='N'?'13':'10'}px;font-weight:${d==='N'?'700':'500'};fill:${d==='N'?'var(--on-surface,#191c1d)':'var(--on-surface-variant,#44474a)'}">${d}</text>`;
   });
@@ -1129,7 +1131,7 @@ function calcRainwater() {
   const diasCobertura = litros / consumoDiario;
   const el = document.getElementById('hc-result');
   el.innerHTML = `
-    <strong>${litros.toLocaleString()}</strong> L/año <span style="color:var(--on-surface-variant)">≈ ${m3.toFixed(1)} m³</span><br>
+    <strong>${litros.toLocaleString()}</strong> L/año <span style="color:var(--on-surface-variant,#44474a)">≈ ${m3.toFixed(1)} m³</span><br>
     <span style="font-size:11px">Precipitación: ${mm} mm/año · Coeficiente: ${coef} · Superficie: ${area} m²</span><br>
     <span style="font-size:11px">🚿 Cobertura para ${famSize} personas: <strong>${diasCobertura.toFixed(0)} días/año</strong> (${(diasCobertura/365*100).toFixed(0)}% del año)</span>
     ${diasCobertura > 300 ? '<br><span style="color:#2a5e0a;font-size:11px">💧 Podés ser autosuficiente en agua con este sistema.</span>' : ''}
@@ -1332,7 +1334,7 @@ function renderStratMatrix() {
     const cat = s.cat;
     html += `<tr><td><span class="sm-icon">${s.icon}</span> ${s.name}</td>`;
     zoneIds.forEach((zid, zi) => {
-      const applicable = s.tags.some(t => t === 'Todas las zonas' || t === ZONES[zi].name || t === ZONES[zi].id || t.slice(0,3) === zid.slice(0,3));
+      const applicable = s.tags.some(t => t === 'Todas las zonas' || t === ZONES[zi].name || t === ZONES[zi].id || t.slice(0,3).toLowerCase() === zid.slice(0,3).toLowerCase());
       html += applicable
         ? `<td class="sm-yes" title="Aplicable en ${ZONES[zi].name}">✅</td>`
         : `<td class="sm-no" title="No prioritario en ${ZONES[zi].name}">—</td>`;
@@ -1504,13 +1506,13 @@ function renderCities(zid) {
   const cities = CITIES[zid];
   if (!cities) return '';
   return `<div class="zcities" style="margin-top:12px">
-    <h4 style="font-size:10px;font-weight:600;margin-bottom:6px;color:var(--on-surface-variant);text-transform:uppercase;letter-spacing:0.3px">🌆 Datos por ciudad</h4>
+    <h4 style="font-size:10px;font-weight:600;margin-bottom:6px;color:var(--on-surface-variant,#44474a);text-transform:uppercase;letter-spacing:0.3px">🌆 Datos por ciudad</h4>
     <div class="zcities-grid">
       ${cities.map(c => `
         <div class="zcities-card">
           <strong>${c.name}</strong>
-          <span style="display:block;font-size:10px;color:var(--on-surface-variant);margin:4px 0">${c.temp} · ${c.hum}</span>
-          <span style="display:block;font-size:10px;color:var(--on-surface-variant)">💧 ${c.lluvia} · 🏔️ ${c.alt} · 💨 ${c.viento}</span>
+          <span style="display:block;font-size:10px;color:var(--on-surface-variant,#44474a);margin:4px 0">${c.temp} · ${c.hum}</span>
+          <span style="display:block;font-size:10px;color:var(--on-surface-variant,#44474a)">💧 ${c.lluvia} · 🏔️ ${c.alt} · 💨 ${c.viento}</span>
         </div>`).join('')}
     </div>
   </div>`;
@@ -1541,7 +1543,7 @@ function calcACH() {
       ach < 10 ? '<div class="ach-ver" style="background:#fff0d6;color:#7a4000;padding:8px;border-radius:6px;margin-top:6px;font-size:11px">🔶 Ventilación <strong>básica</strong>. Aceptable para espacios secundarios. Para espacios principales buscá 10–15 ACH.</div>' :
       ach < 20 ? '<div class="ach-ver" style="background:#e2f0d6;color:#2a5e0a;padding:8px;border-radius:6px;margin-top:6px;font-size:11px">✅ <strong>Buena ventilación.</strong> Adecuada para clima cálido-húmedo. Renueva el aire cada 3–6 minutos.</div>' :
       '<div class="ach-ver" style="background:#d6eaf8;color:#0d4480;padding:8px;border-radius:6px;margin-top:6px;font-size:11px">🌟 <strong>Excelente ventilación.</strong> Ideal para climas húmedos. Renovación completa cada 1–3 minutos.</div>'}
-    <div style="font-size:10px;color:var(--on-surface-variant);margin-top:6px;line-height:1.5">
+    <div style="font-size:10px;color:var(--on-surface-variant,#44474a);margin-top:6px;line-height:1.5">
       💡 Fórmula: Q = C<sub>d</sub> × A × v &rarr; ACH = Q × 3600 / V. Coeficiente de descarga C<sub>d</sub> = 0.61 (abertura tipo ventana). Velocidad del viento: ${windSpeed} m/s (${windSpeed < 1 ? 'calma' : windSpeed < 3 ? 'brisa suave' : windSpeed < 5 ? 'brisa moderada' : 'viento fuerte'}).
     </div>`;
 }
