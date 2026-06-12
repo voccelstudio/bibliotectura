@@ -6,12 +6,9 @@
 /* ISO page layout */
 #p-iso {
   padding: 0 !important;
-  display: none;
-  flex-direction: column;
-  height: calc(100vh - 90px);
-}
-#p-iso.on {
   display: flex;
+  flex-direction: column;
+  background: #fff;
 }
 
 /* TOOLBAR */

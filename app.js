@@ -1155,17 +1155,17 @@ function calcEave() {
     </div>
     <div class="eave-chart">
       <svg viewBox="0 0 280 140" width="100%">
-        <rect x="100" y="20" width="140" height="100" fill="var(--bg2)" stroke="var(--border2)" stroke-width="0.8" rx="4"/>
-        <rect x="100" y="20" width="140" height="10" fill="#D85A30" rx="2"/>
-        <line x1="100" y1="60" x2="240" y2="60" stroke="var(--text3)" stroke-width="0.5" stroke-dasharray="3,2"/>
-        <text x="155" y="58" style="font-size:7px;fill:var(--text3);text-anchor:middle">Ventana ${wh} cm</text>
-        <line x1="100" y1="30" x2="100" y2="120" stroke="var(--border2)" stroke-width="0.8"/>
-        <line x1="145" y1="50" x2="145" y2="120" stroke="var(--accent)" stroke-width="1.5"/>
-        <text x="122" y="130" style="font-size:8px;fill:var(--accent);text-anchor:middle;font-weight:600">Alero ${eaveRec} cm</text>
-        <text x="250" y="90" style="font-size:8px;fill:#EF9F27;text-anchor:start">Verano 88°</text>
-        <text x="250" y="105" style="font-size:8px;fill:#3B8BD4;text-anchor:start">Invierno 41°</text>
-        <line x1="100" y1="120" x2="100" y2="128" stroke="var(--border2)" stroke-width="0.8"/>
-        <line x1="145" y1="120" x2="145" y2="128" stroke="var(--accent)" stroke-width="1.5"/>
+        <rect x="100" y="20" width="140" height="100" fill="var(--surface-container-low, #f3f4f5)" stroke="var(--outline-variant, #c5c6ca)" stroke-width="0.8"/>
+        <rect x="100" y="20" width="140" height="10" fill="#D85A30"/>
+        <line x1="100" y1="60" x2="240" y2="60" stroke="var(--outline, #75777a)" stroke-width="0.5" stroke-dasharray="3,2"/>
+        <text x="155" y="58" style="font-size:7px;fill:var(--on-surface-variant, #44474a);text-anchor:middle">Ventana ${wh} cm</text>
+        <line x1="100" y1="30" x2="100" y2="120" stroke="var(--outline-variant, #c5c6ca)" stroke-width="0.8"/>
+        <line x1="145" y1="50" x2="145" y2="120" stroke="var(--primary, #000101)" stroke-width="1.5"/>
+        <text x="122" y="130" style="font-size:8px;fill:var(--primary, #000101);text-anchor:middle;font-weight:600">Alero ${eaveRec} cm</text>
+        <text x="250" y="90" style="font-size:8px;fill:#EF9F27;text-anchor:start">Verano ${altSummer.toFixed(0)}°</text>
+        <text x="250" y="105" style="font-size:8px;fill:#3B8BD4;text-anchor:start">Invierno ${altWinter.toFixed(0)}°</text>
+        <line x1="100" y1="120" x2="100" y2="128" stroke="var(--outline-variant, #c5c6ca)" stroke-width="0.8"/>
+        <line x1="145" y1="120" x2="145" y2="128" stroke="var(--primary, #000101)" stroke-width="1.5"/>
       </svg>
     </div>
     <div class="eave-tip">

@@ -73,6 +73,8 @@ function isoInit(){
   isoCtx=isoCanvas.getContext('2d');
   isoArea=document.getElementById('iso-canvas-area');
 
+  const existingTop = document.getElementById('top-view-canvas');
+  if (existingTop) existingTop.remove();
   topCanvas=document.createElement('canvas');
   topCanvas.id='top-view-canvas';
   topCanvas.width=topCanvas.height=280;
