@@ -1110,9 +1110,12 @@ function initHerramientas() {
   zcInit();
   eaveInit();
   renderStratMatrix();
+  achInit();
+  dewInit();
 }
 function initGuia() {
   renderDesignPrinciples();
+  renderFAQ();
 }
 
 /* ══════════════════════════════════════
@@ -1284,6 +1287,162 @@ function renderCities(zid) {
         </div>`).join('')}
     </div>
   </div>`;
+}
+
+/* ══════════════════════════════════════
+   ACH — VENTILACIÓN NATURAL
+══════════════════════════════════════ */
+function calcACH() {
+  const area = parseFloat(document.getElementById('ach-area').value) || 80;
+  const height = parseFloat(document.getElementById('ach-height').value) || 2.7;
+  const winArea = parseFloat(document.getElementById('ach-win').value) || 2;
+  const winCount = parseFloat(document.getElementById('ach-win-n').value) || 2;
+  const windSpeed = parseFloat(document.getElementById('ach-wind').value) || 2;
+  const cd = 0.61;
+  const volume = area * height;
+  const totalOpening = winArea * winCount;
+  const flow = cd * totalOpening * windSpeed;
+  const ach = flow * 3600 / volume;
+  const el = document.getElementById('ach-result');
+  el.innerHTML = `
+    <div class="ach-nums">
+      <div class="ach-num"><span class="ach-val">${ach.toFixed(1)}</span><span class="ach-lbl">ACH</span></div>
+      <div class="ach-num"><span class="ach-val">${flow.toFixed(1)}</span><span class="ach-lbl">m³/s</span></div>
+      <div class="ach-num"><span class="ach-val">${volume.toFixed(0)}</span><span class="ach-lbl">m³ (vol.)</span></div>
+    </div>
+    ${ach < 5 ? '<div class="ach-ver" style="background:#fde8e8;color:#7a0000;padding:8px;border-radius:6px;margin-top:6px;font-size:11px">⚠️ Ventilación <strong>insuficiente</strong>. Necesitás más superficie de abertura o mayor exposición al viento. Mínimo recomendado: 5–10 ACH para clima cálido-húmedo.</div>' :
+      ach < 10 ? '<div class="ach-ver" style="background:#fff0d6;color:#7a4000;padding:8px;border-radius:6px;margin-top:6px;font-size:11px">🔶 Ventilación <strong>básica</strong>. Aceptable para espacios secundarios. Para espacios principales buscá 10–15 ACH.</div>' :
+      ach < 20 ? '<div class="ach-ver" style="background:#e2f0d6;color:#2a5e0a;padding:8px;border-radius:6px;margin-top:6px;font-size:11px">✅ <strong>Buena ventilación.</strong> Adecuada para clima cálido-húmedo. Renueva el aire cada 3–6 minutos.</div>' :
+      '<div class="ach-ver" style="background:#d6eaf8;color:#0d4480;padding:8px;border-radius:6px;margin-top:6px;font-size:11px">🌟 <strong>Excelente ventilación.</strong> Ideal para climas húmedos. Renovación completa cada 1–3 minutos.</div>'}
+    <div style="font-size:10px;color:var(--text3);margin-top:6px;line-height:1.5">
+      💡 Fórmula: Q = C<sub>d</sub> × A × v &rarr; ACH = Q × 3600 / V. Coeficiente de descarga C<sub>d</sub> = 0.61 (abertura tipo ventana). Velocidad del viento: ${windSpeed} m/s (${windSpeed < 1 ? 'calma' : windSpeed < 3 ? 'brisa suave' : windSpeed < 5 ? 'brisa moderada' : 'viento fuerte'}).
+    </div>`;
+}
+
+function achInit() { calcACH(); }
+
+/* ══════════════════════════════════════
+   PUNTO DE ROCÍO
+══════════════════════════════════════ */
+function calcDew() {
+  const temp = parseFloat(document.getElementById('dew-temp').value) || 30;
+  const rh = parseFloat(document.getElementById('dew-rh').value) || 70;
+  const a = 17.27, b = 237.7;
+  const f = (a * temp) / (b + temp) + Math.log(rh / 100);
+  const dp = (b * f) / (a - f);
+  const diff = temp - dp;
+  const el = document.getElementById('dew-result');
+  let risk, color;
+  if (diff < 3) { risk = '⚠️ Alto riesgo de condensación — aislá y ventilá'; color = '#fde8e8'; }
+  else if (diff < 6) { risk = '🔶 Riesgo moderado — monitorear en invierno'; color = '#fff0d6'; }
+  else { risk = '✅ Bajo riesgo de condensación'; color = '#e2f0d6'; }
+  el.innerHTML = `
+    <div class="dewnums">
+      <div class="dewnum"><span class="dewv">${temp.toFixed(1)}°C</span><span class="dewl">Temperatura</span></div>
+      <div class="dewnum"><span class="dewv" style="color:#3B8BD4">${dp.toFixed(1)}°C</span><span class="dewl">Punto de rocío</span></div>
+      <div class="dewnum"><span class="dewv">${rh.toFixed(0)}%</span><span class="dewl">Humedad</span></div>
+    </div>
+    <div style="background:${color};color:var(--text);padding:8px;border-radius:6px;margin-top:6px;font-size:11px">${risk}<br><span style="font-size:10px;opacity:.7">Diferencia temp - punto rocío: <strong>${diff.toFixed(1)}°C</strong>. Si la superficie está por debajo del punto de rocío, se forma condensación.</span></div>
+    <div class="dew-bar">
+      <div class="dew-fill" style="width:${Math.min(100, diff*10)}%;background:${diff < 3 ? '#e33' : diff < 6 ? '#f90' : '#3B8BD4'}"></div>
+    </div>`;
+}
+function dewInit() { calcDew(); }
+
+/* ══════════════════════════════════════
+   SISTEMAS CONSTRUCTIVOS
+══════════════════════════════════════ */
+let scFil = 'todos';
+function renderConstSystems() {
+  const cats = ['todos','tierra','albañilería','madera','industrial','natural'];
+  const cl = {todos:'Todos',tierra:'Tierra',albañilería:'Albañilería',madera:'Madera',industrial:'Industrial',natural:'Natural'};
+  const el = document.getElementById('sc-filt');
+  if (el) el.innerHTML = cats.map(c => `<button class="fb${scFil===c?' on':''}" onclick="setSC('${c}')">${cl[c]}</button>`).join('');
+  const list = scFil === 'todos' ? CONSTRUCTION_SYSTEMS : CONSTRUCTION_SYSTEMS.filter(s => s.tipo === scFil);
+  const grid = document.getElementById('sc-grid');
+  if (!grid) return;
+  grid.innerHTML = list.map(s => `
+    <div class="sc-card">
+      <div class="sc-hdr">
+        <span class="sc-icon">${s.icon}</span>
+        <div>
+          <div class="sc-name">${s.name}</div>
+          <div class="sc-tipo">${s.tipo} · ${s.region} · ${s.costo}</div>
+        </div>
+      </div>
+      <p class="sc-desc">${s.desc}</p>
+      <div class="sc-tech">
+        <span class="sc-tag">λ ${s.lambda}</span>
+        <span class="sc-tag">${s.masa}</span>
+      </div>
+      <div class="sc-lists">
+        <div class="sc-pros">${s.pros.map(p => `<span>✅ ${p}</span>`).join('')}</div>
+        <div class="sc-cons">${s.cons.map(c => `<span>⚠️ ${c}</span>`).join('')}</div>
+      </div>
+    </div>`).join('');
+}
+function setSC(c) { scFil = c; renderConstSystems(); }
+
+/* ══════════════════════════════════════
+   FAQ
+══════════════════════════════════════ */
+function renderFAQ() {
+  const el = document.getElementById('faq-list');
+  if (!el) return;
+  el.innerHTML = FAQ.map((f, i) => `
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFAQ(${i})">
+        <span>${f.q}</span>
+        <span class="faq-arrow">▸</span>
+      </div>
+      <div class="faq-a" id="faq-${i}">${f.a}</div>
+    </div>`).join('');
+}
+function toggleFAQ(i) {
+  const el = document.getElementById('faq-' + i);
+  const arrow = el.previousElementSibling.querySelector('.faq-arrow');
+  if (!el) return;
+  el.classList.toggle('open');
+  arrow.textContent = el.classList.contains('open') ? '▾' : '▸';
+}
+
+/* ══════════════════════════════════════
+   EXPORTAR RESUMEN
+══════════════════════════════════════ */
+function exportSummary() {
+  const win = window.open('', '_blank');
+  const theme = currentTheme || 'arq';
+  const t = THEMES[theme];
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Bioclimática Paraguay — Resumen</title>
+    <style>
+      body { font-family:'Inter',sans-serif; font-size:12px; color:#1a1a18; max-width:800px; margin:0 auto; padding:20px; line-height:1.6 }
+      h1 { font-size:18px; margin-bottom:4px }
+      h2 { font-size:14px; margin:16px 0 6px;border-bottom:1px solid #ddd;padding-bottom:4px }
+      h3 { font-size:12px; margin:10px 0 4px }
+      p { margin:0 0 8px;color:#444 }
+      .z { display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;margin:2px }
+      hr { border:none;border-top:1px solid #eee;margin:12px 0 }
+      .f { font-size:10px;color:#888;margin-top:20px }
+    </style></head><body>
+    <h1>🌿 Bioclimática Paraguay</h1>
+    <p>Resumen de recomendaciones · ${new Date().toLocaleDateString()}</p>
+    <hr>`);
+  const zi = parseInt(document.getElementById('sel-zona')?.value) || 0;
+  const z = ZONES.find(x => x.id === (document.getElementById('sel-zona')?.value));
+  if (z) {
+    win.document.write(`<h2>📍 Zona: ${z.name}</h2><p>${z.desc}</p>`);
+    win.document.write(`<div>${z.temp} · ${z.hum} · ${z.lluvia} · ${z.viento}</div>`);
+  }
+  if (fd.frente) win.document.write(`<h2>🧭 Lote</h2><p>Frente: ${fd.frente} · Tipo: ${fd.tipo || '-'} · Entorno: ${fd.entorno || '-'}</p>`);
+  win.document.write(`<h2>📐 Principios clave</h2>`);
+  DESIGN_PRINCIPLES.forEach(p => {
+    win.document.write(`<h3>${p.icon} ${p.title}</h3><p>${p.desc}</p>`);
+  });
+  win.document.write(`<hr><div class="f">Generado por Bioclimática Paraguay · Hecho en Paraguay 🇵🇾</div>`);
+  win.document.write('</body></html>');
+  win.document.close();
+  win.focus();
+  setTimeout(() => { win.print(); }, 500);
 }
 
 /* ── LOCALSTORAGE ── */

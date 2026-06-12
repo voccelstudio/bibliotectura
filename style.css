@@ -1242,3 +1242,132 @@ table.mt tr:hover td { background: var(--bg2); }
   line-height: 1.5;
 }
 .zcities-card strong { font-size: 11px; }
+
+/* ══════════════════════════════════════
+   ACH — VENTILACIÓN
+══════════════════════════════════════ */
+.ach-body { display: flex; flex-direction: column; gap: 8px; }
+.ach-row { display: flex; flex-direction: column; gap: 3px; }
+.ach-row label { font-size: 11px; color: var(--text2); font-weight: 500; }
+.ach-row input { width: 100%; }
+.ach-result {
+  margin-top: 4px; padding: 12px;
+  background: var(--info-bg); border-radius: var(--radius-sm);
+  border: 0.5px solid var(--border);
+}
+.ach-nums { display: flex; gap: 8px; margin-bottom: 6px; }
+.ach-num {
+  flex: 1; text-align: center; padding: 8px 4px;
+  background: var(--bg2); border-radius: 6px; border: 0.5px solid var(--border);
+}
+.ach-val { display: block; font-size: 18px; font-weight: 700; color: var(--accent); }
+.ach-lbl { display: block; font-size: 9px; color: var(--text3); margin-top: 1px; }
+
+/* ══════════════════════════════════════
+   PUNTO DE ROCÍO
+══════════════════════════════════════ */
+.dew-body { display: flex; flex-direction: column; gap: 8px; }
+.dew-row { display: flex; flex-direction: column; gap: 3px; }
+.dew-row label { font-size: 11px; color: var(--text2); font-weight: 500; }
+.dew-row input { width: 100%; }
+.dew-result {
+  margin-top: 4px; padding: 12px;
+  background: var(--info-bg); border-radius: var(--radius-sm);
+  border: 0.5px solid var(--border);
+}
+.dewnums { display: flex; gap: 8px; margin-bottom: 6px; }
+.dewnum {
+  flex: 1; text-align: center; padding: 8px 4px;
+  background: var(--bg2); border-radius: 6px; border: 0.5px solid var(--border);
+}
+.dewv { display: block; font-size: 16px; font-weight: 700; color: var(--accent); }
+.dewl { display: block; font-size: 9px; color: var(--text3); margin-top: 1px; }
+.dew-bar {
+  height: 6px; background: var(--bg3); border-radius: 3px; margin-top: 8px; overflow: hidden;
+}
+.dew-fill { height: 100%; border-radius: 3px; transition: width .3s; }
+
+/* ══════════════════════════════════════
+   SISTEMAS CONSTRUCTIVOS
+══════════════════════════════════════ */
+.sc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+}
+.sc-card {
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  background: var(--bg);
+  box-shadow: var(--shadow);
+  transition: all .18s;
+}
+.sc-card:hover { border-color: var(--border2); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+.sc-hdr { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 8px; }
+.sc-icon { font-size: 22px; flex-shrink: 0; }
+.sc-name { font-size: 13px; font-weight: 600; }
+.sc-tipo { font-size: 10px; color: var(--text3); margin-top: 1px; }
+.sc-desc { font-size: 11px; color: var(--text2); line-height: 1.6; margin-bottom: 8px; }
+.sc-tech { display: flex; gap: 4px; margin-bottom: 8px; }
+.sc-tag {
+  font-size: 9px; font-weight: 600; padding: 2px 7px; border-radius: 20px;
+  background: var(--bg2); border: 0.5px solid var(--border2); color: var(--text2);
+}
+.sc-lists { display: flex; flex-direction: column; gap: 4px; }
+.sc-pros, .sc-cons {
+  display: flex; flex-direction: column; gap: 2px;
+  font-size: 10px; color: var(--text2); line-height: 1.5;
+}
+
+/* ══════════════════════════════════════
+   FAQ
+══════════════════════════════════════ */
+#faq-list { display: flex; flex-direction: column; gap: 4px; }
+.faq-item {
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--bg);
+}
+.faq-q {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 12px;
+  font-size: 12px; font-weight: 500;
+  cursor: pointer;
+  background: var(--bg2);
+  transition: background .12s;
+}
+.faq-q:hover { background: var(--bg3); }
+.faq-arrow { font-size: 11px; color: var(--text3); transition: transform .2s; }
+.faq-a {
+  padding: 0 12px;
+  font-size: 11px;
+  color: var(--text2);
+  line-height: 1.6;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .25s ease, padding .25s ease;
+}
+.faq-a.open {
+  max-height: 300px;
+  padding: 10px 12px;
+}
+
+/* ══════════════════════════════════════
+   PRINT / EXPORT
+══════════════════════════════════════ */
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  border: 0.5px solid var(--border2);
+  border-radius: var(--radius-sm);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  font-family: var(--font);
+  transition: all .12s;
+  white-space: nowrap;
+}
+.btn-sm:hover { background: var(--bg3); color: var(--text); border-color: var(--accent); }

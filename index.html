@@ -49,6 +49,7 @@
     <button class="nb" onclick="go('estrategias',this)"><span class="nb-icon">⚡</span>Estrategias</button>
     <button class="nb" onclick="go('materiales',this)"><span class="nb-icon">🧱</span>Materiales</button>
     <button class="nb" onclick="go('plantas',this)"><span class="nb-icon">🌿</span>Plantas</button>
+    <button class="nb" onclick="go('sistemas',this)"><span class="nb-icon">🏗️</span>Sistemas</button>
     <button class="nb" onclick="go('herramientas',this)"><span class="nb-icon">🛠️</span>Herramientas</button>
   </nav>
 
@@ -123,10 +124,19 @@
             <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">📐 Principios de diseño rápido</div>
             <div class="principles-grid" id="principles-grid"></div>
           </div>
+
+          <!-- FAQ -->
+          <div style="margin-top:20px">
+            <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">❓ Preguntas frecuentes</div>
+            <div id="faq-list"></div>
+          </div>
         </div>
 
         <!-- COLUMNA DERECHA: resultado -->
         <div id="resultado">
+          <div style="display:flex;gap:6px;justify-content:flex-end;margin-bottom:8px">
+            <button class="btn-sm" onclick="exportSummary()" title="Exportar resumen a PDF">🖨️ Exportar resumen</button>
+          </div>
           <div class="empty">
             <span>🗺️</span>
             <p>Completá los pasos del formulario<br>y generá las recomendaciones</p>
@@ -182,6 +192,14 @@
       <div class="pgrid" id="pgrid"></div>
     </div>
 
+    <!-- SISTEMAS -->
+    <div class="panel" id="p-sistemas">
+      <div class="stitle">🏗️ Sistemas constructivos</div>
+      <div class="ssub">Sistemas de construcción sustentable disponibles y aplicables en Paraguay.</div>
+      <div class="frow" id="sc-filt"></div>
+      <div class="sc-grid" id="sc-grid"></div>
+    </div>
+
     <!-- HERRAMIENTAS -->
     <div class="panel" id="p-herramientas">
       <div class="stitle">🛠️ Herramientas técnicas</div>
@@ -232,6 +250,52 @@
               </select>
             </div>
             <div class="hc-result" id="hc-result"></div>
+          </div>
+        </div>
+
+        <!-- ACH VENTILACIÓN -->
+        <div class="ht-card">
+          <h3 class="ht-card-title">🌬️ Ventilación natural (ACH)</h3>
+          <p class="ht-card-sub">Calculá las renovaciones de aire por hora según aberturas y viento.</p>
+          <div class="ach-body">
+            <div class="ach-row">
+              <label>Superficie del espacio (m²)</label>
+              <input type="number" id="ach-area" value="80" min="10" max="2000" oninput="calcACH()">
+            </div>
+            <div class="ach-row">
+              <label>Altura del techo (m)</label>
+              <input type="number" id="ach-height" value="2.7" min="2" max="6" step="0.1" oninput="calcACH()">
+            </div>
+            <div class="ach-row">
+              <label>Superficie de cada abertura (m²)</label>
+              <input type="number" id="ach-win" value="2" min="0.1" max="20" step="0.1" oninput="calcACH()">
+            </div>
+            <div class="ach-row">
+              <label>Cantidad de aberturas</label>
+              <input type="number" id="ach-win-n" value="2" min="1" max="20" oninput="calcACH()">
+            </div>
+            <div class="ach-row">
+              <label>Velocidad del viento (m/s)</label>
+              <input type="number" id="ach-wind" value="2" min="0" max="15" step="0.5" oninput="calcACH()">
+            </div>
+            <div class="ach-result" id="ach-result"></div>
+          </div>
+        </div>
+
+        <!-- PUNTO DE ROCÍO -->
+        <div class="ht-card">
+          <h3 class="ht-card-title">💧 Calculadora de punto de rocío</h3>
+          <p class="ht-card-sub">Determiná la temperatura de rocío y riesgo de condensación en superficies.</p>
+          <div class="dew-body">
+            <div class="dew-row">
+              <label>Temperatura del aire (°C)</label>
+              <input type="number" id="dew-temp" value="30" min="-10" max="50" step="0.5" oninput="calcDew()">
+            </div>
+            <div class="dew-row">
+              <label>Humedad relativa (%)</label>
+              <input type="number" id="dew-rh" value="70" min="0" max="100" oninput="calcDew()">
+            </div>
+            <div class="dew-result" id="dew-result"></div>
           </div>
         </div>
 
@@ -311,6 +375,7 @@ function go(id, btn) {
   document.getElementById('p-' + id).classList.add('on');
   btn.classList.add('on');
   if (id === 'guia') setTimeout(initMap, 80);
+  if (id === 'sistemas') renderConstSystems();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -319,6 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
   applyTheme('arq');
   renderZones(); selZone(0);
   renderStrats(); renderMats(); renderPlantas();
+  renderFAQ();
   setTimeout(initMap, 100);
 });
 </script>
