@@ -185,15 +185,6 @@ function drawLote(id, frente, Z, tipo) {
   ctx.save();
   ctx.strokeStyle = '#2c3e50'; ctx.lineWidth = 3.5; ctx.lineCap = 'round';
   ctx.beginPath(); ctx.moveTo(stP[0].x, stP[0].y); ctx.lineTo(stP[1].x, stP[1].y); ctx.stroke();
-  const lp = ip((edge.x1 + edge.x2) / 2 + edge.lo.x, (edge.y1 + edge.y2) / 2 + edge.lo.y, 0);
-  ctx.font = 'italic 600 11px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  const tw = ctx.measureText('CALLE').width + 16;
-  const rx = lp.x - tw / 2, ry = lp.y - 8;
-  ctx.fillStyle = 'rgba(251,251,250,.92)';
-  ctx.beginPath();
-  if (ctx.roundRect) ctx.roundRect(rx, ry, tw, 16, 8); else ctx.rect(rx, ry, tw, 16);
-  ctx.fill();
-  ctx.fillStyle = '#7f8c8d'; ctx.fillText('CALLE', lp.x, lp.y);
   ctx.restore();
 
   /* ── ROOMS UNDERLAY (Beautiful subtle color zones) ── */
@@ -227,8 +218,6 @@ function drawLote(id, frente, Z, tipo) {
   ctx.strokeStyle = 'rgba(44, 62, 80, 0.25)'; ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(rL.x, rL.y); ctx.lineTo(rR.x, rR.y); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(rL.x, rL.y); ctx.lineTo(rM.x, rM.y); ctx.lineTo(rR.x, rR.y); ctx.stroke();
-  ctx.fillStyle = '#2c3e50'; ctx.font = '700 10px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
-  ctx.fillText('caballete', rM.x, rM.y - 9);
 
   /* ── DIVISIONES INTERIORES (Partition walls inside the model) ── */
   ctx.strokeStyle = 'rgba(44, 62, 80, 0.25)'; ctx.lineWidth = 0.8; ctx.setLineDash([3, 3]);
@@ -239,27 +228,6 @@ function drawLote(id, frente, Z, tipo) {
   const d3 = ip(bx, dY, bz), d4 = ip(dx, dY, bz);
   ctx.beginPath(); ctx.moveTo(d3.x, d3.y); ctx.lineTo(d4.x, d4.y); ctx.stroke();
   ctx.setLineDash([]);
-
-  /* ── AMBIENTES LABELS ── */
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  const labs = [
-    ['ESTAR',   bx + bw * 0.22, by + bh * 0.22],
-    ['DORM.',   bx + bw * 0.22, by + bh * 0.78],
-    ['COCINA',  bx + bw * 0.78, by + bh * 0.22],
-    ['GALERÍA', bx + bw * 0.78, by + bh * 0.78],
-  ];
-  labs.forEach(([t, x_, y_]) => {
-    const p = ip(x_, y_, bz + 0.3); 
-    // Small background label container
-    ctx.save();
-    ctx.font = '700 11px "JetBrains Mono",sans-serif';
-    const lw = ctx.measureText(t).width + 8;
-    ctx.fillStyle = 'rgba(251,251,250,0.85)';
-    ctx.fillRect(p.x - lw/2, p.y - 7, lw, 14);
-    ctx.fillStyle = '#2c3e50';
-    ctx.fillText(t, p.x, p.y);
-    ctx.restore();
-  });
 
   /* ── VENTANAS (Detailed frames & glass reflection) ── */
   function drawDetailedWindow(p1, p2, p3, p4, glassCol, borderCol) {
@@ -290,9 +258,6 @@ function drawLote(id, frente, Z, tipo) {
     const a = ip(xo, yo, 0), b = ip(xo + ww, yo, 0);
     const c = ip(xo + ww, yo, wh), d = ip(xo, yo, wh);
     drawDetailedWindow(a, b, c, d, 'rgba(59, 139, 212, 0.25)', '#3a7abf');
-    const lb = ip(xo + ww / 2, yo, wh + 0.4);
-    ctx.fillStyle = '#3a7abf'; ctx.font = 'bold 9px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
-    ctx.fillText('V.N.', lb.x, lb.y);
   });
   // East/South Windows
   [0.25, 0.65].forEach(py => {
@@ -307,8 +272,6 @@ function drawLote(id, frente, Z, tipo) {
   const ea = ip(bx - 0.6, by - 0.6, bz), eb = ip(bx + bw + 0.6, by - 0.6, bz);
   ctx.beginPath(); ctx.moveTo(ea.x, ea.y); ctx.lineTo(eb.x, eb.y); ctx.stroke();
   ctx.setLineDash([]);
-  ctx.fillStyle = '#2c3e50'; ctx.font = '700 9px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
-  ctx.fillText('alero', (ea.x + eb.x) / 2, ea.y - 8);
 
   /* ── PERGOLA ── */
   const pp = { x: bx + bw + 1.8, y: by + bh * 0.50, w: 4.5, h: 3.0 };
@@ -322,9 +285,6 @@ function drawLote(id, frente, Z, tipo) {
     const cPos = ip(pp.x + (i + 0.5) * pp.w / 4, pp.y + pp.h * 0.5, 2.4);
     ctx.fillStyle = 'rgba(44, 62, 80, 0.2)'; ctx.beginPath(); ctx.arc(cPos.x, cPos.y, 2.5, 0, Math.PI * 2); ctx.fill();
   }
-  const ppM = ip(pp.x + pp.w / 2, pp.y + pp.h + 0.8, 0);
-  ctx.fillStyle = '#2c3e50'; ctx.font = 'bold 10px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
-  ctx.fillText('PÉRGOLA', ppM.x, ppM.y);
 
   /* ── ÁRBOLES NATIVOS (Architectural tree representation) ── */
   function arbolIso(ctx, x, y, r, col, lbl) {
@@ -361,24 +321,18 @@ function drawLote(id, frente, Z, tipo) {
     // Thin elegant outline
     ctx.strokeStyle = 'rgba(44, 62, 80, 0.35)'; ctx.lineWidth = 0.8;
     ctx.beginPath(); ctx.arc(copa.x, copa.y, r, 0, Math.PI * 2); ctx.stroke();
-    
-    if (lbl) {
-      ctx.fillStyle = '#2c3e50'; ctx.font = 'italic bold 8px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
-      ctx.fillText(lbl, copa.x, copa.y + r + 5);
-    }
   }
 
   const isCh = Z.id === 'chaco';
   const c1 = isCh ? '#a3cb71' : '#6ab04c', c2 = isCh ? '#8cb860' : '#4bae4f';
-  const n1 = isCh ? 'Ñandubay' : 'Lapacho', n2 = isCh ? 'Ñandubay' : 'Timbó';
   const r0 = S * 0.95;
   [
-    [bx + bw * 0.12, by - 1.8, r0,      c1, n1],
-    [bx + bw * 0.48, by - 2.6, r0 * 1.25, c2, n2],
-    [bx + bw * 0.85, by - 1.8, r0 * 0.95, c1, ''],
-    [bx - 2.8,       by + bh * 0.30, r0 * 0.75, '#78c281', 'Arbusto'],
-    [bx - 2.8,       by + bh * 0.65, r0 * 0.65, '#78c281', ''],
-  ].forEach(a => arbolIso(ctx, a[0], a[1], a[2], a[3], a[4]));
+    [bx + bw * 0.12, by - 1.8, r0,      c1],
+    [bx + bw * 0.48, by - 2.6, r0 * 1.25, c2],
+    [bx + bw * 0.85, by - 1.8, r0 * 0.95, c1],
+    [bx - 2.8,       by + bh * 0.30, r0 * 0.75, '#78c281'],
+    [bx - 2.8,       by + bh * 0.65, r0 * 0.65, '#78c281'],
+  ].forEach(a => arbolIso(ctx, a[0], a[1], a[2], a[3]));
 
   /* ── ACCESO (Dynamic path connecting from the street edge) ── */
   let aS, aE, aM;
@@ -411,14 +365,6 @@ function drawLote(id, frente, Z, tipo) {
   ctx.lineTo(aS.x - 7 * Math.cos(aA - 0.5), aS.y - 7 * Math.sin(aA - 0.5));
   ctx.lineTo(aS.x - 7 * Math.cos(aA + 0.5), aS.y - 7 * Math.sin(aA + 0.5));
   ctx.closePath(); ctx.fill();
-
-  ctx.save(); ctx.font = '700 10px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  const aT = 'ACCESO'; const aW = ctx.measureText(aT).width + 8;
-  ctx.fillStyle = 'rgba(251,251,250,.92)';
-  ctx.beginPath();
-  if (ctx.roundRect) ctx.roundRect(aM.x - aW / 2, aM.y - 6, aW, 12, 4); else ctx.rect(aM.x - aW / 2, aM.y - 6, aW, 12);
-  ctx.fill(); ctx.fillStyle = '#2c3e50'; ctx.fillText(aT, aM.x, aM.y);
-  ctx.restore();
 
   /* ── VIENTO (Elegant aerodynamic flow lines) ── */
   const wDeg = Z.windDeg || 45, wRad = wDeg * Math.PI / 180;
@@ -457,10 +403,6 @@ function drawLote(id, frente, Z, tipo) {
     ctx.closePath(); ctx.fill();
     ctx.restore();
   }
-  
-  const wM = ip(wS.x + wLen * 0.7, wS.y + wLen * 0.3, 2.0);
-  ctx.fillStyle = wCol; ctx.font = '700 11px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
-  ctx.fillText('VIENTO → ' + (Z.viento || ''), wM.x, wM.y);
 
   /* ── SOL (Glowing architectural overlay) ── */
   ctx.strokeStyle = 'rgba(239, 159, 39, 0.12)'; ctx.lineWidth = 0.8;
@@ -483,8 +425,6 @@ function drawLote(id, frente, Z, tipo) {
     ctx.lineTo(sp.x + 18 * Math.cos(a), sp.y + 18 * Math.sin(a));
     ctx.stroke();
   }
-  ctx.fillStyle = '#c0392b'; ctx.font = '700 10px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
-  ctx.fillText('SOL', sp.x, sp.y + 24);
 
   /* ── BRÚJULA (Minimalist) ── */
   const bcX = W - 150, bcY = 45;
