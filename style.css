@@ -337,7 +337,7 @@ table.mt tr:hover td { background: var(--surface-container-low, #f3f4f5); }
 .eave-num { flex: 1; text-align: center; padding: 8px 4px; background: var(--surface-container-low, #f3f4f5); border: 1px solid var(--outline-variant, #c5c6ca); }
 .eave-val { display: block; font-size: 16px; font-weight: 700; color: var(--primary, #000101); }
 .eave-lbl { display: block; font-size: 9px; color: var(--on-surface-variant, #44474a); margin-top: 2px; }
-.eave-chart { margin: 8px 0; max-height: 140px; }
+.eave-chart { margin: 8px 0; max-height: 140px; overflow: hidden; text-align:center; }
 .eave-tip { font-size: 11px; color: var(--on-surface-variant, #44474a); line-height: 1.6; padding: 8px; background: var(--surface-container-low, #f3f4f5); }
 
 /* ══════════════════════════════════════
@@ -356,14 +356,8 @@ table.mt tr:hover td { background: var(--surface-container-low, #f3f4f5); }
 /* ══════════════════════════════════════
    PRINCIPIOS DE DISEÑO
 ══════════════════════════════════════ */
-.principles-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-@media (max-width: 600px) { .principles-grid { grid-template-columns: 1fr; } }
-.dp-card { display: flex; gap: 8px; padding: 10px; background: var(--surface-container-low, #f3f4f5); border: 1px solid var(--outline-variant, #c5c6ca); }
-.dp-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-.dp-body { flex: 1; min-width: 0; }
-.dp-title { font-size: 11px; font-weight: 600; margin-bottom: 3px; }
-.dp-desc { font-size: 10px; color: var(--on-surface-variant, #44474a); line-height: 1.55; }
-.dp-why { font-size: 9px; color: var(--outline, #75777a); margin-top: 4px; padding-top: 4px; border-top: 1px solid var(--outline-variant, #c5c6ca); line-height: 1.5; font-style: italic; }
+.principles-grid { width:100%; }
+@media (max-width: 700px) { .principles-grid > div:last-child { grid-template-columns: 1fr !important; } }
 
 /* ══════════════════════════════════════
    CIUDADES

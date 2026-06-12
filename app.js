@@ -1154,7 +1154,7 @@ function calcEave() {
       </div>
     </div>
     <div class="eave-chart">
-      <svg viewBox="0 0 280 140" width="100%">
+      <svg viewBox="0 0 280 140" style="width:100%;max-width:280px;height:auto;display:block;margin:0 auto">
         <rect x="100" y="20" width="140" height="100" fill="var(--surface-container-low, #f3f4f5)" stroke="var(--outline-variant, #c5c6ca)" stroke-width="0.8"/>
         <rect x="100" y="20" width="140" height="10" fill="#D85A30"/>
         <line x1="100" y1="60" x2="240" y2="60" stroke="var(--outline, #75777a)" stroke-width="0.5" stroke-dasharray="3,2"/>
@@ -1249,15 +1249,88 @@ function renderStratMatrix() {
 function renderDesignPrinciples() {
   const el = document.getElementById('principles-grid');
   if (!el) return;
-  el.innerHTML = DESIGN_PRINCIPLES.map(p => `
-    <div class="dp-card">
-      <div class="dp-icon">${p.icon}</div>
-      <div class="dp-body">
-        <h4 class="dp-title">${p.title}</h4>
-        <p class="dp-desc">${p.desc}</p>
-        <div class="dp-why">💡 ${p.why}</div>
+  const vbx=800,vby=440;
+  const gx=260,gx2=540,gy=340,py=90,px=400;
+  const eveX=180,wwY=265,wH=55;
+  let S = `<svg viewBox="0 0 ${vbx} ${vby}" style="width:100%;max-width:800px;height:auto;display:block;margin:0 auto 20px;border:1px solid var(--outline-variant,#c5c6ca);background:var(--surface-container-lowest,#fff)">
+  <defs>
+    <marker id="arrS" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#EF9F27"/></marker>
+    <marker id="arrW" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#3B8BD4"/></marker>
+    <marker id="arrV" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#4CAF50"/></marker>
+  </defs>
+  <!-- Ground -->
+  <rect x="0" y="${gy}" width="800" height="100" fill="#e8e0d0" stroke="#c5b8a0" stroke-width="0.5"/>
+  <rect x="0" y="${gy+4}" width="800" height="96" fill="#d4c9b6"/>
+  <path d="M0 ${gy} Q200 ${gy-6} 400 ${gy} Q600 ${gy+6} 800 ${gy}" fill="none" stroke="#b8aa92" stroke-width="1.5"/>
+  <!-- Underground -->
+  <rect x="${gx-8}" y="${gy}" width="16" height="18" fill="#999"/>
+  <rect x="${gx2-6}" y="${gy}" width="12" height="14" fill="#999"/>
+  <!-- House fill -->
+  <polygon points="${gx},${gy} ${gx},${py} ${px},${py} ${gx2},${py} ${gx2},${gy}" fill="#f5efe8" stroke="#8a7a6a" stroke-width="1.5"/>
+  <!-- Roof -->
+  <polygon points="${gx},${py} ${px},${py-50} ${gx2},${py}" fill="#c4462a" stroke="#8a3020" stroke-width="1.5"/>
+  <line x1="220" y1="${py}" x2="${gx}" y2="${py}" stroke="#8a7a6a" stroke-width="1"/>
+  <!-- Eave -->
+  <polygon points="${gx},${py} ${eveX},${py+10} ${eveX},${py+16} ${gx},${py+6}" fill="#c4462a" stroke="#8a3020" stroke-width="1"/>
+  <line x1="${eveX}" y1="${py+10}" x2="${eveX}" y2="${py+16}" stroke="#8a3020" stroke-width="1"/>
+  <!-- Floor -->
+  <line x1="${gx}" y1="${gy}" x2="${gx2}" y2="${gy}" stroke="#8a7a6a" stroke-width="2"/>
+  <!-- North wall interior -->
+  <line x1="${gx}" y1="${py}" x2="${gx}" y2="${gy}" stroke="#8a7a6a" stroke-width="2"/>
+  <!-- North window -->
+  <rect x="${gx-2}" y="${wwY}" width="4" height="${wH}" rx="2" fill="#3B8BD4" opacity=".6"/>
+  <line x1="${gx-3}" y1="${wwY}" x2="${gx-3}" y2="${wwY+wH}" stroke="#fff" stroke-width="1.5"/>
+  <line x1="${gx+1}" y1="${wwY}" x2="${gx+1}" y2="${wwY+wH}" stroke="#fff" stroke-width="1.5"/>
+  <!-- South wall interior -->
+  <line x1="${gx2}" y1="${py}" x2="${gx2}" y2="${gy}" stroke="#8a7a6a" stroke-width="2"/>
+  <!-- South window -->
+  <rect x="${gx2-2}" y="${wwY+10}" width="4" height="34" rx="2" fill="#3B8BD4" opacity=".4"/>
+  <!-- Summer sun -->
+  <line x1="${eveX-60}" y1="30" x2="${eveX}" y2="${py+10}" stroke="#EF9F27" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrS)"/>
+  <line x1="${eveX-50}" y1="20" x2="${eveX+10}" y2="${py+5}" stroke="#EF9F27" stroke-width="1" stroke-dasharray="4,4" opacity=".5"/>
+  <line x1="${eveX-70}" y1="40" x2="${eveX-10}" y2="${py+15}" stroke="#EF9F27" stroke-width="1" stroke-dasharray="4,4" opacity=".4"/>
+  <text x="${eveX-75}" y="18" style="font-size:11px;fill:#EF9F27;font-weight:600">Verano 88°</text>
+  <!-- Winter sun -->
+  <line x1="10" y1="${py+100}" x2="${gx}" y2="${wwY+25}" stroke="#3B8BD4" stroke-width="2.5" stroke-dasharray="6,4" marker-end="url(#arrW)"/>
+  <line x1="22" y1="${py+88}" x2="${gx}" y2="${wwY+15}" stroke="#3B8BD4" stroke-width="1" stroke-dasharray="4,4" opacity=".5"/>
+  <line x1="-2" y1="${py+112}" x2="${gx-8}" y2="${wwY+35}" stroke="#3B8BD4" stroke-width="1" stroke-dasharray="4,4" opacity=".4"/>
+  <text x="14" y="${py+118}" style="font-size:11px;fill:#3B8BD4;font-weight:600">Invierno 41°</text>
+  <!-- Ventilation arrows -->
+  <path d="M${gx+10} ${wwY+10} L${gx+40} ${wwY-5} L${gx+40} ${wwY+5} Z" fill="#4CAF50"/>
+  <line x1="${gx+40}" y1="${wwY}" x2="${gx2-10}" y2="${wwY-15}" stroke="#4CAF50" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrV)"/>
+  <path d="M${gx+15} ${gy-5} L${gx+45} ${gy-20} L${gx+45} ${gy-10} Z" fill="#4CAF50" opacity=".5"/>
+  <line x1="${gx+45}" y1="${gy-15}" x2="${gx2-5}" y2="${wwY+35}" stroke="#4CAF50" stroke-width="1" stroke-dasharray="3,3" opacity=".5" marker-end="url(#arrV)"/>
+  <!-- Tree (deciduous north side) -->
+  <rect x="140" y="${gy-18}" width="8" height="18" fill="#6b5a4a"/>
+  <circle cx="144" cy="${gy-38}" r="20" fill="#6b7f4e" opacity=".6"/>
+  <circle cx="134" cy="${gy-30}" r="14" fill="#7a8f5e" opacity=".4"/>
+  <circle cx="154" cy="${gy-30}" r="14" fill="#5c7040" opacity=".5"/>
+  <text x="130" y="${gy-55}" style="font-size:9px;fill:#6b7f4e;font-weight:500">Caducifolio</text>
+  <!-- Labels -->
+  <text x="${eveX+6}" y="${py+30}" style="font-size:9px;fill:#8a3020;font-weight:600">Alero</text>
+  <text x="${gx+14}" y="${wwY+30}" style="font-size:8px;fill:#3B8BD4">Ventana N</text>
+  <text x="${gx2-70}" y="${wwY+28}" style="font-size:8px;fill:#3B8BD4">Ventana S</text>
+  <text x="${px-8}" y="${py-40}" style="font-size:10px;fill:#fff;font-weight:600">Cubierta</text>
+  <text x="${px-22}" y="${gy-4}" style="font-size:8px;fill:#888;text-anchor:middle">🌊 Masa térmica</text>
+  <!-- North indicator -->
+  <text x="20" y="30" style="font-size:10px;fill:#1a1a1a;font-weight:600">N ←</text>
+  <!-- Insulation indicator -->
+  <rect x="${gx+20}" y="${py+10}" width="6" height="60" rx="3" fill="#f90" opacity=".7"/>
+  <text x="${gx+28}" y="${py+30}" style="font-size:7px;fill:#f90;font-weight:500">Aislación</text>
+</svg>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:8px;padding:0 2px">`;
+  DESIGN_PRINCIPLES.forEach(p => {
+    S += `<div style="display:flex;gap:6px;padding:8px;background:var(--surface-container-low,#f3f4f5);border:1px solid var(--outline-variant,#c5c6ca);align-items:flex-start">
+      <span style="font-size:16px;flex-shrink:0;margin-top:1px">${p.icon}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:10px;font-weight:600;margin-bottom:2px;color:var(--on-surface,#191c1d)">${p.title}</div>
+        <div style="font-size:9px;color:var(--on-surface-variant,#44474a);line-height:1.5">${p.desc}</div>
+        <div style="font-size:8px;color:var(--outline,#75777a);margin-top:3px;padding-top:3px;border-top:1px solid var(--outline-variant,#c5c6ca);font-style:italic;line-height:1.4">💡 ${p.why}</div>
       </div>
-    </div>`).join('');
+    </div>`;
+  });
+  S += '</div>';
+  el.innerHTML = S;
 }
 
 /* ══════════════════════════════════════

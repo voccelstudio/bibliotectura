@@ -543,12 +543,11 @@ tailwind.config = {
           </select>
         </div>
         <div class="iso-tb-group" style="gap:2px">
-          <button class="iso-btn" onclick="isoRotateCam(-1)" title="Rotar izq">⟲</button>
-          <button class="iso-btn" onclick="isoRotateCam(1)" title="Rotar der">⟳</button>
           <button class="iso-btn" onclick="isoResetView()" title="Reset vista">⌖</button>
           <button class="iso-btn" onclick="isoZoom(1.3)" title="Acercar">⊕</button>
           <button class="iso-btn" onclick="isoZoom(1/1.3)" title="Alejar">⊖</button>
           <button class="iso-btn" id="iso-btn-shadow" onclick="isoToggleShadow()" title="Sombras">☀️</button>
+          <span class="iso-tb-label" style="margin-left:4px;font-size:10px;color:#999">Vista axonométrica fija</span>
         </div>
         <div class="iso-tb-group">
           <label class="iso-lbl" style="font-size:10px;margin:0 4px">Norte</label>
@@ -615,10 +614,10 @@ tailwind.config = {
             <label>Elementos</label>
             <div class="iso-el-list" id="iso-el-list"></div>
           </div>
-          <div class="iso-sb-section">
-            <div class="iso-stat-row"><span>Lote</span><span id="iso-st-lot">—</span></div>
-            <div class="iso-stat-row"><span>Construido</span><span id="iso-st-built">—</span></div>
-            <div class="iso-stat-row"><span>FOS</span><span id="iso-st-fos">—</span></div>
+          <div class="iso-sb-section" style="border-bottom:none;padding-bottom:16px">
+            <div class="iso-stat-row"><span style="font-size:11px;color:#888">Lote</span><span id="iso-st-lot" style="font-size:12px;font-weight:500">—</span></div>
+            <div class="iso-stat-row"><span style="font-size:11px;color:#888">Construido</span><span id="iso-st-built" style="font-size:12px;font-weight:500">—</span></div>
+            <div class="iso-stat-row"><span style="font-size:11px;color:#888">FOS</span><span id="iso-st-fos" style="font-size:12px;font-weight:500">—</span></div>
             <div class="iso-fos-bar"><div class="iso-fos-fill" id="iso-fos-fill" style="width:0%"></div></div>
           </div>
         </div>
