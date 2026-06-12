@@ -186,7 +186,7 @@ function drawLote(id, frente, Z, tipo) {
   ctx.strokeStyle = '#2c3e50'; ctx.lineWidth = 3.5; ctx.lineCap = 'round';
   ctx.beginPath(); ctx.moveTo(stP[0].x, stP[0].y); ctx.lineTo(stP[1].x, stP[1].y); ctx.stroke();
   const lp = ip((edge.x1 + edge.x2) / 2 + edge.lo.x, (edge.y1 + edge.y2) / 2 + edge.lo.y, 0);
-  ctx.font = 'italic 600 10px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.font = 'italic 600 11px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   const tw = ctx.measureText('CALLE').width + 16;
   const rx = lp.x - tw / 2, ry = lp.y - 8;
   ctx.fillStyle = 'rgba(251,251,250,.92)';
@@ -227,8 +227,8 @@ function drawLote(id, frente, Z, tipo) {
   ctx.strokeStyle = 'rgba(44, 62, 80, 0.25)'; ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(rL.x, rL.y); ctx.lineTo(rR.x, rR.y); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(rL.x, rL.y); ctx.lineTo(rM.x, rM.y); ctx.lineTo(rR.x, rR.y); ctx.stroke();
-  ctx.fillStyle = 'rgba(44, 62, 80, 0.6)'; ctx.font = '600 7px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
-  ctx.fillText('caballete', rM.x, rM.y - 7);
+  ctx.fillStyle = '#2c3e50'; ctx.font = '700 10px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('caballete', rM.x, rM.y - 9);
 
   /* ── DIVISIONES INTERIORES (Partition walls inside the model) ── */
   ctx.strokeStyle = 'rgba(44, 62, 80, 0.25)'; ctx.lineWidth = 0.8; ctx.setLineDash([3, 3]);
@@ -241,7 +241,6 @@ function drawLote(id, frente, Z, tipo) {
   ctx.setLineDash([]);
 
   /* ── AMBIENTES LABELS ── */
-  ctx.fillStyle = '#2c3e50'; ctx.font = '700 9px "JetBrains Mono",sans-serif';
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   const labs = [
     ['ESTAR',   bx + bw * 0.22, by + bh * 0.22],
@@ -253,7 +252,7 @@ function drawLote(id, frente, Z, tipo) {
     const p = ip(x_, y_, bz + 0.3); 
     // Small background label container
     ctx.save();
-    ctx.font = '700 9px "JetBrains Mono",sans-serif';
+    ctx.font = '700 11px "JetBrains Mono",sans-serif';
     const lw = ctx.measureText(t).width + 8;
     ctx.fillStyle = 'rgba(251,251,250,0.85)';
     ctx.fillRect(p.x - lw/2, p.y - 7, lw, 14);
@@ -292,7 +291,7 @@ function drawLote(id, frente, Z, tipo) {
     const c = ip(xo + ww, yo, wh), d = ip(xo, yo, wh);
     drawDetailedWindow(a, b, c, d, 'rgba(59, 139, 212, 0.25)', '#3a7abf');
     const lb = ip(xo + ww / 2, yo, wh + 0.4);
-    ctx.fillStyle = '#3a7abf'; ctx.font = 'bold 7px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
+    ctx.fillStyle = '#3a7abf'; ctx.font = 'bold 9px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
     ctx.fillText('V.N.', lb.x, lb.y);
   });
   // East/South Windows
@@ -308,8 +307,8 @@ function drawLote(id, frente, Z, tipo) {
   const ea = ip(bx - 0.6, by - 0.6, bz), eb = ip(bx + bw + 0.6, by - 0.6, bz);
   ctx.beginPath(); ctx.moveTo(ea.x, ea.y); ctx.lineTo(eb.x, eb.y); ctx.stroke();
   ctx.setLineDash([]);
-  ctx.fillStyle = 'rgba(44, 62, 80, 0.6)'; ctx.font = '600 7px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
-  ctx.fillText('alero', (ea.x + eb.x) / 2, ea.y - 7);
+  ctx.fillStyle = '#2c3e50'; ctx.font = '700 9px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('alero', (ea.x + eb.x) / 2, ea.y - 8);
 
   /* ── PERGOLA ── */
   const pp = { x: bx + bw + 1.8, y: by + bh * 0.50, w: 4.5, h: 3.0 };
@@ -324,7 +323,7 @@ function drawLote(id, frente, Z, tipo) {
     ctx.fillStyle = 'rgba(44, 62, 80, 0.2)'; ctx.beginPath(); ctx.arc(cPos.x, cPos.y, 2.5, 0, Math.PI * 2); ctx.fill();
   }
   const ppM = ip(pp.x + pp.w / 2, pp.y + pp.h + 0.8, 0);
-  ctx.fillStyle = 'rgba(44, 62, 80, 0.6)'; ctx.font = 'bold 8px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
+  ctx.fillStyle = '#2c3e50'; ctx.font = 'bold 10px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
   ctx.fillText('PÉRGOLA', ppM.x, ppM.y);
 
   /* ── ÁRBOLES NATIVOS (Architectural tree representation) ── */
@@ -364,7 +363,7 @@ function drawLote(id, frente, Z, tipo) {
     ctx.beginPath(); ctx.arc(copa.x, copa.y, r, 0, Math.PI * 2); ctx.stroke();
     
     if (lbl) {
-      ctx.fillStyle = '#2c3e50'; ctx.font = 'italic bold 7px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillStyle = '#2c3e50'; ctx.font = 'italic bold 8px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
       ctx.fillText(lbl, copa.x, copa.y + r + 5);
     }
   }
@@ -381,19 +380,39 @@ function drawLote(id, frente, Z, tipo) {
     [bx - 2.8,       by + bh * 0.65, r0 * 0.65, '#78c281', ''],
   ].forEach(a => arbolIso(ctx, a[0], a[1], a[2], a[3], a[4]));
 
-  /* ── ACCESO ── */
-  const accX = bx + bw * 0.5, accY = by + bh;
-  const aE = ip(accX, accY + 1.5, 0), aS = ip(accX, accY, 0);
+  /* ── ACCESO (Dynamic path connecting from the street edge) ── */
+  let aS, aE, aM;
+  const accX = bx + bw * 0.5;
+  const accY = by + bh * 0.55;
+  if (['N', 'NE', 'NO'].includes(frente)) {
+    aS = ip(accX, by, 0);
+    aE = ip(accX, 0, 0);
+    aM = ip(accX, by * 0.5, 0);
+  } else if (['S', 'SE', 'SO'].includes(frente)) {
+    aS = ip(accX, by + bh, 0);
+    aE = ip(accX, lotD, 0);
+    aM = ip(accX, by + bh + (lotD - (by + bh)) * 0.5, 0);
+  } else if (frente === 'E') {
+    aS = ip(bx + bw, accY, 0);
+    aE = ip(lotW, accY, 0);
+    aM = ip(bx + bw + (lotW - (bx + bw)) * 0.5, accY, 0);
+  } else { // O
+    aS = ip(bx, accY, 0);
+    aE = ip(0, accY, 0);
+    aM = ip(bx * 0.5, accY, 0);
+  }
+
   ctx.strokeStyle = '#2c3e50'; ctx.lineWidth = 1.2; ctx.setLineDash([4, 3]);
   ctx.beginPath(); ctx.moveTo(aE.x, aE.y); ctx.lineTo(aS.x, aS.y); ctx.stroke(); ctx.setLineDash([]);
-  const aA = Math.atan2(aE.y - aS.y, aE.x - aS.x);
+  
+  const aA = Math.atan2(aS.y - aE.y, aS.x - aE.x); // Pointing towards the house entrance
   ctx.fillStyle = '#2c3e50';
-  ctx.beginPath(); ctx.moveTo(aE.x, aE.y);
-  ctx.lineTo(aE.x - 8 * Math.cos(aA - 0.5), aE.y - 8 * Math.sin(aA - 0.5));
-  ctx.lineTo(aE.x - 8 * Math.cos(aA + 0.5), aE.y - 8 * Math.sin(aA + 0.5));
+  ctx.beginPath(); ctx.moveTo(aS.x, aS.y);
+  ctx.lineTo(aS.x - 7 * Math.cos(aA - 0.5), aS.y - 7 * Math.sin(aA - 0.5));
+  ctx.lineTo(aS.x - 7 * Math.cos(aA + 0.5), aS.y - 7 * Math.sin(aA + 0.5));
   ctx.closePath(); ctx.fill();
-  const aM = ip(accX, accY + 0.5, 0);
-  ctx.save(); ctx.font = '700 8px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+
+  ctx.save(); ctx.font = '700 10px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   const aT = 'ACCESO'; const aW = ctx.measureText(aT).width + 8;
   ctx.fillStyle = 'rgba(251,251,250,.92)';
   ctx.beginPath();
@@ -440,7 +459,7 @@ function drawLote(id, frente, Z, tipo) {
   }
   
   const wM = ip(wS.x + wLen * 0.7, wS.y + wLen * 0.3, 2.0);
-  ctx.fillStyle = wCol; ctx.font = '700 9px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
+  ctx.fillStyle = wCol; ctx.font = '700 11px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
   ctx.fillText('VIENTO → ' + (Z.viento || ''), wM.x, wM.y);
 
   /* ── SOL (Glowing architectural overlay) ── */
@@ -464,7 +483,7 @@ function drawLote(id, frente, Z, tipo) {
     ctx.lineTo(sp.x + 18 * Math.cos(a), sp.y + 18 * Math.sin(a));
     ctx.stroke();
   }
-  ctx.fillStyle = 'rgba(216, 90, 48, 0.75)'; ctx.font = '700 8px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
+  ctx.fillStyle = '#c0392b'; ctx.font = '700 10px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
   ctx.fillText('SOL', sp.x, sp.y + 24);
 
   /* ── BRÚJULA (Minimalist) ── */
@@ -479,17 +498,17 @@ function drawLote(id, frente, Z, tipo) {
     ctx.lineWidth = l === 'N' ? 1.5 : 0.6;
     ctx.beginPath(); ctx.moveTo(bcX, bcY); ctx.lineTo(x, y); ctx.stroke();
     ctx.fillStyle = l === 'N' ? '#e74c3c' : '#7f8c8d';
-    ctx.font = l === 'N' ? '700 9px "JetBrains Mono",sans-serif' : '500 8px "JetBrains Mono",sans-serif';
+    ctx.font = l === 'N' ? '700 11px "JetBrains Mono",sans-serif' : '500 10px "JetBrains Mono",sans-serif';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText(l, bcX + 26 * Math.cos(a), bcY + 26 * Math.sin(a));
+    ctx.fillText(l, bcX + 28 * Math.cos(a), bcY + 28 * Math.sin(a));
   });
   ctx.fillStyle = '#2c3e50'; ctx.beginPath(); ctx.arc(bcX, bcY, 2, 0, Math.PI * 2); ctx.fill();
   ctx.restore();
 
   const dirL = { N:'NORTE', S:'SUR', E:'ESTE', O:'OESTE',
     NE:'NORESTE', NO:'NOROESTE', SE:'SURESTE', SO:'SUROESTE' };
-  ctx.fillStyle = 'rgba(44, 62, 80, 0.55)'; ctx.font = '500 8px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
-  ctx.fillText('Frente: ' + (dirL[frente] || frente), bcX, bcY + 34);
+  ctx.fillStyle = 'rgba(44, 62, 80, 0.55)'; ctx.font = '500 10px "JetBrains Mono",sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('Frente: ' + (dirL[frente] || frente), bcX, bcY + 36);
 
   /* ── LEYENDA (Sleek minimalist table) ── */
   let legY = H - 40;
@@ -513,7 +532,7 @@ function drawLote(id, frente, Z, tipo) {
       ctx.fillStyle = it.col; ctx.fillRect(legX, legY - 3, it.sw, 8);
       ctx.strokeStyle = it.border; ctx.lineWidth = 0.8; ctx.strokeRect(legX, legY - 3, it.sw, 8); 
     }
-    ctx.fillStyle = '#555'; ctx.font = '500 9px "JetBrains Mono",sans-serif';
+    ctx.fillStyle = '#555'; ctx.font = '500 10px "JetBrains Mono",sans-serif';
     ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
     ctx.fillText(it.lbl, legX + 22, legY + 2);
     legX += ctx.measureText(it.lbl).width + 36;
@@ -524,7 +543,7 @@ function drawLote(id, frente, Z, tipo) {
   ctx.fillStyle = '#2c3e50'; ctx.font = '700 13px "JetBrains Mono",sans-serif';
   ctx.textAlign = 'left'; ctx.textBaseline = 'top';
   ctx.fillText('DIAGRAMA AXONOMÉTRICO — Lote y vivienda', 12, 10);
-  ctx.fillStyle = 'rgba(44, 62, 80, 0.55)'; ctx.font = '500 10px "JetBrains Mono",sans-serif';
+  ctx.fillStyle = 'rgba(44, 62, 80, 0.55)'; ctx.font = '500 11px "JetBrains Mono",sans-serif';
   ctx.fillText(Z.name + '  ·  Frente: ' + (dirL[frente] || frente) + '  ·  Viento: ' + (Z.viento || '') + '  ·  Escala aprox.', 12, 26);
 
   const boxX = 12, boxY = 42, boxW = 220, boxH = 46;
@@ -534,7 +553,7 @@ function drawLote(id, frente, Z, tipo) {
   ctx.beginPath();
   if (ctx.roundRect) ctx.roundRect(boxX, boxY, boxW, boxH, 4); else ctx.rect(boxX, boxY, boxW, boxH);
   ctx.stroke();
-  ctx.fillStyle = 'rgba(44, 62, 80, 0.6)'; ctx.font = '500 9px "JetBrains Mono",sans-serif';
+  ctx.fillStyle = 'rgba(44, 62, 80, 0.6)'; ctx.font = '500 10px "JetBrains Mono",sans-serif';
   ctx.textAlign = 'left'; ctx.textBaseline = 'top';
   ctx.fillText('Lote: ' + lotW + '×' + lotD + ' m  |  Edificio: ' + bw + '×' + bh + '×' + bz + ' m', boxX + 6, boxY + 4);
   ctx.fillText('Frente al ' + (dirL[frente] || frente) + '  |  Tipo: ' + tipo, boxX + 6, boxY + 17);
@@ -817,7 +836,7 @@ function wrose(z) {
     const isDom=vals[i]===mx;
     p += `<path d="M${cx+10*Math.cos(a1)},${cy+10*Math.sin(a1)} L${cx+len*Math.cos(a1)},${cy+len*Math.sin(a1)} L${cx+len*Math.cos(a2)},${cy+len*Math.sin(a2)} L${cx+10*Math.cos(a2)},${cy+10*Math.sin(a2)}Z" fill="${isDom?z.color:'#999'}" opacity="${isDom ? .9 : .45}"/>`;
     const lx=cx+(r+17)*Math.cos(an), ly=cy+(r+17)*Math.sin(an);
-    l += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="central" style="font-size:${d==='N'?'13':'10'}px;font-weight:${d==='N'?'700':'500'};fill:${d==='N'?'var(--on-surface,#191c1d)':'var(--on-surface-variant,#44474a)'}">${d}</text>`;
+    l += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="central" style="font-size:${d==='N'?'14':'11'}px;font-weight:${d==='N'?'700':'500'};fill:${d==='N'?'var(--on-surface,#191c1d)':'var(--on-surface-variant,#44474a)'}">${d}</text>`;
   });
   return `<svg viewBox="0 0 190 190" width="100%" style="display:block"><circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--outline-variant,#c5c6ca)" stroke-width="0.5"/><circle cx="${cx}" cy="${cy}" r="${r*.6}" fill="none" stroke="var(--outline-variant,#c5c6ca)" stroke-width="0.5" stroke-dasharray="3,3"/>${p}${l}</svg>`;
 }
@@ -835,13 +854,13 @@ function sunpath() {
   [30,60].forEach(a => {
     const yy = hz - (a/90)*(hz-10);
     svg += `<line x1="${padX}" y1="${yy}" x2="${W-padX}" y2="${yy}" stroke="var(--outline-variant,#c5c6ca)" stroke-width="0.5" stroke-dasharray="3,2"/>`;
-    svg += `<text x="${padX-2}" y="${yy}" text-anchor="end" dominant-baseline="middle" style="font-size:9px;fill:var(--on-surface-variant,#44474a)">${a}°</text>`;
+    svg += `<text x="${padX-2}" y="${yy}" text-anchor="end" dominant-baseline="middle" style="font-size:10px;fill:var(--on-surface-variant,#44474a)">${a}°</text>`;
   });
 
   svg += `<line x1="${padX}" y1="${hz}" x2="${W-padX}" y2="${hz}" stroke="var(--outline,#75777a)" stroke-width="0.8"/>`;
-  svg += `<text x="${padX}" y="${hz+12}" style="font-size:10px;fill:var(--on-surface,#191c1d);font-weight:600">E</text>`;
-  svg += `<text x="${W-padX-8}" y="${hz+12}" style="font-size:10px;fill:var(--on-surface,#191c1d);font-weight:600">O</text>`;
-  svg += `<text x="${W/2}" y="${hz+12}" text-anchor="middle" style="font-size:10px;fill:var(--on-surface-variant,#44474a)">N (cenit solar)</text>`;
+  svg += `<text x="${padX}" y="${hz+12}" style="font-size:11px;fill:var(--on-surface,#191c1d);font-weight:600">E</text>`;
+  svg += `<text x="${W-padX-8}" y="${hz+12}" style="font-size:11px;fill:var(--on-surface,#191c1d);font-weight:600">O</text>`;
+  svg += `<text x="${W/2}" y="${hz+12}" text-anchor="middle" style="font-size:11px;fill:var(--on-surface-variant,#44474a)">N (cenit solar)</text>`;
 
   arcs.forEach(a => {
     const pts = [];
@@ -897,7 +916,7 @@ function solarMap() {
     const r = R * (1 - alt/90);
     const op = alt===0 ? '0.5' : '0.2';
     svg += `<circle cx="${cx}" cy="${cy}" r="${r.toFixed(1)}" fill="none" stroke="rgba(128,128,128,${op})" stroke-width="${alt===0?1:'0.5'}"/>`;
-    if (alt > 0 && alt < 80) svg += `<text x="${(cx+4).toFixed(1)}" y="${(cy-r-3).toFixed(1)}" style="font-size:8px;fill:var(--on-surface-variant,#44474a)">${alt}°</text>`;
+    if (alt > 0 && alt < 80) svg += `<text x="${(cx+4).toFixed(1)}" y="${(cy-r-3).toFixed(1)}" style="font-size:9px;fill:var(--on-surface-variant,#44474a)">${alt}°</text>`;
   });
 
   for (let a=0; a<360; a+=30) {
@@ -917,7 +936,7 @@ function solarMap() {
       svg += `<circle cx="${pos.x.toFixed(1)}" cy="${pos.y.toFixed(1)}" r="2" fill="var(--on-surface-variant,#44474a)" opacity="0.6"/>`;
       const offX = ha < 0 ? -10 : ha > 0 ? 4 : 0;
       const offY = ha === 0 ? -7 : -4;
-      svg += `<text x="${(pos.x+offX).toFixed(1)}" y="${(pos.y+offY).toFixed(1)}" text-anchor="${ha<0?'end':ha>0?'start':'middle'}" style="font-size:7.5px;fill:var(--on-surface-variant,#44474a)">${h}h</text>`;
+      svg += `<text x="${(pos.x+offX).toFixed(1)}" y="${(pos.y+offY).toFixed(1)}" text-anchor="${ha<0?'end':ha>0?'start':'middle'}" style="font-size:9px;fill:var(--on-surface-variant,#44474a)">${h}h</text>`;
     }
   });
 
@@ -938,8 +957,8 @@ function solarMap() {
       svg += `<circle cx="${peak.x.toFixed(1)}" cy="${peak.y.toFixed(1)}" r="4" fill="${m.col}" opacity="0.85"/>`;
       const lx = peak.x > cx+5 ? peak.x + 7 : peak.x - 7;
       const ta = peak.x > cx+5 ? 'start' : 'end';
-      svg += `<text x="${lx.toFixed(1)}" y="${(peak.y-2).toFixed(1)}" text-anchor="${ta}" style="font-size:8.5px;fill:${m.col};font-weight:700">${m.name}</text>`;
-      svg += `<text x="${lx.toFixed(1)}" y="${(peak.y+8).toFixed(1)}" text-anchor="${ta}" style="font-size:7.5px;fill:${m.col}">${peak.alt.toFixed(0)}° alt.</text>`;
+      svg += `<text x="${lx.toFixed(1)}" y="${(peak.y-2).toFixed(1)}" text-anchor="${ta}" style="font-size:10px;fill:${m.col};font-weight:700">${m.name}</text>`;
+      svg += `<text x="${lx.toFixed(1)}" y="${(peak.y+9).toFixed(1)}" text-anchor="${ta}" style="font-size:9px;fill:${m.col}">${peak.alt.toFixed(0)}° alt.</text>`;
     }
     // Sunrise/sunset markers
     const rise = sunXY(m.dec, -120);
@@ -1729,11 +1748,11 @@ function renderDashboard() {
           <text fill="#a04100" font-family="JetBrains Mono" font-size="10" x="210" y="35">Solsticio verano ${altSummer.toFixed(1)}°</text>
           <text fill="#75777a" font-family="JetBrains Mono" font-size="10" x="210" y="50">Solsticio invierno ${altWinter.toFixed(1)}°</text>
           <line class="stroke-outline" stroke-dasharray="2" stroke-width="0.5" x1="200" x2="200" y1="40" y2="200"/>
-          <text fill="#75777a" font-family="JetBrains Mono" font-size="8" x="10" y="215">E</text>
-          <text fill="#75777a" font-family="JetBrains Mono" font-size="8" x="385" y="215">W</text>
-          <text fill="#75777a" font-family="JetBrains Mono" font-size="8" x="195" y="215">S</text>
-          <rect x="100" y="170" width="80" height="30" fill="var(--surface-container,#edeeef)" stroke="var(--outline-variant,#c5c6ca)" stroke-width="0.5"/>
-          <text fill="#44474a" font-family="JetBrains Mono" font-size="7" x="115" y="185">Edificio</text>
+          <text fill="#75777a" font-family="JetBrains Mono" font-size="10" x="10" y="215">E</text>
+          <text fill="#75777a" font-family="JetBrains Mono" font-size="10" x="385" y="215">W</text>
+          <text fill="#75777a" font-family="JetBrains Mono" font-size="10" x="195" y="215">S</text>
+          <rect x="85" y="165" width="110" height="40" fill="var(--surface-container,#edeeef)" stroke="var(--outline-variant,#c5c6ca)" stroke-width="0.5" rx="4"/>
+          <text fill="#44474a" font-family="JetBrains Mono" font-size="9" x="140" y="190" text-anchor="middle">Edificio</text>
           <line x1="100" y1="170" x2="50" y2="70" stroke="#fe6b00" stroke-width="1" stroke-dasharray="3,2" opacity="0.6"/>
           <line x1="180" y1="170" x2="240" y2="80" stroke="#2480ff" stroke-width="1" stroke-dasharray="3,2" opacity="0.6"/>
         </svg>
